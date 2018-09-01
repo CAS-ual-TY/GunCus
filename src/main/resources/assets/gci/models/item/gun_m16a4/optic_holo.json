@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "gci:items/gun_m16a4/optic_holo"
+    }
+}

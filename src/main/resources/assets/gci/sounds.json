@@ -1,0 +1,26 @@
+{
+    "shoot":{
+        "category":"player",
+        "sounds":[
+            "gci:shoot"
+        ]
+    },
+    "reload":{
+        "category":"player",
+        "sounds":[
+            "gci:reload"
+        ]
+    },
+    "shoot_sniper":{
+        "category":"player",
+        "sounds":[
+            "gci:shoot_sniper"
+        ]
+    },
+    "shoot_silenced":{
+        "category":"player",
+        "sounds":[
+            "gci:shoot_silenced"
+        ]
+    }
+}

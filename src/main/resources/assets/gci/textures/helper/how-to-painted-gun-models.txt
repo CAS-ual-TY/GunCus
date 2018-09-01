@@ -1,0 +1,4 @@
+- clone default gun texture
+- get color from the paint item texture
+- draw over entire gun texture with 50% opacity
+- (dont do with black:) draw over dark pixels again using their original color with 50% opacity
