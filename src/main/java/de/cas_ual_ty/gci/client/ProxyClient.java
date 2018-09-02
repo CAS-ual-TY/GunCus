@@ -40,8 +40,6 @@ public class ProxyClient extends Proxy
 		}
 	}
 	
-	public static ArrayList<ItemGun> registeredGuns = new ArrayList<ItemGun>();
-	
 	public void registerItemRenderer(ItemGCI item)
 	{
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(GunCus.MOD_ID + ":" + item.getModelRL(), "inventory"));
@@ -58,8 +56,6 @@ public class ProxyClient extends Proxy
 	public void registerGun(IForgeRegistry<Item> registry, ItemGun gun)
 	{
 		super.registerGun(registry, gun);
-		
-		registeredGuns.add(gun);
 		
 		ModelResourceLocation main = new ModelResourceLocation(GunCus.MOD_ID + ":" + gun.getModelRL() + "/gun", "inventory");
 		ModelLoader.setCustomModelResourceLocation(gun, 0, main);
@@ -102,6 +98,8 @@ public class ProxyClient extends Proxy
 	public void init(FMLInitializationEvent event)
 	{
 		super.init(event);
+		
+//		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderFactoryGCI());
 		
 		MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
 	}

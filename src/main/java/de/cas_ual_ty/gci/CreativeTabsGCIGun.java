@@ -11,10 +11,10 @@ public class CreativeTabsGCIGun extends CreativeTabsGCI
 	private int variants;
 	private ItemGun gun;
 	
-	public CreativeTabsGCIGun(String label, ItemStack item)
+	public CreativeTabsGCIGun(String label, ItemGun gun)
 	{
-		super(label, item);
-		this.gun = (ItemGun) item.getItem();
+		super(label, new ItemStack(gun));
+		this.gun = gun;
 		this.variants = 0;
 	}
 	

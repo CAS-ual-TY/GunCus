@@ -8,21 +8,36 @@ import de.cas_ual_ty.gci.GunCus;
 import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Attachment;
 import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
+import de.cas_ual_ty.gci.item.attachment.Optic;
 
 public class BakeHandler
 {
 	@SubscribeEvent
 	public void modelBake(ModelBakeEvent event)
 	{
-		int i;
-		int j;
-		Attachment attachment;
+		Optic optic;
 		ModelResourceLocation mrl;
 		IBakedModel main;
 		
+		for(int i = 0; i < Attachment.getAmmountForSlot(EnumAttachmentType.OPTIC.getSlot()); ++i)
+		{
+			optic = (Optic) Attachment.getAttachment(EnumAttachmentType.OPTIC.getSlot(), i);
+			
+			if(optic != null)
+			{
+				mrl = new ModelResourceLocation(GunCus.MOD_ID + ":" + optic.getModelRL(), "inventory");
+				main = event.getModelRegistry().getObject(mrl);
+				event.getModelRegistry().putObject(mrl, new BakedModelOptic(main));
+			}
+		}
+		
+		int i;
+		int j;
+		Attachment attachment;
+		
 		IBakedModel[][] models; //These are the attachment models which will be passed onto the gun model for use
 		
-		for(ItemGun gun : ProxyClient.registeredGuns) //Cycle through all guns
+		for(ItemGun gun : ItemGun.GUNS_LIST) //Cycle through all guns
 		{
 			models = new IBakedModel[EnumAttachmentType.values().length][];
 			

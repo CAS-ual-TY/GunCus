@@ -1,6 +1,6 @@
-item.gci:gun.name=Gun
-item.gci:bullet.name=Bullet
+itemGroup.gci=Gun Customization: Infinity
 
+local.gci:cartridge.name=Cartridge
 local.gci:attachment.name=Attachment
 local.gci:attachments.name=Attachments
 local.gci:slot0.name=Optic
@@ -22,6 +22,8 @@ item.gci:cartridge_12g_buckshot.name=12G Buckshot
 item.gci:cartridge_12g_dart.name=12G Dart
 item.gci:cartridge_12g_frag.name=12G Frag
 item.gci:cartridge_12g_slug.name=12G Slug
+item.gci:cartridge__44_magnum.name=.44 Magnum
+item.gci:cartridge__338_magnum.name=.338 Magnum
 
 item.gci:optic_reflex.name=Reflex
 item.gci:optic_coyote.name=Coyote
@@ -39,7 +41,7 @@ item.gci:optic_jgm4.name=JGM-4
 item.gci:optic_pso1.name=PSO-1
 item.gci:optic_cl6x.name=CL6X
 item.gci:optic_pks07.name=PKS-07
-item.gci:optic_rifle_scope.name=Rifle Scope
+item.gci:optic_rifle.name=Rifle Scope
 item.gci:optic_hunter.name=Hunter
 item.gci:optic_ballistic.name=Ballistic
 
@@ -80,8 +82,8 @@ item.gci:ammo_12g_dart.name=12G Dart
 item.gci:ammo_12g_frag.name=12G Frag
 item.gci:ammo_12g_slug.name=12G Slug
 
-item.gci:magazine_quick_switch_mags.name=Quick Switch Mags
-item.gci:magazine_extended_mag_10.name=Extended Mag (+10)
+item.gci:magazine_quick_switch.name=Quick Switch
+item.gci:magazine_extended_10.name=Extended (+10)
 
 item.gci:paint_black.name=Black Paint
 item.gci:paint_white.name=White Paint

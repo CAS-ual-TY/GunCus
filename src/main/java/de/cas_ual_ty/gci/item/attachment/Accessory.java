@@ -38,7 +38,7 @@ public class Accessory extends Attachment
 		return this.extraZoom;
 	}
 	
-	public Laser getLazer()
+	public Laser getLaser()
 	{
 		return this.laser;
 	}

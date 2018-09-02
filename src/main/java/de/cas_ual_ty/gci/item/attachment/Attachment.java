@@ -12,24 +12,24 @@ import de.cas_ual_ty.gci.item.ItemGCI;
 
 public abstract class Attachment extends ItemGCI
 {
-	public static ArrayList[] attachmentList = new ArrayList[EnumAttachmentType.values().length];
+	public static final ArrayList[] ATTACHMENTS_LIST = new ArrayList[EnumAttachmentType.values().length];
 	
 	static
 	{
-		for(int i = 0; i < attachmentList.length; ++i)
+		for(int i = 0; i < ATTACHMENTS_LIST.length; ++i)
 		{
-			attachmentList[i] = new ArrayList<Attachment>();
+			ATTACHMENTS_LIST[i] = new ArrayList<Attachment>();
 		}
 	}
 	
 	public static Attachment getAttachment(int slot, int id)
 	{
-		return (Attachment) attachmentList[slot].get(id);
+		return (Attachment) ATTACHMENTS_LIST[slot].get(id);
 	}
 	
 	public static int getAmmountForSlot(int slot)
 	{
-		return attachmentList[slot].size();
+		return ATTACHMENTS_LIST[slot].size();
 	}
 	
 	private int id;
@@ -40,11 +40,11 @@ public abstract class Attachment extends ItemGCI
 		
 		this.id = id;
 		
-		while(attachmentList[this.getSlot()].size() <= id)
+		while(ATTACHMENTS_LIST[this.getSlot()].size() <= id)
 		{
-			attachmentList[this.getSlot()].add(null);
+			ATTACHMENTS_LIST[this.getSlot()].add(null);
 		}
-		attachmentList[this.getSlot()].set(id, this);
+		ATTACHMENTS_LIST[this.getSlot()].set(id, this);
 	}
 	
 	public int getID()
@@ -100,7 +100,7 @@ public abstract class Attachment extends ItemGCI
 	@Override
 	public void addInformation(ItemStack itemStack, World world, List<String> list, ITooltipFlag flag)
 	{
-		list.add("งe" + getSlotTranslated(this.getSlot()) + " ง8" + getAttachmentTranslated(false) + "");
+		list.add("ยงe" + getSlotTranslated(this.getSlot()) + " ยง8" + getAttachmentTranslated(false) + "");
 	}
 	
 	public static String getSlotTranslated(int slot)

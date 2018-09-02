@@ -6,8 +6,10 @@ import org.lwjgl.opengl.GL11;
 
 import de.cas_ual_ty.gci.EntityBullet;
 import de.cas_ual_ty.gci.GunCus;
+import de.cas_ual_ty.gci.client.render.GuiSight;
 import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Accessory;
+import de.cas_ual_ty.gci.item.attachment.Accessory.Laser;
 import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
 import de.cas_ual_ty.gci.item.attachment.Optic;
 import de.cas_ual_ty.gci.network.MessageShoot;
@@ -35,6 +37,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class EventHandlerClient
 {
@@ -149,36 +152,50 @@ public class EventHandlerClient
 		}
 	}
 	
+	private int tabCounter = 0;
+	private static final int TAB_ITEM_INTERVAL = 20;
+	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
 	public void clientTick(ClientTickEvent event)
 	{
-		if(Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && Minecraft.getMinecraft().player != null)
+		if(event.phase == Phase.START)
 		{
-			boolean aiming = false;
-			EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
-			
-			if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
+			if(Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && Minecraft.getMinecraft().player != null)
 			{
-				if(!entityPlayer.isSprinting() && !entityPlayer.isSneaking() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && entityPlayer.getHeldItemOffhand().isEmpty())
+				boolean aiming = false;
+				EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
+				
+				if(Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && !entityPlayer.isSprinting())
 				{
-					ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-					ItemGun gun = (ItemGun) itemStack.getItem();
 					
-					if(gun.getCanAim(itemStack))
+					if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty())
 					{
-						Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
+						ItemStack itemStack = entityPlayer.getHeldItemMainhand();
+						ItemGun gun = (ItemGun) itemStack.getItem();
 						
-						if(optic != null && optic.canAim())
+						if(gun.getCanAim(itemStack))
 						{
-							aiming = true;
+							Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
+							
+							if(optic != null && optic.canAim())
+							{
+								aiming = true;
+							}
 						}
 					}
 				}
+				
+				GunCus.channel.sendToServer(new MessageShoot(aiming, (!entityPlayer.onGround || (entityPlayer.motionX != 0) || (entityPlayer.motionY != 0))));
 			}
 			
-			System.out.println(entityPlayer.motionX + " " + entityPlayer.motionZ + " ");
+			++this.tabCounter;
 			
-			GunCus.channel.sendToServer(new MessageShoot(aiming, (!entityPlayer.onGround || (entityPlayer.motionX != 0) || (entityPlayer.motionY != 0))));
+			if(this.tabCounter >= TAB_ITEM_INTERVAL)
+			{
+				GunCus.TAB_GUNCUS.shuffleItemStack();
+				
+				this.tabCounter = 0;
+			}
 		}
 	}
 	
@@ -188,26 +205,35 @@ public class EventHandlerClient
 		if(event.getType() == ElementType.CROSSHAIRS && Minecraft.getMinecraft().player != null)
 		{
 			EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
+			Optic optic = null;
 			
 			if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
 			{
-				if(!entityPlayer.isSprinting() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && entityPlayer.getHeldItemOffhand().isEmpty())
+				if(entityPlayer.getHeldItemOffhand().isEmpty())
 				{
 					ItemStack itemStack = entityPlayer.getHeldItemMainhand();
 					ItemGun gun = (ItemGun) itemStack.getItem();
 					
 					if(gun.getCanAim(itemStack))
 					{
-						Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
-						
-						if(optic != null && optic.canAim())
-						{
-							GUI_SIGHT.draw(optic, event.getResolution());
-						}
+						optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
 					}
 				}
 				
 				event.setCanceled(true);
+			}
+			else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
+			{
+				ItemStack itemStack = entityPlayer.getHeldItemMainhand();
+				optic = (Optic) itemStack.getItem();
+			}
+			
+			if(!entityPlayer.isSprinting() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && optic != null && optic.canAim())
+			{
+				GUI_SIGHT.draw(optic, event.getResolution());
+				
+				if(!event.isCanceled())
+					event.setCanceled(true);
 			}
 		}
 	}
@@ -219,19 +245,32 @@ public class EventHandlerClient
 		{
 			EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
 			
-			if(!entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty())
+			if(!entityPlayer.isSprinting() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())
 			{
-				ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-				ItemGun gun = (ItemGun) itemStack.getItem();
+				Optic optic = null;
 				
-				if(gun.getCanAim(itemStack))
+				if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
 				{
-					Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
-					
-					if(optic != null && optic.getID() != 0)
+					if(entityPlayer.getHeldItemOffhand().isEmpty())
 					{
-						event.setNewfov(calculateFov(optic.getZoom() + 0.1F, event.getFov()));
+						ItemStack itemStack = entityPlayer.getHeldItemMainhand();
+						ItemGun gun = (ItemGun) itemStack.getItem();
+						
+						if(gun.getCanAim(itemStack))
+						{
+							optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
+						}
 					}
+				}
+				else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
+				{
+					ItemStack itemStack = entityPlayer.getHeldItemMainhand();
+					optic = (Optic) itemStack.getItem();
+				}
+				
+				if(optic != null && optic.canAim())
+				{
+					event.setNewfov(calculateFov(optic.getZoom() + 0.1F, event.getFov()));
 				}
 			}
 		}
@@ -246,7 +285,8 @@ public class EventHandlerClient
 			
 			ItemStack itemStack;
 			ItemGun gun;
-			Accessory accessory;
+			Accessory accessory = null;
+			Laser laser;
 			
 			Vec3d start;
 			Vec3d end;
@@ -271,106 +311,113 @@ public class EventHandlerClient
 					
 					for(EnumHand hand : EnumHand.values())
 					{
+						accessory = null;
 						itemStack = entityPlayer.getHeldItem(hand);
 						
 						if(itemStack.getItem() instanceof ItemGun)
 						{
 							gun = (ItemGun) itemStack.getItem();
 							accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY.getSlot());
+							laser = accessory.getLaser();
+						}
+						else if(itemStack.getItem() instanceof Accessory)
+						{
+							accessory = (Accessory) itemStack.getItem();
+						}
+						
+						if(accessory != null)
+						{
+							laser = accessory.getLaser();
+							start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
+							end = entityPlayer.getLookVec().normalize().scale(laser.getMaxRange()).add(start).add(getOffsetForHandRaw(entityPlayer, hand));
 							
-							if(accessory.getLazer() != null)
+							resultBlock = findBlockOnPath(world, entityPlayer, start, end);
+							resultEntity = findEntityOnPath(world, entityPlayer, start, end);
+							
+							if(resultBlock != null && resultEntity != null)
 							{
-								start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
-								end = entityPlayer.getLookVec().normalize().scale(accessory.getLazer().getMaxRange()).add(start).add(getOffsetForHandRaw(entityPlayer, hand));
+								rangeBlockSq = resultBlock.hitVec.distanceTo(start);
+								rangeEntitySq = resultEntity.hitVec.distanceTo(start);
 								
-								resultBlock = findBlockOnPath(world, entityPlayer, start, end);
-								resultEntity = findEntityOnPath(world, entityPlayer, start, end);
-								
-								if(resultBlock != null && resultEntity != null)
-								{
-									rangeBlockSq = resultBlock.hitVec.distanceTo(start);
-									rangeEntitySq = resultEntity.hitVec.distanceTo(start);
-									
-									if(rangeBlockSq < rangeEntitySq)
-									{
-										end = resultBlock.hitVec;
-									}
-									else
-									{
-										end = resultEntity.hitVec;
-									}
-									
-									renderPoint = accessory.getLazer().isPoint();
-								}
-								else if(resultBlock != null)
+								if(rangeBlockSq < rangeEntitySq)
 								{
 									end = resultBlock.hitVec;
-									
-									renderPoint = accessory.getLazer().isPoint();
 								}
-								else if(resultEntity != null)
+								else
 								{
 									end = resultEntity.hitVec;
-									
-									renderPoint = accessory.getLazer().isPoint();
 								}
 								
-								start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight() * 0.8F, entityPlayer.posZ).add(getOffsetForHand(entityPlayer, hand));
-								
-								start = start.subtract(subtract);
-								end = end.subtract(subtract);
-								
-								GlStateManager.disableTexture2D();
-								
-								if(renderPoint)
-								{
-									b.begin(7, DefaultVertexFormats.POSITION_COLOR);
-									
-									b.pos(end.x + 0.05D, end.y + 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y + 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y + 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y + 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									b.pos(end.x + 0.05D, end.y - 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y - 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y - 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y - 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									b.pos(end.x + 0.05D, end.y - 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y - 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y + 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y + 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									b.pos(end.x - 0.05D, end.y - 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y + 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y + 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y - 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									b.pos(end.x - 0.05D, end.y - 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y - 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y + 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y + 0.05D, end.z + 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									b.pos(end.x - 0.05D, end.y - 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x - 0.05D, end.y + 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y + 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x + 0.05D, end.y - 0.05D, end.z - 0.05D).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									tessellator.draw();
-								}
-								
-								if(accessory.getLazer().isBeam())
-								{
-									b.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-									
-									b.pos(start.x, start.y, start.z).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									b.pos(end.x, end.y, end.z).color(accessory.getLazer().getR(), accessory.getLazer().getG(), accessory.getLazer().getB(), 1F).endVertex();
-									
-									tessellator.draw();
-								}
-								
-								GlStateManager.enableTexture2D();
+								renderPoint = laser.isPoint();
 							}
+							else if(resultBlock != null)
+							{
+								end = resultBlock.hitVec;
+								
+								renderPoint = laser.isPoint();
+							}
+							else if(resultEntity != null)
+							{
+								end = resultEntity.hitVec;
+								
+								renderPoint = laser.isPoint();
+							}
+							
+							start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight() * 0.8F, entityPlayer.posZ).add(getOffsetForHand(entityPlayer, hand));
+							
+							start = start.subtract(subtract);
+							end = end.subtract(subtract);
+							
+							GlStateManager.disableTexture2D();
+							
+							if(renderPoint)
+							{
+								b.begin(7, DefaultVertexFormats.POSITION_COLOR);
+								
+								b.pos(end.x + 0.05D, end.y + 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y + 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y + 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y + 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								b.pos(end.x + 0.05D, end.y - 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y - 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y - 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y - 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								b.pos(end.x + 0.05D, end.y - 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y - 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y + 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y + 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								b.pos(end.x - 0.05D, end.y - 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y + 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y + 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y - 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								b.pos(end.x - 0.05D, end.y - 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y - 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y + 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y + 0.05D, end.z + 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								b.pos(end.x - 0.05D, end.y - 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x - 0.05D, end.y + 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y + 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x + 0.05D, end.y - 0.05D, end.z - 0.05D).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								tessellator.draw();
+							}
+							
+							if(laser.isBeam())
+							{
+								b.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+								
+								b.pos(start.x, start.y, start.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								b.pos(end.x, end.y, end.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+								
+								tessellator.draw();
+							}
+							
+							GlStateManager.enableTexture2D();
 						}
 					}
 				}

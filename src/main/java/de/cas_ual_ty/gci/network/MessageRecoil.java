@@ -1,9 +1,7 @@
 package de.cas_ual_ty.gci.network;
 
 import de.cas_ual_ty.gci.GunCus;
-import de.cas_ual_ty.gci.SoundEventGCI;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -16,11 +14,11 @@ public class MessageRecoil implements IMessage
 	
 	public MessageRecoil()
 	{
-		
 	}
 	
 	public MessageRecoil(float pitch, float yaw)
 	{
+		this();
 		this.pitch = pitch;
 		this.yaw = yaw;
 	}

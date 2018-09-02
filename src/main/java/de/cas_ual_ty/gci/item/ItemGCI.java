@@ -24,7 +24,7 @@ public class ItemGCI extends Item
 		if(tab != null)
 			this.setCreativeTab(tab);
 		else
-			this.setCreativeTab(GunCus.TAB_BF4);
+			this.setCreativeTab(GunCus.TAB_GUNCUS);
 	}
 	
 	public String getModelRL()

@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "gci",
+  "name": "Gun Customization: Infinity",
+  "description": "Guns with Hundreds of Thousands of Attachment Combinations",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": ""https://minecraft.curseforge.com/projects/gun-customization-infinity,
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["CAS_ual_TY"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

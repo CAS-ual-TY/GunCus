@@ -14,7 +14,6 @@ import de.cas_ual_ty.gci.item.attachment.Optic;
 import de.cas_ual_ty.gci.item.attachment.Accessory.Laser;
 import de.cas_ual_ty.gci.item.attachment.Paint;
 import de.cas_ual_ty.gci.item.attachment.Underbarrel;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,9 +34,9 @@ public class GunCus
 	public static final String MOD_NAME = "Gun Customization: Infinity";
 	public static final String MOD_VERSION = "0.1-1.12.2";
 	
-	public static final CreativeTabs TAB_BF4 = new CreativeTabsGCI(MOD_ID);
+	public static final Random RANDOM = new Random();
 	
-	public static final ItemCartridge BULLET = new ItemCartridge("bullet");
+	public static final CreativeTabsGCI TAB_GUNCUS = new CreativeTabsGCI(MOD_ID);
 	
 	public static final ItemCartridge CARTRIDGE_5_56x45mm = new ItemCartridge("cartridge_5_56x45mm").setDamage(5F);
 	public static final ItemCartridge CARTRIDGE_5_45x39mm = new ItemCartridge("cartridge_5_45x39mm").setDamage(5F);
@@ -45,15 +44,17 @@ public class GunCus
 	public static final ItemCartridge CARTRIDGE_12G_DART = new ItemCartridge("cartridge_12g_dart").setDamage(1.5F).setProjectileAmmount(6);
 	public static final ItemCartridge CARTRIDGE_12G_FRAG = new ItemCartridge("cartridge_12g_frag").setDamage(5F);
 	public static final ItemCartridge CARTRIDGE_12G_SLUG = new ItemCartridge("cartridge_12g_slug").setDamage(5F);
+	public static final ItemCartridge CARTRIDGE__44_magnum = new ItemCartridge("cartridge__44_magnum").setDamage(8F);
+	public static final ItemCartridge CARTRIDGE__338_magnum = new ItemCartridge("cartridge__338_magnum").setDamage(8F);
 	
-	public static final Optic OPTIC_DEFAULT = new Optic(0, "default");
-	public static final Accessory ACCESSORY_DEFAULT = new Accessory(0, "default");
-	public static final Barrel BARREL_DEFAULT = new Barrel(0, "default");
+	public static final Optic 		OPTIC_DEFAULT = new Optic(0, "default");
+	public static final Accessory 	ACCESSORY_DEFAULT = new Accessory(0, "default");
+	public static final Barrel 		BARREL_DEFAULT = new Barrel(0, "default");
 	public static final Underbarrel UNDERBARREL_DEFAULT = new Underbarrel(0, "default");
-	public static final Auxiliary AUXILIARY_DEFAULT = new Auxiliary(0, "default");
-	public static final Ammo AMMO_DEFAULT = new Ammo(0, "default");
-	public static final Magazine MAGAZINE_DEFAULT = new Magazine(0, "default");
-	public static final Paint PAINT_DEFAULT = new Paint(0, "default");
+	public static final Auxiliary 	AUXILIARY_DEFAULT = new Auxiliary(0, "default");
+	public static final Ammo 		AMMO_DEFAULT = new Ammo(0, "default");
+	public static final Magazine 	MAGAZINE_DEFAULT = new Magazine(0, "default");
+	public static final Paint 		PAINT_DEFAULT = new Paint(0, "default");
 	
 	public static final Optic OPTIC_REFLEX = new Optic(1, "optic_reflex");
 	public static final Optic OPTIC_COYOTE = new Optic(2, "optic_coyote");
@@ -71,7 +72,7 @@ public class GunCus
 	public static final Optic OPTIC_PSO1 = new Optic(14, "optic_pso1").setZoom(4F);
 	public static final Optic OPTIC_CL6X = new Optic(15, "optic_cl6x").setZoom(6F);
 	public static final Optic OPTIC_PKS07 = new Optic(16, "optic_pks07").setZoom(7F);
-	public static final Optic OPTIC_RIFLE_SCOPE = new Optic(17, "optic_rifle_scope").setZoom(8F);
+	public static final Optic OPTIC_RIFLE = new Optic(17, "optic_rifle").setZoom(8F);
 	public static final Optic OPTIC_HUNTER = new Optic(18, "optic_hunter").setZoom(20F);
 	public static final Optic OPTIC_BALLISTIC = new Optic(19, "optic_ballistic").setZoom(40F);
 	
@@ -112,8 +113,8 @@ public class GunCus
 	public static final Ammo AMMO_12G_FRAG = new Ammo(3, "ammo_12g_frag").setReplacementCartridge(CARTRIDGE_12G_FRAG);
 	public static final Ammo AMMO_12G_SLUG = new Ammo(4, "ammo_12g_slug").setReplacementCartridge(CARTRIDGE_12G_SLUG);
 	
-	public static final Magazine MAGAZINE_QUICK_SWITCH_MAGS = new Magazine(1, "magazine_quick_switch_mags").setReloadTimeModifier(0.8F);
-	public static final Magazine MAGAZINE_EXTENDED_MAG_10 = new Magazine(2, "magazine_extended_mag_10").setExtraCapacity(10);
+	public static final Magazine MAGAZINE_QUICK_SWITCH = new Magazine(1, "magazine_quick_switch").setReloadTimeModifier(0.8F);
+	public static final Magazine MAGAZINE_EXTENDED_10 = new Magazine(2, "magazine_extended_10").setExtraCapacity(10);
 	
 	public static final Paint PAINT_BLACK = new Paint(1, "paint_black");
 	public static final Paint PAINT_BLUE = new Paint(2, "paint_blue");
@@ -125,7 +126,6 @@ public class GunCus
 	public static final Paint PAINT_WHITE = new Paint(8, "paint_white");
 	public static final Paint PAINT_YELLOW = new Paint(9, "paint_yellow");
 	
-	public static final ItemGun GUN = createAssaultRifle("gun", 3, 30, 5F, GunCus.BULLET);
 	public static final ItemGun GUN_AK_74M = createAssaultRifle("gun_ak_74m", 3, 30, 5F, GunCus.CARTRIDGE_5_45x39mm);
 	public static final ItemGun GUN_M16A4 = createAssaultRifle("gun_m16a4", 3, 30, 5F, GunCus.CARTRIDGE_5_56x45mm);
 	
@@ -133,8 +133,6 @@ public class GunCus
 	public static final SoundEventGCI SOUND_SHOOT_SILENCED = new SoundEventGCI(1, "shoot_silenced");
 	public static final SoundEventGCI SOUND_SHOOT_SNIPER = new SoundEventGCI(2, "shoot_sniper");
 	public static final SoundEventGCI SOUND_RELOAD = new SoundEventGCI(3, "reload");
-	
-	public static final Random RANDOM = new Random();
 	
 	@SidedProxy(clientSide = "de.cas_ual_ty.gci.client.ProxyClient", serverSide = "de.cas_ual_ty.gci.Proxy")
 	public static Proxy proxy;
@@ -197,8 +195,8 @@ public class GunCus
 		.addAttachment(GunCus.UNDERBARREL_FOLDING_GRIP)
 		.addAttachment(GunCus.UNDERBARREL_POTATO_GRIP)
 		
-		.addAttachment(GunCus.MAGAZINE_QUICK_SWITCH_MAGS)
-		.addAttachment(GunCus.MAGAZINE_EXTENDED_MAG_10)
+		.addAttachment(GunCus.MAGAZINE_QUICK_SWITCH)
+		.addAttachment(GunCus.MAGAZINE_EXTENDED_10)
 		
 		.addAttachment(PAINT_BLACK)
 		.addAttachment(PAINT_BLUE)
@@ -220,31 +218,29 @@ public class GunCus
 		{
 			IForgeRegistry<Item> registry = event.getRegistry();
 			
-			GunCus.proxy.registerItem(registry, GunCus.BULLET);
-			GunCus.proxy.registerItem(registry, GunCus.CARTRIDGE_5_56x45mm);
-			GunCus.proxy.registerItem(registry, GunCus.CARTRIDGE_5_45x39mm);
-			GunCus.proxy.registerItem(registry, GunCus.CARTRIDGE_12G_BUCKSHOT);
-			GunCus.proxy.registerItem(registry, GunCus.CARTRIDGE_12G_DART);
-			GunCus.proxy.registerItem(registry, GunCus.CARTRIDGE_12G_FRAG);
-			GunCus.proxy.registerItem(registry, GunCus.CARTRIDGE_12G_SLUG);
-			
 			int j;
-			Attachment item;
+			Attachment attachment;
 			
-			for(int i = 0; i < Attachment.attachmentList.length; ++i)
+			for(int i = 0; i < Attachment.ATTACHMENTS_LIST.length; ++i)
 			{
 				for(j = 0; j < Attachment.getAmmountForSlot(i); ++j)
 				{
-					item = Attachment.getAttachment(i, j);
+					attachment = Attachment.getAttachment(i, j);
 					
-					if(item != null && item.shouldRegister())
-						GunCus.proxy.registerItem(registry, item);
+					if(attachment != null && attachment.shouldRegister())
+						GunCus.proxy.registerItem(registry, attachment);
 				}
 			}
 			
-			GunCus.proxy.registerGun(registry, GunCus.GUN);
-			GunCus.proxy.registerGun(registry, GunCus.GUN_AK_74M);
-			GunCus.proxy.registerGun(registry, GunCus.GUN_M16A4);
+			for(ItemCartridge cartridge : ItemCartridge.CARTRIDGES_LIST)
+			{
+				GunCus.proxy.registerItem(registry, cartridge);
+			}
+			
+			for(ItemGun gun : ItemGun.GUNS_LIST)
+			{
+				GunCus.proxy.registerGun(registry, gun);
+			}
 		}
 	}
 }

@@ -10,9 +10,9 @@ public class Underbarrel extends Attachment
 	{
 		super(id, rl);
 		
-		this.driftModifier = 0F;
-		this.inaccuracyModifierMoving = 0F;
-		this.inaccuracyModifierStill = 0F;
+		this.driftModifier = 1F;
+		this.inaccuracyModifierMoving = 1F;
+		this.inaccuracyModifierStill = 1F;
 	}
 
 	@Override

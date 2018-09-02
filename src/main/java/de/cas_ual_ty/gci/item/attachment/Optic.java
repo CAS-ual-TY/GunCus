@@ -30,7 +30,7 @@ public class Optic extends Attachment
 	@Override
 	public String getInformationString()
 	{
-		return I18n.translateToLocal(this.getUnlocalizedName() + ".name").trim() + " §f(" + this.getZoom() + "x)";
+		return I18n.translateToLocal(this.getUnlocalizedName() + ".name").trim() + " Â§f(" + this.getZoom() + "x)";
 	}
 
 	public boolean canAim()

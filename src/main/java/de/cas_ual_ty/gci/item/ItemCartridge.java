@@ -1,7 +1,18 @@
 package de.cas_ual_ty.gci.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.cas_ual_ty.gci.GunCus;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
+
 public class ItemCartridge extends ItemGCI
 {
+	public static final ArrayList<ItemCartridge> CARTRIDGES_LIST = new ArrayList<ItemCartridge>();
+	
 	protected float damage;
 	protected float gravityModifier;
 	protected float bulletSpeedModifier;
@@ -17,6 +28,8 @@ public class ItemCartridge extends ItemGCI
 		this.bulletSpeedModifier = 1F;
 		this.spreadModifier = 1F;
 		this.projectileAmmount = 1;
+		
+		CARTRIDGES_LIST.add(this);
 	}
 
 	public float getDamage() {
@@ -64,5 +77,11 @@ public class ItemCartridge extends ItemGCI
 	{
 		this.projectileAmmount = projectileAmmount;
 		return this;
+	}
+	
+	@Override
+	public void addInformation(ItemStack itemStack, World world, List<String> list, ITooltipFlag flag)
+	{
+		list.add("§e" + I18n.translateToLocal("local." + GunCus.MOD_ID + ":cartridge.name").trim());
 	}
 }

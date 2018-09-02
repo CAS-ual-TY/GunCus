@@ -30,7 +30,7 @@ public class Proxy
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		
+		GunCus.TAB_GUNCUS.shuffleItemStack();
 	}
 	
 	public void init(FMLInitializationEvent event)

@@ -124,7 +124,7 @@ public class BakedModelGunFinalized implements IBakedModel
 		return this.modelMain.isGui3d();
 	}
 	
-	private static final Matrix4f NULL_MATRIX = new Matrix4f();
+	public static final Matrix4f NULL_MATRIX = new Matrix4f();
 	
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType transformType)
@@ -133,19 +133,16 @@ public class BakedModelGunFinalized implements IBakedModel
 		{
 			EntityPlayer entityPlayer = Minecraft.getMinecraft().player;
 			
-			if(entityPlayer != null && !entityPlayer.isSprinting())
+			if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())
 			{
-				if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())
+				ItemStack itemStack = entityPlayer.getHeldItemMainhand();
+				ItemGun gun = (ItemGun) itemStack.getItem();
+				
+				Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
+				
+				if(optic != null && optic.canAim())
 				{
-					ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-					ItemGun gun = (ItemGun) itemStack.getItem();
-					
-					Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
-					
-					if(optic != null && optic.canAim())
-					{
-						return Pair.of(this, NULL_MATRIX);
-					}
+					return Pair.of(this, NULL_MATRIX);
 				}
 			}
 		}

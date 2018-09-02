@@ -35,6 +35,8 @@ import net.minecraft.world.World;
 
 public class ItemGun extends ItemGCI
 {
+	public static final ArrayList<ItemGun> GUNS_LIST = new ArrayList<ItemGun>();
+	
 	public static final String NBT_SHOOT_TIME = "ShootTime";
 	public static final String NBT_AMMO = "Ammo";
 	public static final String NBT_RELOADING = "Reloading";
@@ -59,7 +61,7 @@ public class ItemGun extends ItemGCI
 		this.damage = damage;
 		this.cartridge = cartridge;
 		
-		this.gunTab = new CreativeTabsGCIGun(rl, new ItemStack(this));
+		this.gunTab = new CreativeTabsGCIGun(rl, this);
 		
 		this.attachments = new boolean[EnumAttachmentType.values().length][];
 		
@@ -67,6 +69,8 @@ public class ItemGun extends ItemGCI
 		{
 			this.attachments[i] = new boolean[Attachment.getAmmountForSlot(i)];
 		}
+		
+		GUNS_LIST.add(this);
 	}
 	
 	public ItemGun addAttachment(Attachment attachment)
@@ -164,7 +168,7 @@ public class ItemGun extends ItemGCI
 			float pitch = entityPlayer.rotationPitch;
 			float yaw = entityPlayer.rotationYaw;
 			float pitchRecoil = -GunCus.RANDOM.nextFloat() * 5F;
-			float yawRecoil = GunCus.RANDOM.nextFloat() - 0.5F * 5F;
+			float yawRecoil = (GunCus.RANDOM.nextFloat() - 0.5F) * 5F;
 			
 			if(inaccuracy > 10)
 			{
@@ -397,7 +401,7 @@ public class ItemGun extends ItemGCI
 		{
 			list.add(new ItemStack(this));
 			
-			int[] array = new int[Attachment.attachmentList.length];
+			int[] array = new int[Attachment.ATTACHMENTS_LIST.length];
 			
 			int slot;
 			int j;
@@ -469,7 +473,7 @@ public class ItemGun extends ItemGCI
 	{
 		super.addInformation(itemStack, world, list, flag);
 		
-		list.add("งe" + this.getAmmo(itemStack) + "งf/" + this.maxAmmo + " งe" + getCardridgeTranslated(this.getCurrentlyUsedCardridge(itemStack)));
+		list.add("ยงe" + this.getAmmo(itemStack) + "ยงf/" + this.maxAmmo + " ยงe" + getCardridgeTranslated(this.getCurrentlyUsedCardridge(itemStack)));
 		
 		Attachment attachment;
 		int ammount = 0;;
@@ -485,7 +489,7 @@ public class ItemGun extends ItemGCI
 		
 		if(ammount > 0)
 		{
-			list.add("ง8" + Attachment.getAttachmentTranslated(ammount > 1) + ":");
+			list.add("ยง8" + Attachment.getAttachmentTranslated(ammount > 1) + ":");
 			for(i = 0; i < EnumAttachmentType.values().length; ++i)
 			{
 				if(this.isSlotAvailable(i))
@@ -494,11 +498,11 @@ public class ItemGun extends ItemGCI
 					
 					if(attachment != null)
 					{
-						list.add("งe" + attachment.getInformationString() + " ง8(" + Attachment.getSlotTranslated(i) + ")");
+						list.add("ยงe" + attachment.getInformationString() + " ยง8(" + Attachment.getSlotTranslated(i) + ")");
 					}
 					else
 					{
-						list.add("--" + " ง8(" + Attachment.getSlotTranslated(i) + ")");
+						list.add("--" + " ยง8(" + Attachment.getSlotTranslated(i) + ")");
 					}
 				}
 			}
@@ -535,7 +539,7 @@ public class ItemGun extends ItemGCI
 	{
 		int ammount = 0;
 		
-		int[] array = new int[Attachment.attachmentList.length];
+		int[] array = new int[Attachment.ATTACHMENTS_LIST.length];
 		
 		int slot;
 		int j;

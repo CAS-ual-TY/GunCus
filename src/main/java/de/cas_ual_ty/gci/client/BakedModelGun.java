@@ -1,6 +1,5 @@
 package de.cas_ual_ty.gci.client;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,13 +22,13 @@ public class BakedModelGun implements IBakedModel
 	 */
 	private final IBakedModel modelMain;
 	private final BakedModelGunFinalized modelFinal;
-	private final OverridesList overridesList;
+	private final ItemOverrideListGCI overridesList;
 	
 	public BakedModelGun(IBakedModel modelMain, IBakedModel[][] attachmentModels)
 	{
 		this.modelMain = modelMain;
 		this.modelFinal = new BakedModelGunFinalized(this.modelMain, attachmentModels);
-		this.overridesList = new OverridesList(this);
+		this.overridesList = new ItemOverrideListGCI(this);
 	}
 	
 	public BakedModelGunFinalized getModelFinal()
@@ -73,11 +72,11 @@ public class BakedModelGun implements IBakedModel
 		return this.modelMain.isGui3d();
 	}
 	
-	private static class OverridesList extends ItemOverrideList
+	private static class ItemOverrideListGCI extends ItemOverrideList
 	{
 		private BakedModelGun modelGun;
 		
-		public OverridesList(BakedModelGun modelGun)
+		public ItemOverrideListGCI(BakedModelGun modelGun)
 		{
 			super(Collections.EMPTY_LIST);
 			this.modelGun = modelGun;
