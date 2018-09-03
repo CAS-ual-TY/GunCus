@@ -1,10 +1,14 @@
 package de.cas_ual_ty.gci;
 
+import de.cas_ual_ty.gci.block.BlockGCI;
+import de.cas_ual_ty.gci.item.ItemBlockGCI;
 import de.cas_ual_ty.gci.item.ItemGCI;
 import de.cas_ual_ty.gci.item.ItemGun;
+import de.cas_ual_ty.gci.network.GuiHandlerGCI;
 import de.cas_ual_ty.gci.network.MessageRecoil;
 import de.cas_ual_ty.gci.network.MessageShoot;
 import de.cas_ual_ty.gci.network.MessageSound;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -23,14 +27,26 @@ public class Proxy
 		registry.register(item);
 	}
 	
+	public void registerItem(IForgeRegistry<Item> registry, ItemBlockGCI item)
+	{
+		registry.register(item);
+	}
+	
 	public void registerGun(IForgeRegistry<Item> registry, ItemGun gun)
 	{
 		registry.register(gun);
 	}
 	
+	public void registerBlock(IForgeRegistry<Block> registry, BlockGCI block)
+	{
+		registry.register(block);
+	}
+	
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		GunCus.TAB_GUNCUS.shuffleItemStack();
+		
+		NetworkRegistry.INSTANCE.registerGuiHandler(GunCus.instance, new GuiHandlerGCI());
 	}
 	
 	public void init(FMLInitializationEvent event)

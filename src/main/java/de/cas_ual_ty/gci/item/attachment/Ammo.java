@@ -21,12 +21,6 @@ public class Ammo extends Attachment
 	}
 	
 	@Override
-	public ItemStack createItemStack()
-	{
-		return new ItemStack(this);
-	}
-	
-	@Override
 	public boolean shouldRender()
 	{
 		return false;

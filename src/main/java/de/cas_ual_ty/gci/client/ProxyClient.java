@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.registries.IForgeRegistry;
 import de.cas_ual_ty.gci.GunCus;
 import de.cas_ual_ty.gci.Proxy;
+import de.cas_ual_ty.gci.block.BlockGCI;
+import de.cas_ual_ty.gci.item.ItemBlockGCI;
 import de.cas_ual_ty.gci.item.ItemGCI;
 import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Attachment;
@@ -45,8 +48,20 @@ public class ProxyClient extends Proxy
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(GunCus.MOD_ID + ":" + item.getModelRL(), "inventory"));
 	}
 	
+	public void registerItemRenderer(ItemBlockGCI item)
+	{
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(GunCus.MOD_ID + ":" + item.getModelRL(), "inventory"));
+	}
+	
 	@Override
 	public void registerItem(IForgeRegistry<Item> registry, ItemGCI item)
+	{
+		super.registerItem(registry, item);
+		this.registerItemRenderer(item);
+	}
+	
+	@Override
+	public void registerItem(IForgeRegistry<Item> registry, ItemBlockGCI item)
 	{
 		super.registerItem(registry, item);
 		this.registerItemRenderer(item);
@@ -84,6 +99,12 @@ public class ProxyClient extends Proxy
 		}
 		
 		ModelBakery.registerItemVariants(gun, list.toArray(new ModelResourceLocation[list.size()])); //Register all attachment MRLs found so that they will be loaded
+	}
+	
+	@Override
+	public void registerBlock(IForgeRegistry<Block> registry, BlockGCI block)
+	{
+		super.registerBlock(registry, block);
 	}
 	
 	@Override

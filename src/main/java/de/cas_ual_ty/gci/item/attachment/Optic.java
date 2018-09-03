@@ -32,6 +32,16 @@ public class Optic extends Attachment
 	{
 		return I18n.translateToLocal(this.getUnlocalizedName() + ".name").trim() + " §f(" + this.getZoom() + "x)";
 	}
+	
+	public boolean isCompatibleWithMagnifiers()
+	{
+		return this.zoom <= 4F;
+	}
+	
+	public boolean isCompatibleWithExtraZoom()
+	{
+		return !this.isCompatibleWithMagnifiers();
+	}
 
 	public boolean canAim()
 	{

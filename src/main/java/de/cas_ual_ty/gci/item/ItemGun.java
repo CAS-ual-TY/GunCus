@@ -42,6 +42,7 @@ public class ItemGun extends ItemGCI
 	public static final String NBT_RELOADING = "Reloading";
 	public static final String NBT_INACCURACY = "Inaccuracy";
 	public static final String NBT_ATTACHMENT_PREFIX = "Attachment";
+	public static final String NBT_ACCESSORY_SWITCH = "AccessorySwitch";
 	
 	protected int fireRate;
 	protected int maxAmmo;
@@ -307,6 +308,16 @@ public class ItemGun extends ItemGCI
 		return itemStack.getTagCompound();
 	}
 	
+	public boolean isAccessoryTurnedOn(ItemStack itemStack)
+	{
+		return true;//return this.getNBT(itemStack).getBoolean(NBT_ACCESSORY_SWITCH);
+	}
+	
+	public void setAccessoryTurnedOn(ItemStack itemStack, boolean b)
+	{
+		this.getNBT(itemStack).setBoolean(NBT_ACCESSORY_SWITCH, b);
+	}
+	
 	public int getShootTime(ItemStack itemStack)
 	{
 		return this.getNBT(itemStack).getInteger(NBT_SHOOT_TIME);
@@ -498,7 +509,7 @@ public class ItemGun extends ItemGCI
 					
 					if(attachment != null)
 					{
-						list.add("§e" + attachment.getInformationString() + " §8(" + Attachment.getSlotTranslated(i) + ")");
+						list.add("§e" + attachment.getInformationString(this, itemStack) + " §8(" + Attachment.getSlotTranslated(i) + ")");
 					}
 					else
 					{

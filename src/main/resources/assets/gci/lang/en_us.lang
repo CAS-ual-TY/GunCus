@@ -13,6 +13,8 @@ local.gci:slot6.name=Magazine
 local.gci:slot7.name=Paint
 item.gci:default.name=--
 
+tile.gci:gun_table.name=Gun Table
+
 item.gci:gun_ak_74m.name=AK-74M
 item.gci:gun_m16a4.name=M16A4
 

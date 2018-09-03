@@ -9,6 +9,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import de.cas_ual_ty.gci.GunCus;
 import de.cas_ual_ty.gci.item.ItemGCI;
+import de.cas_ual_ty.gci.item.ItemGun;
 
 public abstract class Attachment extends ItemGCI
 {
@@ -57,6 +58,11 @@ public abstract class Attachment extends ItemGCI
 		return this.getType().getSlot();
 	}
 	
+	public String getInformationString(ItemGun gun, ItemStack gunStack)
+	{
+		return this.getInformationString();
+	}
+	
 	public String getInformationString()
 	{
 		return I18n.translateToLocal(this.getUnlocalizedName() + ".name").trim();
@@ -70,7 +76,7 @@ public abstract class Attachment extends ItemGCI
 	
 	public ItemStack createItemStack()
 	{
-		if(this.id == 0)
+		if(this.getID() == 0)
 		{
 			return ItemStack.EMPTY;
 		}

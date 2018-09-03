@@ -248,6 +248,8 @@ public class EventHandlerClient
 			if(!entityPlayer.isSprinting() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())
 			{
 				Optic optic = null;
+				float modifier = 1F;
+				float extra = 0F;
 				
 				if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
 				{
@@ -260,6 +262,21 @@ public class EventHandlerClient
 						{
 							optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
 						}
+						
+						if(gun.isAccessoryTurnedOn(itemStack) && gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY.getSlot()) != null)
+						{
+							Accessory accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY.getSlot());
+							
+							if(optic.isCompatibleWithMagnifiers())
+							{
+								modifier = accessory.getZoomModifier();
+							}
+							
+							if(optic.isCompatibleWithExtraZoom())
+							{
+								extra = accessory.getExtraZoom();
+							}
+						}
 					}
 				}
 				else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
@@ -270,7 +287,7 @@ public class EventHandlerClient
 				
 				if(optic != null && optic.canAim())
 				{
-					event.setNewfov(calculateFov(optic.getZoom() + 0.1F, event.getFov()));
+					event.setNewfov(calculateFov(optic.getZoom() * modifier + 0.1F, event.getFov()));
 				}
 			}
 		}
@@ -317,15 +334,19 @@ public class EventHandlerClient
 						if(itemStack.getItem() instanceof ItemGun)
 						{
 							gun = (ItemGun) itemStack.getItem();
-							accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY.getSlot());
-							laser = accessory.getLaser();
+							
+							if(gun.isAccessoryTurnedOn(itemStack))
+							{
+								accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY.getSlot());
+								laser = accessory.getLaser();
+							}
 						}
 						else if(itemStack.getItem() instanceof Accessory)
 						{
 							accessory = (Accessory) itemStack.getItem();
 						}
 						
-						if(accessory != null)
+						if(accessory != null && accessory.getLaser() != null)
 						{
 							laser = accessory.getLaser();
 							start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);

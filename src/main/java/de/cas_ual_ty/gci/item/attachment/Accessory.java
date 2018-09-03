@@ -1,5 +1,9 @@
 package de.cas_ual_ty.gci.item.attachment;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.translation.I18n;
+import de.cas_ual_ty.gci.item.ItemGun;
+
 public class Accessory extends Attachment
 {
 	protected float zoomModifier;
@@ -16,11 +20,23 @@ public class Accessory extends Attachment
 		this.extraZoom = 0F;
 		this.laser = null;
 	}
-
+	
 	@Override
 	public EnumAttachmentType getType()
 	{
 		return EnumAttachmentType.ACCESSORY;
+	}
+	
+	@Override
+	public String getInformationString(ItemGun gun, ItemStack gunStack)
+	{
+		return this.getInformationString() + (this.getID() == 0 ? "" : (" §f(" + (gun.isAccessoryTurnedOn(gunStack) ? "+" : "-") + ")"));
+	}
+	
+	@Override
+	public String getInformationString()
+	{
+		return I18n.translateToLocal(this.getUnlocalizedName() + ".name").trim();
 	}
 	
 	public float getZoomModifier()
