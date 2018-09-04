@@ -44,7 +44,7 @@ public class EventHandlerClient
 	public static final GuiSight GUI_SIGHT = new GuiSight();
 	private static final ModelRendererTransformationHelper TRANSFORMATION_HELPER = new ModelRendererTransformationHelper();
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void onEvent(RenderPlayerEvent.Pre event)
 	{
 		EntityPlayer entityPlayer = event.getEntityPlayer();
@@ -67,7 +67,7 @@ public class EventHandlerClient
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void onEvent(RenderPlayerEvent.Post event)
 	{
 		EntityPlayer entityPlayer = event.getEntityPlayer();

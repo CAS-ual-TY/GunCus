@@ -30,7 +30,7 @@ public class ContainerGunTable extends Container
 		this.world = world;
 		this.pos = pos;
 		
-		this.gunSlot = new Slot(this.craftMatrix, 1 + 1 * 3, 30 + 1 * 18, 17 + 1 * 18)
+		this.gunSlot = new Slot(this.craftMatrix, 1 + 1 * 3, 80, 35)
 		{
 			@Override
 			public boolean isItemValid(ItemStack itemStack)
@@ -58,7 +58,7 @@ public class ContainerGunTable extends Container
 		this.attachmentSlots = new SlotAttachment[EnumAttachmentType.values().length];
 		for(EnumAttachmentType attachmentType : EnumAttachmentType.values())
 		{
-			this.attachmentSlots[attachmentType.getSlot()] = new SlotAttachment(this.gunSlot, attachmentType.getSlot(), this.craftMatrix, attachmentType.getX() + attachmentType.getY() * 3, 30 + attachmentType.getX() * 18, 17 + attachmentType.getY() * 18);
+			this.attachmentSlots[attachmentType.getSlot()] = new SlotAttachment(this.gunSlot, attachmentType.getSlot(), this.craftMatrix, attachmentType.getX() + attachmentType.getY() * 3, 8 + (attachmentType.getX() + 3) * 18, 17 + attachmentType.getY() * 18);
 			this.addSlotToContainer(this.attachmentSlots[attachmentType.getSlot()]);
 		}
 		
