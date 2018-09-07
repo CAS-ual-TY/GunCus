@@ -56,7 +56,7 @@ public class CreativeTabsGCI extends CreativeTabs
 	{
 		return this.getTabIconItem();
 	}
-
+	
 	@Override
 	public ItemStack getTabIconItem()
 	{

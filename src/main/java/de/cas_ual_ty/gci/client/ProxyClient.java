@@ -8,6 +8,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.cas_ual_ty.gci.GunCus;
+import de.cas_ual_ty.gci.Proxy;
+import de.cas_ual_ty.gci.block.BlockGCI;
+import de.cas_ual_ty.gci.item.ItemBlockGCI;
+import de.cas_ual_ty.gci.item.ItemGCI;
+import de.cas_ual_ty.gci.item.ItemGun;
+import de.cas_ual_ty.gci.item.attachment.Attachment;
+import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -20,19 +28,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.registries.IForgeRegistry;
-import de.cas_ual_ty.gci.GunCus;
-import de.cas_ual_ty.gci.Proxy;
-import de.cas_ual_ty.gci.block.BlockGCI;
-import de.cas_ual_ty.gci.item.ItemBlockGCI;
-import de.cas_ual_ty.gci.item.ItemGCI;
-import de.cas_ual_ty.gci.item.ItemGun;
-import de.cas_ual_ty.gci.item.attachment.Attachment;
-import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
 
 public class ProxyClient extends Proxy
 {
 	public ProxyClient()
 	{
+		/*
 		try //TODO
 		{
 			generateAttachmentModelsForGun(GunCus.GUN_M16A4);
@@ -40,7 +41,7 @@ public class ProxyClient extends Proxy
 		catch (IOException e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public void registerItemRenderer(ItemGCI item)
@@ -120,7 +121,7 @@ public class ProxyClient extends Proxy
 	{
 		super.init(event);
 		
-//		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderFactoryGCI());
+		//		RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, new RenderFactoryGCI());
 		
 		MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
 	}
@@ -155,7 +156,9 @@ public class ProxyClient extends Proxy
 		File itemDir = new File(itemDirPath);
 		
 		if(!itemDir.exists())
+		{
 			itemDir.mkdirs();
+		}
 		
 		int j;
 		Attachment attachment;
@@ -224,6 +227,6 @@ public class ProxyClient extends Proxy
 	
 	public static void generateAttachmentModelsForGun(ItemGun gun) throws IOException
 	{
-		generateAttachmentModelsForGun("C:/Minecraft Coding 1.12/src/main/resources/assets/gci", gun);
+		ProxyClient.generateAttachmentModelsForGun("C:/Minecraft Coding 1.12/src/main/resources/assets/gci", gun);
 	}
 }

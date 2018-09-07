@@ -32,7 +32,7 @@ public class MessageShoot implements IMessage
 		this.aiming = buf.readBoolean();
 		this.moving = buf.readBoolean();
 	}
-
+	
 	@Override
 	public void toBytes(ByteBuf buf)
 	{

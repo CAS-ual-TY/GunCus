@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import de.cas_ual_ty.gci.CreativeTabsGCIGun;
 import de.cas_ual_ty.gci.EntityBullet;
 import de.cas_ual_ty.gci.GunCus;
+import de.cas_ual_ty.gci.SoundEventGCI;
 import de.cas_ual_ty.gci.item.attachment.Accessory;
 import de.cas_ual_ty.gci.item.attachment.Ammo;
 import de.cas_ual_ty.gci.item.attachment.Attachment;
@@ -53,6 +54,10 @@ public class ItemGun extends ItemGCI
 	
 	protected boolean[][] attachments;
 	
+	protected SoundEventGCI soundShoot;
+	protected SoundEventGCI soundShootSilenced;
+	protected SoundEventGCI soundReload;
+	
 	public ItemGun(String rl, int fireRate, int maxAmmo, float damage, ItemCartridge cartridge)
 	{
 		super(rl);
@@ -71,7 +76,11 @@ public class ItemGun extends ItemGCI
 			this.attachments[i] = new boolean[Attachment.getAmmountForSlot(i)];
 		}
 		
-		GUNS_LIST.add(this);
+		this.soundShoot = GunCus.SOUND_SHOOT;
+		this.soundShootSilenced = GunCus.SOUND_SHOOT_SILENCED;
+		this.soundReload = GunCus.SOUND_RELOAD;
+		
+		ItemGun.GUNS_LIST.add(this);
 	}
 	
 	public ItemGun addAttachment(Attachment attachment)
@@ -216,14 +225,23 @@ public class ItemGun extends ItemGCI
 			this.setShootTime(itemStack, this.fireRate);
 			
 			if(!entityPlayer.capabilities.isCreativeMode)
+			{
 				this.setAmmo(itemStack, this.getAmmo(itemStack) - 1);
+			}
 			
 			this.setInaccuracy(itemStack, inaccuracyInt + 2);
 			
 			GunCus.channel.sendTo(new MessageRecoil(pitchRecoil, yawRecoil), (EntityPlayerMP) entityPlayer);
 		}
 		
-		GunCus.channel.sendTo(new MessageSound(entityPlayer, GunCus.SOUND_SHOOT), (EntityPlayerMP) entityPlayer);
+		if(this.<Barrel>getAttachmentCalled(itemStack, EnumAttachmentType.BARREL.getSlot()) != null && this.<Barrel>getAttachmentCalled(itemStack, EnumAttachmentType.BARREL.getSlot()).getIsSilenced())
+		{
+			GunCus.channel.sendTo(new MessageSound(entityPlayer, this.soundShootSilenced, 1F, 1F), (EntityPlayerMP) entityPlayer);
+		}
+		else
+		{
+			GunCus.channel.sendTo(new MessageSound(entityPlayer, this.soundShoot, 10F, 1F), (EntityPlayerMP) entityPlayer);
+		}
 		
 		return EnumActionResult.PASS;
 	}
@@ -268,7 +286,9 @@ public class ItemGun extends ItemGCI
 			}
 			
 			if(ammount >= this.maxAmmo)
+			{
 				break;
+			}
 		}
 		
 		if(ammount > 0)
@@ -288,7 +308,7 @@ public class ItemGun extends ItemGCI
 			this.setIsReloading(itemStack, true);
 		}
 		
-		GunCus.channel.sendTo(new MessageSound(entityPlayer, GunCus.SOUND_RELOAD), (EntityPlayerMP) entityPlayer);
+		GunCus.channel.sendTo(new MessageSound(entityPlayer, this.soundReload, 1F, 1F), (EntityPlayerMP) entityPlayer);
 		
 		return EnumActionResult.SUCCESS;
 	}
@@ -315,17 +335,17 @@ public class ItemGun extends ItemGCI
 	
 	public void setAccessoryTurnedOn(ItemStack itemStack, boolean b)
 	{
-		this.getNBT(itemStack).setBoolean(NBT_ACCESSORY_SWITCH, b);
+		this.getNBT(itemStack).setBoolean(ItemGun.NBT_ACCESSORY_SWITCH, b);
 	}
 	
 	public int getShootTime(ItemStack itemStack)
 	{
-		return this.getNBT(itemStack).getInteger(NBT_SHOOT_TIME);
+		return this.getNBT(itemStack).getInteger(ItemGun.NBT_SHOOT_TIME);
 	}
 	
 	public void setShootTime(ItemStack itemStack, int i)
 	{
-		this.getNBT(itemStack).setInteger(NBT_SHOOT_TIME, i);
+		this.getNBT(itemStack).setInteger(ItemGun.NBT_SHOOT_TIME, i);
 	}
 	
 	public boolean getCanAim(ItemStack itemStack)
@@ -335,32 +355,32 @@ public class ItemGun extends ItemGCI
 	
 	public boolean getIsReloading(ItemStack itemStack)
 	{
-		return this.getNBT(itemStack).getBoolean(NBT_RELOADING);
+		return this.getNBT(itemStack).getBoolean(ItemGun.NBT_RELOADING);
 	}
 	
 	public void setIsReloading(ItemStack itemStack, boolean isReloading)
 	{
-		this.getNBT(itemStack).setBoolean(NBT_RELOADING, isReloading);
+		this.getNBT(itemStack).setBoolean(ItemGun.NBT_RELOADING, isReloading);
 	}
 	
 	public int getAmmo(ItemStack itemStack)
 	{
-		return this.getNBT(itemStack).getInteger(NBT_AMMO);
+		return this.getNBT(itemStack).getInteger(ItemGun.NBT_AMMO);
 	}
 	
 	public void setAmmo(ItemStack itemStack, int i)
 	{
-		this.getNBT(itemStack).setInteger(NBT_AMMO, i);
+		this.getNBT(itemStack).setInteger(ItemGun.NBT_AMMO, i);
 	}
 	
 	public int getInaccuracy(ItemStack itemStack)
 	{
-		return this.getNBT(itemStack).getInteger(NBT_INACCURACY);
+		return this.getNBT(itemStack).getInteger(ItemGun.NBT_INACCURACY);
 	}
 	
 	public void setInaccuracy(ItemStack itemStack, int i)
 	{
-		this.getNBT(itemStack).setInteger(NBT_INACCURACY, i);
+		this.getNBT(itemStack).setInteger(ItemGun.NBT_INACCURACY, i);
 	}
 	
 	public @Nullable Attachment getAttachment(ItemStack itemStack, int slot)
@@ -370,7 +390,7 @@ public class ItemGun extends ItemGCI
 	
 	public int getAttachmentID(ItemStack itemStack, int slot)
 	{
-		return this.getNBT(itemStack).getInteger(getAttachmentNBTKey(slot));
+		return this.getNBT(itemStack).getInteger(ItemGun.getAttachmentNBTKey(slot));
 	}
 	
 	public void setAttachment(ItemStack itemStack, Attachment attachment)
@@ -380,7 +400,7 @@ public class ItemGun extends ItemGCI
 	
 	public void setAttachment(ItemStack itemStack, int slot, int id)
 	{
-		this.getNBT(itemStack).setInteger(getAttachmentNBTKey(slot), id);
+		this.getNBT(itemStack).setInteger(ItemGun.getAttachmentNBTKey(slot), id);
 	}
 	
 	public void removeAttachment(ItemStack itemStack, int slot)
@@ -484,7 +504,7 @@ public class ItemGun extends ItemGCI
 	{
 		super.addInformation(itemStack, world, list, flag);
 		
-		list.add("§e" + this.getAmmo(itemStack) + "§f/" + this.maxAmmo + " §e" + getCardridgeTranslated(this.getCurrentlyUsedCardridge(itemStack)));
+		list.add("§e" + this.getAmmo(itemStack) + "§f/" + this.maxAmmo + " §e" + ItemGun.getCardridgeTranslated(this.getCurrentlyUsedCardridge(itemStack)));
 		
 		Attachment attachment;
 		int ammount = 0;;
@@ -522,28 +542,28 @@ public class ItemGun extends ItemGCI
 	
 	public static String getAttachmentNBTKey(int slot)
 	{
-		return NBT_ATTACHMENT_PREFIX + slot;
+		return ItemGun.NBT_ATTACHMENT_PREFIX + slot;
 	}
 	
 	public static String getCardridgeTranslated(Item cardridge)
 	{
 		return I18n.translateToLocal(cardridge.getUnlocalizedName() + ".name").trim();
 	}
-
+	
 	public int getFireRate() {
-		return fireRate;
+		return this.fireRate;
 	}
-
+	
 	public int getMaxAmmo() {
-		return maxAmmo;
+		return this.maxAmmo;
 	}
-
+	
 	public float getDamage() {
-		return damage + this.getCartridge().getDamage();
+		return this.damage + this.getCartridge().getDamage();
 	}
-
+	
 	public ItemCartridge getCartridge() {
-		return cartridge;
+		return this.cartridge;
 	}
 	
 	public int getVariants()

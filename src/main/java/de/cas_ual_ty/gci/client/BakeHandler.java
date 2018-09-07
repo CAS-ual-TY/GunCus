@@ -1,14 +1,14 @@
 package de.cas_ual_ty.gci.client;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import de.cas_ual_ty.gci.GunCus;
 import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Attachment;
 import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
 import de.cas_ual_ty.gci.item.attachment.Optic;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class BakeHandler
 {

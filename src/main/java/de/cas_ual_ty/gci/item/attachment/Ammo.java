@@ -31,12 +31,12 @@ public class Ammo extends Attachment
 	{
 		return EnumAttachmentType.AMMO;
 	}
-
+	
 	public Item getReplacementCartridge()
 	{
-		return replacementCartridge;
+		return this.replacementCartridge;
 	}
-
+	
 	public Ammo setReplacementCartridge(Item replacementCartridge)
 	{
 		this.replacementCartridge = replacementCartridge;

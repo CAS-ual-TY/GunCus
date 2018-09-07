@@ -3,13 +3,13 @@ package de.cas_ual_ty.gci.item.attachment;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.cas_ual_ty.gci.GunCus;
+import de.cas_ual_ty.gci.item.ItemGCI;
+import de.cas_ual_ty.gci.item.ItemGun;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import de.cas_ual_ty.gci.GunCus;
-import de.cas_ual_ty.gci.item.ItemGCI;
-import de.cas_ual_ty.gci.item.ItemGun;
 
 public abstract class Attachment extends ItemGCI
 {
@@ -17,20 +17,20 @@ public abstract class Attachment extends ItemGCI
 	
 	static
 	{
-		for(int i = 0; i < ATTACHMENTS_LIST.length; ++i)
+		for(int i = 0; i < Attachment.ATTACHMENTS_LIST.length; ++i)
 		{
-			ATTACHMENTS_LIST[i] = new ArrayList<Attachment>();
+			Attachment.ATTACHMENTS_LIST[i] = new ArrayList<Attachment>();
 		}
 	}
 	
 	public static Attachment getAttachment(int slot, int id)
 	{
-		return (Attachment) ATTACHMENTS_LIST[slot].get(id);
+		return (Attachment) Attachment.ATTACHMENTS_LIST[slot].get(id);
 	}
 	
 	public static int getAmmountForSlot(int slot)
 	{
-		return ATTACHMENTS_LIST[slot].size();
+		return Attachment.ATTACHMENTS_LIST[slot].size();
 	}
 	
 	private int id;
@@ -41,11 +41,11 @@ public abstract class Attachment extends ItemGCI
 		
 		this.id = id;
 		
-		while(ATTACHMENTS_LIST[this.getSlot()].size() <= id)
+		while(Attachment.ATTACHMENTS_LIST[this.getSlot()].size() <= id)
 		{
-			ATTACHMENTS_LIST[this.getSlot()].add(null);
+			Attachment.ATTACHMENTS_LIST[this.getSlot()].add(null);
 		}
-		ATTACHMENTS_LIST[this.getSlot()].set(id, this);
+		Attachment.ATTACHMENTS_LIST[this.getSlot()].set(id, this);
 	}
 	
 	public int getID()
@@ -106,7 +106,7 @@ public abstract class Attachment extends ItemGCI
 	@Override
 	public void addInformation(ItemStack itemStack, World world, List<String> list, ITooltipFlag flag)
 	{
-		list.add("§e" + getSlotTranslated(this.getSlot()) + " §8" + getAttachmentTranslated(false) + "");
+		list.add("§e" + Attachment.getSlotTranslated(this.getSlot()) + " §8" + Attachment.getAttachmentTranslated(false) + "");
 	}
 	
 	public static String getSlotTranslated(int slot)

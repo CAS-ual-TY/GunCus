@@ -29,7 +29,7 @@ public class MessageRecoil implements IMessage
 		this.pitch = buf.readFloat();
 		this.yaw = buf.readFloat();
 	}
-
+	
 	@Override
 	public void toBytes(ByteBuf buf)
 	{

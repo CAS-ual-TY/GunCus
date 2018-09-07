@@ -8,13 +8,13 @@ import de.cas_ual_ty.gci.item.ItemBlockGCI;
 import de.cas_ual_ty.gci.item.ItemCartridge;
 import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Accessory;
+import de.cas_ual_ty.gci.item.attachment.Accessory.Laser;
 import de.cas_ual_ty.gci.item.attachment.Ammo;
 import de.cas_ual_ty.gci.item.attachment.Attachment;
 import de.cas_ual_ty.gci.item.attachment.Auxiliary;
 import de.cas_ual_ty.gci.item.attachment.Barrel;
 import de.cas_ual_ty.gci.item.attachment.Magazine;
 import de.cas_ual_ty.gci.item.attachment.Optic;
-import de.cas_ual_ty.gci.item.attachment.Accessory.Laser;
 import de.cas_ual_ty.gci.item.attachment.Paint;
 import de.cas_ual_ty.gci.item.attachment.Underbarrel;
 import net.minecraft.block.Block;
@@ -40,7 +40,12 @@ public class GunCus
 	
 	public static final Random RANDOM = new Random();
 	
-	public static final CreativeTabsGCI TAB_GUNCUS = new CreativeTabsGCI(MOD_ID);
+	public static final CreativeTabsGCI TAB_GUNCUS = new CreativeTabsGCI(GunCus.MOD_ID);
+	
+	public static final SoundEventGCI SOUND_SHOOT 			= new SoundEventGCI(0, "shoot");
+	public static final SoundEventGCI SOUND_SHOOT_SILENCED 	= new SoundEventGCI(1, "shoot_silenced");
+	public static final SoundEventGCI SOUND_SHOOT_SNIPER 	= new SoundEventGCI(2, "shoot_sniper");
+	public static final SoundEventGCI SOUND_RELOAD 			= new SoundEventGCI(3, "reload");
 	
 	public static final BlockGCI BLOCK_GUN_TABLE = new BlockGunTable("gun_table");
 	
@@ -68,8 +73,8 @@ public class GunCus
 	public static final Optic 		OPTIC_HOLO 					= new Optic(4, "optic_holo");
 	public static final Optic 		OPTIC_HD33 					= new Optic(5, "optic_hd33");
 	public static final Optic 		OPTIC_PKAS 					= new Optic(6, "optic_pkas");
-//	public static final Optic 		OPTIC_IRNV 					= new Optic(7, "optic_irnv").setOpticType(EnumOpticType.NIGHT_VISION);
-//	public static final Optic 		OPTIC_FLIR 					= new Optic(8, "optic_flir").setZoom(2F).setOpticType(EnumOpticType.THERMAL);
+	//	public static final Optic 		OPTIC_IRNV 					= new Optic(7, "optic_irnv").setOpticType(EnumOpticType.NIGHT_VISION);
+	//	public static final Optic 		OPTIC_FLIR 					= new Optic(8, "optic_flir").setZoom(2F).setOpticType(EnumOpticType.THERMAL);
 	public static final Optic 		OPTIC_M145 					= new Optic(9, "optic_m145").setZoom(3.4F);
 	public static final Optic 		OPTIC_PRISMA 				= new Optic(10, "optic_prisma").setZoom(3.4F);
 	public static final Optic 		OPTIC_PKA 					= new Optic(11, "optic_pka").setZoom(3.4F);
@@ -114,10 +119,10 @@ public class GunCus
 	public static final Auxiliary 	AUXILIARY_BIPOD 			= new Auxiliary(1, "auxiliary_bipod").setDriftModifierWhenShiftAndStill(0.25F).setInaccuracyModifierWhenShiftAndStill(0.25F);
 	public static final Auxiliary 	AUXILIARY_STRAIGHT_PULL 	= new Auxiliary(2, "auxiliary_straight_pull").setIsAllowingReloadWhileZoomed(true);
 	
-	public static final Ammo 		AMMO_12G_BUCKSHOT 			= new Ammo(1, "ammo_12g_buckshot").setReplacementCartridge(CARTRIDGE_12G_BUCKSHOT);
-	public static final Ammo 		AMMO_12G_DART 				= new Ammo(2, "ammo_12g_dart").setReplacementCartridge(CARTRIDGE_12G_DART);
-	public static final Ammo 		AMMO_12G_FRAG 				= new Ammo(3, "ammo_12g_frag").setReplacementCartridge(CARTRIDGE_12G_FRAG);
-	public static final Ammo 		AMMO_12G_SLUG 				= new Ammo(4, "ammo_12g_slug").setReplacementCartridge(CARTRIDGE_12G_SLUG);
+	public static final Ammo 		AMMO_12G_BUCKSHOT 			= new Ammo(1, "ammo_12g_buckshot").setReplacementCartridge(GunCus.CARTRIDGE_12G_BUCKSHOT);
+	public static final Ammo 		AMMO_12G_DART 				= new Ammo(2, "ammo_12g_dart").setReplacementCartridge(GunCus.CARTRIDGE_12G_DART);
+	public static final Ammo 		AMMO_12G_FRAG 				= new Ammo(3, "ammo_12g_frag").setReplacementCartridge(GunCus.CARTRIDGE_12G_FRAG);
+	public static final Ammo 		AMMO_12G_SLUG 				= new Ammo(4, "ammo_12g_slug").setReplacementCartridge(GunCus.CARTRIDGE_12G_SLUG);
 	
 	public static final Magazine 	MAGAZINE_QUICK_SWITCH 		= new Magazine(1, "magazine_quick_switch").setReloadTimeModifier(0.8F);
 	public static final Magazine 	MAGAZINE_EXTENDED_10 		= new Magazine(2, "magazine_extended_10").setExtraCapacity(10);
@@ -132,13 +137,8 @@ public class GunCus
 	public static final Paint 		PAINT_WHITE 				= new Paint(8, "paint_white");
 	public static final Paint 		PAINT_YELLOW 				= new Paint(9, "paint_yellow");
 	
-	public static final ItemGun GUN_AK_74M 	= createAssaultRifle("gun_ak_74m", 3, 30, 5F, GunCus.CARTRIDGE_5_45x39mm);
-	public static final ItemGun GUN_M16A4 	= createAssaultRifle("gun_m16a4", 3, 30, 5F, GunCus.CARTRIDGE_5_56x45mm);
-	
-	public static final SoundEventGCI SOUND_SHOOT 			= new SoundEventGCI(0, "shoot");
-	public static final SoundEventGCI SOUND_SHOOT_SILENCED 	= new SoundEventGCI(1, "shoot_silenced");
-	public static final SoundEventGCI SOUND_SHOOT_SNIPER 	= new SoundEventGCI(2, "shoot_sniper");
-	public static final SoundEventGCI SOUND_RELOAD 			= new SoundEventGCI(3, "reload");
+	public static final ItemGun GUN_AK_74M 	= GunCus.createAssaultRifle("gun_ak_74m", 3, 30, 5F, GunCus.CARTRIDGE_5_45x39mm);
+	public static final ItemGun GUN_M16A4 	= GunCus.createAssaultRifle("gun_m16a4", 3, 30, 5F, GunCus.CARTRIDGE_5_56x45mm);
 	
 	@SidedProxy(clientSide = "de.cas_ual_ty.gci.client.ProxyClient", serverSide = "de.cas_ual_ty.gci.Proxy")
 	public static Proxy proxy;
@@ -151,71 +151,71 @@ public class GunCus
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		proxy.preInit(event);
+		GunCus.proxy.preInit(event);
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		proxy.init(event);
+		GunCus.proxy.init(event);
 	}
 	
 	public static ItemGun createAssaultRifle(String rl, int fireRate, int maxAmmo, float damage, ItemCartridge cartridge)
 	{
 		return new ItemGun(rl, fireRate, maxAmmo, damage, cartridge)
-		
-		.addAttachment(GunCus.OPTIC_REFLEX)
-		.addAttachment(GunCus.OPTIC_COYOTE)
-		.addAttachment(GunCus.OPTIC_KOBRA)
-		.addAttachment(GunCus.OPTIC_HOLO)
-		.addAttachment(GunCus.OPTIC_HD33)
-		.addAttachment(GunCus.OPTIC_PKAS)
-//		.addAttachment(GunCus.OPTIC_IRNV)
-//		.addAttachment(GunCus.OPTIC_FLIR)
-		.addAttachment(GunCus.OPTIC_M145)
-		.addAttachment(GunCus.OPTIC_PRISMA)
-		.addAttachment(GunCus.OPTIC_PKA)
-		.addAttachment(GunCus.OPTIC_ACOG)
-		.addAttachment(GunCus.OPTIC_JGM4)
-		.addAttachment(GunCus.OPTIC_PSO1)
-		
-		.addAttachment(GunCus.ACCESSORY_MAGNIFIER)
-//		.addAttachment(GunCus.ACCESSORY_FLASH_LIGHT)
-//		.addAttachment(GunCus.ACCESSORY_TACTICAL_LIGHT)
-		.addAttachment(GunCus.ACCESSORY_LASER_SIGHT)
-		.addAttachment(GunCus.ACCESSORY_TRI_BEAM_LASER)
-		.addAttachment(GunCus.ACCESSORY_GREEN_LASER_SIGHT)
-//		.addAttachment(GunCus.ACCESSORY_LASER_LIGHT_COMBO)
-		
-		.addAttachment(GunCus.BARREL_HEAVY_BARREL)
-		.addAttachment(GunCus.BARREL_SUPPRESSOR)
-		.addAttachment(GunCus.BARREL_LS06_SUPPRESSOR)
-		.addAttachment(GunCus.BARREL_PBS4_SUPPRESSOR)
-		.addAttachment(GunCus.BARREL_R2_SUPPRESSOR)
-		.addAttachment(GunCus.BARREL_FLASH_HIDER)
-		.addAttachment(GunCus.BARREL_COMPENSATOR)
-		.addAttachment(GunCus.BARREL_MUZZLE_BRAKE)
-		
-		.addAttachment(GunCus.UNDERBARREL_ERGO_GRIP)
-		.addAttachment(GunCus.UNDERBARREL_ANGLED_GRIP)
-		.addAttachment(GunCus.UNDERBARREL_STUBBY_GRIP)
-		.addAttachment(GunCus.UNDERBARREL_VERTICAL_GRIP)
-		.addAttachment(GunCus.UNDERBARREL_FOLDING_GRIP)
-		.addAttachment(GunCus.UNDERBARREL_POTATO_GRIP)
-		
-		.addAttachment(GunCus.MAGAZINE_QUICK_SWITCH)
-		.addAttachment(GunCus.MAGAZINE_EXTENDED_10)
-		
-		.addAttachment(GunCus.PAINT_BLACK)
-		.addAttachment(GunCus.PAINT_BLUE)
-		.addAttachment(GunCus.PAINT_GREEN)
-		.addAttachment(GunCus.PAINT_ORANGE)
-		.addAttachment(GunCus.PAINT_PINK)
-		.addAttachment(GunCus.PAINT_RED)
-		.addAttachment(GunCus.PAINT_TURQUOISE)
-		.addAttachment(GunCus.PAINT_WHITE)
-		.addAttachment(GunCus.PAINT_YELLOW)
-		;
+				
+				.addAttachment(GunCus.OPTIC_REFLEX)
+				.addAttachment(GunCus.OPTIC_COYOTE)
+				.addAttachment(GunCus.OPTIC_KOBRA)
+				.addAttachment(GunCus.OPTIC_HOLO)
+				.addAttachment(GunCus.OPTIC_HD33)
+				.addAttachment(GunCus.OPTIC_PKAS)
+				//		.addAttachment(GunCus.OPTIC_IRNV)
+				//		.addAttachment(GunCus.OPTIC_FLIR)
+				.addAttachment(GunCus.OPTIC_M145)
+				.addAttachment(GunCus.OPTIC_PRISMA)
+				.addAttachment(GunCus.OPTIC_PKA)
+				.addAttachment(GunCus.OPTIC_ACOG)
+				.addAttachment(GunCus.OPTIC_JGM4)
+				.addAttachment(GunCus.OPTIC_PSO1)
+				
+				.addAttachment(GunCus.ACCESSORY_MAGNIFIER)
+				//		.addAttachment(GunCus.ACCESSORY_FLASH_LIGHT)
+				//		.addAttachment(GunCus.ACCESSORY_TACTICAL_LIGHT)
+				.addAttachment(GunCus.ACCESSORY_LASER_SIGHT)
+				.addAttachment(GunCus.ACCESSORY_TRI_BEAM_LASER)
+				.addAttachment(GunCus.ACCESSORY_GREEN_LASER_SIGHT)
+				//		.addAttachment(GunCus.ACCESSORY_LASER_LIGHT_COMBO)
+				
+				.addAttachment(GunCus.BARREL_HEAVY_BARREL)
+				.addAttachment(GunCus.BARREL_SUPPRESSOR)
+				.addAttachment(GunCus.BARREL_LS06_SUPPRESSOR)
+				.addAttachment(GunCus.BARREL_PBS4_SUPPRESSOR)
+				.addAttachment(GunCus.BARREL_R2_SUPPRESSOR)
+				.addAttachment(GunCus.BARREL_FLASH_HIDER)
+				.addAttachment(GunCus.BARREL_COMPENSATOR)
+				.addAttachment(GunCus.BARREL_MUZZLE_BRAKE)
+				
+				.addAttachment(GunCus.UNDERBARREL_ERGO_GRIP)
+				.addAttachment(GunCus.UNDERBARREL_ANGLED_GRIP)
+				.addAttachment(GunCus.UNDERBARREL_STUBBY_GRIP)
+				.addAttachment(GunCus.UNDERBARREL_VERTICAL_GRIP)
+				.addAttachment(GunCus.UNDERBARREL_FOLDING_GRIP)
+				.addAttachment(GunCus.UNDERBARREL_POTATO_GRIP)
+				
+				.addAttachment(GunCus.MAGAZINE_QUICK_SWITCH)
+				.addAttachment(GunCus.MAGAZINE_EXTENDED_10)
+				
+				.addAttachment(GunCus.PAINT_BLACK)
+				.addAttachment(GunCus.PAINT_BLUE)
+				.addAttachment(GunCus.PAINT_GREEN)
+				.addAttachment(GunCus.PAINT_ORANGE)
+				.addAttachment(GunCus.PAINT_PINK)
+				.addAttachment(GunCus.PAINT_RED)
+				.addAttachment(GunCus.PAINT_TURQUOISE)
+				.addAttachment(GunCus.PAINT_WHITE)
+				.addAttachment(GunCus.PAINT_YELLOW)
+				;
 	}
 	
 	@EventBusSubscriber
@@ -228,7 +228,7 @@ public class GunCus
 			
 			for(BlockGCI block : BlockGCI.BLOCKS_LIST)
 			{
-				proxy.registerItem(registry, new ItemBlockGCI(block));
+				GunCus.proxy.registerItem(registry, new ItemBlockGCI(block));
 			}
 			
 			int j;
@@ -241,7 +241,9 @@ public class GunCus
 					attachment = Attachment.getAttachment(i, j);
 					
 					if(attachment != null && attachment.shouldRegister())
+					{
 						GunCus.proxy.registerItem(registry, attachment);
+					}
 				}
 			}
 			
@@ -263,7 +265,7 @@ public class GunCus
 			
 			for(BlockGCI block : BlockGCI.BLOCKS_LIST)
 			{
-				proxy.registerBlock(registry, block);
+				GunCus.proxy.registerBlock(registry, block);
 			}
 		}
 	}

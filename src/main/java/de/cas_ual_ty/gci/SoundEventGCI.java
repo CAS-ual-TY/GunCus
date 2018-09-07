@@ -16,7 +16,7 @@ public class SoundEventGCI extends SoundEvent
 		
 		this.id = id;
 		
-		soundEventList[id] = this;
+		SoundEventGCI.soundEventList[id] = this;
 	}
 	
 	public int getID()

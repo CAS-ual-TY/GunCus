@@ -24,7 +24,7 @@ public class Barrel extends Attachment
 		this.isSilenced = false;
 		this.isFlashHider = false;
 	}
-
+	
 	@Override
 	public EnumAttachmentType getType()
 	{
@@ -70,13 +70,13 @@ public class Barrel extends Attachment
 	{
 		return this.isFlashHider;
 	}
-
+	
 	public Barrel setExtraDamage(float extraDamage)
 	{
 		this.extraDamage = extraDamage;
 		return this;
 	}
-
+	
 	public Barrel setInaccuracyModifier(float inaccuracyModifier)
 	{
 		this.inaccuracyModifier = inaccuracyModifier;
@@ -106,7 +106,7 @@ public class Barrel extends Attachment
 		this.horizontalSpreadModifier = horizontalSpreadModifier;
 		return this;
 	}
-
+	
 	public Barrel setIsSilenced(boolean isSilenced)
 	{
 		this.isSilenced = isSilenced;

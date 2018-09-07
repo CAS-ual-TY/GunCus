@@ -12,13 +12,13 @@ public class Magazine extends Attachment
 		this.extraCapacity = 0;
 		this.reloadTimeModifier = 1F;
 	}
-
+	
 	@Override
 	public EnumAttachmentType getType()
 	{
 		return EnumAttachmentType.MAGAZINE;
 	}
-
+	
 	public int getExtraCapacity()
 	{
 		return this.extraCapacity;
@@ -28,13 +28,13 @@ public class Magazine extends Attachment
 	{
 		return this.reloadTimeModifier;
 	}
-
+	
 	public Magazine setExtraCapacity(int extraCapacity)
 	{
 		this.extraCapacity = extraCapacity;
 		return this;
 	}
-
+	
 	public Magazine setReloadTimeModifier(float reloadTimeModifier)
 	{
 		this.reloadTimeModifier = reloadTimeModifier;

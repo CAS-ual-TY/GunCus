@@ -29,11 +29,15 @@ public class BlockGCI extends Block
 		this.modelRL = rl;
 		
 		if(tab != null)
+		{
 			this.setCreativeTab(tab);
+		}
 		else
+		{
 			this.setCreativeTab(GunCus.TAB_GUNCUS);
+		}
 		
-		BLOCKS_LIST.add(this);
+		BlockGCI.BLOCKS_LIST.add(this);
 	}
 	
 	public String getModelRL()

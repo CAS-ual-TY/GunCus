@@ -6,7 +6,7 @@ public class Paint extends Attachment
 	{
 		super(id, rl);
 	}
-
+	
 	@Override
 	public EnumAttachmentType getType()
 	{

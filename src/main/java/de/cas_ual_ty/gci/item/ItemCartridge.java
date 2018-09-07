@@ -29,45 +29,45 @@ public class ItemCartridge extends ItemGCI
 		this.spreadModifier = 1F;
 		this.projectileAmmount = 1;
 		
-		CARTRIDGES_LIST.add(this);
+		ItemCartridge.CARTRIDGES_LIST.add(this);
 	}
-
+	
 	public float getDamage() {
-		return damage;
+		return this.damage;
 	}
-
+	
 	public float getGravityModifier() {
-		return gravityModifier;
+		return this.gravityModifier;
 	}
-
+	
 	public float getBulletSpeedModifier() {
-		return bulletSpeedModifier;
+		return this.bulletSpeedModifier;
 	}
-
+	
 	public float getSpreadModifier() {
-		return spreadModifier;
+		return this.spreadModifier;
 	}
 	
 	public int getProjectileAmmount()
 	{
 		return this.projectileAmmount;
 	}
-
+	
 	public ItemCartridge setDamage(float damage) {
 		this.damage = damage;
 		return this;
 	}
-
+	
 	public ItemCartridge setGravityModifier(float gravityModifier) {
 		this.gravityModifier = gravityModifier;
 		return this;
 	}
-
+	
 	public ItemCartridge setBulletSpeedModifier(float bulletSpeedModifier) {
 		this.bulletSpeedModifier = bulletSpeedModifier;
 		return this;
 	}
-
+	
 	public ItemCartridge setSpreadModifier(float spreadModifier) {
 		this.spreadModifier = spreadModifier;
 		return this;

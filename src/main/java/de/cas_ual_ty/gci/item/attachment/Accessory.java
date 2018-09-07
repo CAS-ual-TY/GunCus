@@ -1,8 +1,8 @@
 package de.cas_ual_ty.gci.item.attachment;
 
+import de.cas_ual_ty.gci.item.ItemGun;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
-import de.cas_ual_ty.gci.item.ItemGun;
 
 public class Accessory extends Attachment
 {
@@ -105,40 +105,40 @@ public class Accessory extends Attachment
 			this.isPoint = isPoint;
 			this.isRangeFinder = isRangeFinder;
 		}
-
+		
 		public float getR()
 		{
-			return r;
+			return this.r;
 		}
-
+		
 		public float getG()
 		{
-			return g;
+			return this.g;
 		}
-
+		
 		public float getB()
 		{
-			return b;
+			return this.b;
 		}
-
+		
 		public double getMaxRange()
 		{
-			return maxRange;
+			return this.maxRange;
 		}
-
+		
 		public boolean isBeam()
 		{
-			return isBeam;
+			return this.isBeam;
 		}
-
+		
 		public boolean isPoint()
 		{
-			return isPoint;
+			return this.isPoint;
 		}
-
+		
 		public boolean isRangeFinder()
 		{
-			return isRangeFinder;
+			return this.isRangeFinder;
 		}
 	}
 }

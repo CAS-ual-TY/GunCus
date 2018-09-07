@@ -17,13 +17,13 @@ public class Auxiliary extends Attachment
 		this.isAllowingReloadWhileZoomed = false;
 		this.extraFireRate = 0;
 	}
-
+	
 	@Override
 	public EnumAttachmentType getType()
 	{
 		return EnumAttachmentType.AUXILIARY;
 	}
-
+	
 	public float getDriftModifierWhenShiftAndStill()
 	{
 		return this.driftModifierWhenShiftAndStill;
@@ -38,13 +38,13 @@ public class Auxiliary extends Attachment
 	{
 		return this.isAllowingReloadWhileZoomed;
 	}
-
+	
 	public Auxiliary setDriftModifierWhenShiftAndStill(float driftModifierWhenShiftAndStill)
 	{
 		this.driftModifierWhenShiftAndStill = driftModifierWhenShiftAndStill;
 		return this;
 	}
-
+	
 	public Auxiliary setInaccuracyModifierWhenShiftAndStill(float inaccuracyModifierWhenShiftAndStill)
 	{
 		this.inaccuracyModifierWhenShiftAndStill = inaccuracyModifierWhenShiftAndStill;

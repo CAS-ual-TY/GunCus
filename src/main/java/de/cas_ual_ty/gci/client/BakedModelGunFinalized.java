@@ -2,7 +2,9 @@ package de.cas_ual_ty.gci.client;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.vecmath.Matrix4f;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import de.cas_ual_ty.gci.item.ItemGun;
@@ -14,8 +16,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,19 +41,19 @@ public class BakedModelGunFinalized implements IBakedModel
 		this.itemStack = itemStack;
 		return this;
 	}
-
+	
 	@Override
 	public ItemOverrideList getOverrides()
 	{
 		return this.modelMain.getOverrides();
 	}
-
+	
 	@Override
 	public TextureAtlasSprite getParticleTexture()
 	{
 		return this.modelMain.getParticleTexture();
 	}
-
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState arg0, EnumFacing arg1, long arg2)
 	{
@@ -85,7 +87,7 @@ public class BakedModelGunFinalized implements IBakedModel
 		
 		for(int i = 0; i < EnumAttachmentType.values().length; ++i)
 		{
-			attachment = gun.getAttachment(itemStack, i);
+			attachment = gun.getAttachment(this.itemStack, i);
 			
 			if(attachment != null && attachment.shouldRender())
 			{
@@ -105,7 +107,7 @@ public class BakedModelGunFinalized implements IBakedModel
 		
 		return list;
 	}
-
+	
 	@Override
 	public boolean isAmbientOcclusion()
 	{
@@ -117,7 +119,7 @@ public class BakedModelGunFinalized implements IBakedModel
 	{
 		return this.modelMain.isBuiltInRenderer();
 	}
-
+	
 	@Override
 	public boolean isGui3d()
 	{
@@ -142,7 +144,7 @@ public class BakedModelGunFinalized implements IBakedModel
 				
 				if(optic != null && optic.canAim())
 				{
-					return Pair.of(this, NULL_MATRIX);
+					return Pair.of(this, BakedModelGunFinalized.NULL_MATRIX);
 				}
 			}
 		}

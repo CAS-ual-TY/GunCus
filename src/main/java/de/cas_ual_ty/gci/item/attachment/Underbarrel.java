@@ -14,7 +14,7 @@ public class Underbarrel extends Attachment
 		this.inaccuracyModifierMoving = 1F;
 		this.inaccuracyModifierStill = 1F;
 	}
-
+	
 	@Override
 	public EnumAttachmentType getType()
 	{
@@ -35,7 +35,7 @@ public class Underbarrel extends Attachment
 	{
 		return this.inaccuracyModifierStill;
 	}
-
+	
 	public Underbarrel setDriftModifier(float driftModifier)
 	{
 		this.driftModifier = driftModifier;
@@ -47,7 +47,7 @@ public class Underbarrel extends Attachment
 		this.inaccuracyModifierMoving = inaccuracyModifierMoving;
 		return this;
 	}
-
+	
 	public Underbarrel setInaccuracyModifierStill(float inaccuracyModifierStill)
 	{
 		this.inaccuracyModifierStill = inaccuracyModifierStill;

@@ -19,7 +19,7 @@ public class GuiHandlerGCI implements IGuiHandler
 		
 		return null;
 	}
-
+	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer entityPlayer, World world, int x, int y, int z)
 	{
@@ -30,5 +30,5 @@ public class GuiHandlerGCI implements IGuiHandler
 		
 		return null;
 	}
-
+	
 }

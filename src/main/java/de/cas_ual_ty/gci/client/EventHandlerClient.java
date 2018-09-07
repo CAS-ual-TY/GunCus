@@ -44,7 +44,7 @@ public class EventHandlerClient
 	public static final GuiSight GUI_SIGHT = new GuiSight();
 	private static final ModelRendererTransformationHelper TRANSFORMATION_HELPER = new ModelRendererTransformationHelper();
 	
-//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void onEvent(RenderPlayerEvent.Pre event)
 	{
 		EntityPlayer entityPlayer = event.getEntityPlayer();
@@ -67,7 +67,7 @@ public class EventHandlerClient
 		}
 	}
 	
-//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void onEvent(RenderPlayerEvent.Post event)
 	{
 		EntityPlayer entityPlayer = event.getEntityPlayer();
@@ -81,7 +81,7 @@ public class EventHandlerClient
 				if(entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
 				{
 					event.getRenderer().getMainModel().bipedRightArm.isHidden = false;
-					TRANSFORMATION_HELPER.set(
+					EventHandlerClient.TRANSFORMATION_HELPER.set(
 							-MathHelper.cos((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
 							20,
 							-MathHelper.sin((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
@@ -91,7 +91,7 @@ public class EventHandlerClient
 							).transformAndRender(entityPlayer, event.getRenderer().getMainModel().bipedRightArm, 0.0625F);
 					
 					event.getRenderer().getMainModel().bipedLeftArm.isHidden = false;
-					TRANSFORMATION_HELPER.set(
+					EventHandlerClient.TRANSFORMATION_HELPER.set(
 							MathHelper.cos((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
 							20,
 							MathHelper.sin((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
@@ -103,7 +103,7 @@ public class EventHandlerClient
 				else if(!entityPlayer.getHeldItemOffhand().isEmpty())
 				{
 					event.getRenderer().getMainModel().bipedRightArm.isHidden = false;
-					TRANSFORMATION_HELPER.set(
+					EventHandlerClient.TRANSFORMATION_HELPER.set(
 							-MathHelper.cos((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
 							20,
 							-MathHelper.sin((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
@@ -115,7 +115,7 @@ public class EventHandlerClient
 				else
 				{
 					event.getRenderer().getMainModel().bipedRightArm.isHidden = false;
-					TRANSFORMATION_HELPER.set(
+					EventHandlerClient.TRANSFORMATION_HELPER.set(
 							-MathHelper.cos((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
 							20,
 							-MathHelper.sin((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
@@ -125,7 +125,7 @@ public class EventHandlerClient
 							).transformAndRender(entityPlayer, event.getRenderer().getMainModel().bipedRightArm, 0.0625F);
 					
 					event.getRenderer().getMainModel().bipedLeftArm.isHidden = false;
-					TRANSFORMATION_HELPER.set(
+					EventHandlerClient.TRANSFORMATION_HELPER.set(
 							MathHelper.cos((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
 							20,
 							MathHelper.sin((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
@@ -140,7 +140,7 @@ public class EventHandlerClient
 				Minecraft.getMinecraft().getTextureManager().bindTexture(event.getRenderer().getEntityTexture((AbstractClientPlayer) entityPlayer));
 				
 				event.getRenderer().getMainModel().bipedLeftArm.isHidden = false;
-				TRANSFORMATION_HELPER.set(
+				EventHandlerClient.TRANSFORMATION_HELPER.set(
 						MathHelper.cos((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
 						20,
 						MathHelper.sin((float) Math.toRadians(entityPlayer.renderYawOffset)) * 4.5F,
@@ -190,7 +190,7 @@ public class EventHandlerClient
 			
 			++this.tabCounter;
 			
-			if(this.tabCounter >= TAB_ITEM_INTERVAL)
+			if(this.tabCounter >= EventHandlerClient.TAB_ITEM_INTERVAL)
 			{
 				GunCus.TAB_GUNCUS.shuffleItemStack();
 				
@@ -230,10 +230,12 @@ public class EventHandlerClient
 			
 			if(!entityPlayer.isSprinting() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && optic != null && optic.canAim())
 			{
-				GUI_SIGHT.draw(optic, event.getResolution());
+				EventHandlerClient.GUI_SIGHT.draw(optic, event.getResolution());
 				
 				if(!event.isCanceled())
+				{
 					event.setCanceled(true);
+				}
 			}
 		}
 	}
@@ -263,7 +265,7 @@ public class EventHandlerClient
 							optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC.getSlot());
 						}
 						
-						if(gun.isAccessoryTurnedOn(itemStack) && gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY.getSlot()) != null)
+						if(optic != null && gun.isAccessoryTurnedOn(itemStack) && gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY.getSlot()) != null)
 						{
 							Accessory accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY.getSlot());
 							
@@ -287,7 +289,7 @@ public class EventHandlerClient
 				
 				if(optic != null && optic.canAim())
 				{
-					event.setNewfov(calculateFov(optic.getZoom() * modifier + 0.1F, event.getFov()));
+					event.setNewfov(EventHandlerClient.calculateFov(optic.getZoom() * modifier + 0.1F, event.getFov()));
 				}
 			}
 		}
@@ -323,7 +325,7 @@ public class EventHandlerClient
 			{
 				if(!entityPlayer.isDead)
 				{
-//					subtract = new Vec3d(entityPlayer.posX - entityPlayer.motionX * event.getPartialTicks(), entityPlayer.posY /*+ entityPlayer.getEyeHeight()*/ - (entityPlayer.onGround ? 0 : entityPlayer.motionY * event.getPartialTicks()), entityPlayer.posZ - entityPlayer.motionZ * event.getPartialTicks());
+					//					subtract = new Vec3d(entityPlayer.posX - entityPlayer.motionX * event.getPartialTicks(), entityPlayer.posY /*+ entityPlayer.getEyeHeight()*/ - (entityPlayer.onGround ? 0 : entityPlayer.motionY * event.getPartialTicks()), entityPlayer.posZ - entityPlayer.motionZ * event.getPartialTicks());
 					subtract = new Vec3d(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ);
 					
 					for(EnumHand hand : EnumHand.values())
@@ -350,10 +352,10 @@ public class EventHandlerClient
 						{
 							laser = accessory.getLaser();
 							start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
-							end = entityPlayer.getLookVec().normalize().scale(laser.getMaxRange()).add(start).add(getOffsetForHandRaw(entityPlayer, hand));
+							end = entityPlayer.getLookVec().normalize().scale(laser.getMaxRange()).add(start).add(EventHandlerClient.getOffsetForHandRaw(entityPlayer, hand));
 							
-							resultBlock = findBlockOnPath(world, entityPlayer, start, end);
-							resultEntity = findEntityOnPath(world, entityPlayer, start, end);
+							resultBlock = EventHandlerClient.findBlockOnPath(world, entityPlayer, start, end);
+							resultEntity = EventHandlerClient.findEntityOnPath(world, entityPlayer, start, end);
 							
 							if(resultBlock != null && resultEntity != null)
 							{
@@ -384,7 +386,7 @@ public class EventHandlerClient
 								renderPoint = laser.isPoint();
 							}
 							
-							start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight() * 0.8F, entityPlayer.posZ).add(getOffsetForHand(entityPlayer, hand));
+							start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight() * 0.8F, entityPlayer.posZ).add(EventHandlerClient.getOffsetForHand(entityPlayer, hand));
 							
 							start = start.subtract(subtract);
 							end = end.subtract(subtract);
@@ -457,7 +459,7 @@ public class EventHandlerClient
 	
 	public static Vec3d getOffsetForHandRaw(EntityPlayer entityPlayer, EnumHand hand)
 	{
-		Vec3d vec = getVectorForRotation(entityPlayer.rotationPitch, entityPlayer.rotationYaw + 90F);
+		Vec3d vec = EventHandlerClient.getVectorForRotation(entityPlayer.rotationPitch, entityPlayer.rotationYaw + 90F);
 		
 		if(hand == EnumHand.OFF_HAND)
 		{
@@ -469,9 +471,9 @@ public class EventHandlerClient
 	
 	public static Vec3d getOffsetForHand(EntityPlayer entityPlayer, EnumHand hand)
 	{
-		Vec3d vec = getOffsetForHandRaw(entityPlayer, hand);
+		Vec3d vec = EventHandlerClient.getOffsetForHandRaw(entityPlayer, hand);
 		
-		return vec.add(getVectorForRotation(entityPlayer.rotationPitch, entityPlayer.rotationYaw).scale(0.4D));
+		return vec.add(EventHandlerClient.getVectorForRotation(entityPlayer.rotationPitch, entityPlayer.rotationYaw).scale(0.4D));
 	}
 	
 	@Nullable
@@ -586,22 +588,22 @@ public class EventHandlerClient
 		}
 		
 		public float getRotationPointX() {
-			return rotationPointX;
+			return this.rotationPointX;
 		}
 		public float getRotationPointY() {
-			return rotationPointY;
+			return this.rotationPointY;
 		}
 		public float getRotationPointZ() {
-			return rotationPointZ;
+			return this.rotationPointZ;
 		}
 		public float getRotateAngleX() {
-			return rotateAngleX;
+			return this.rotateAngleX;
 		}
 		public float getRotateAngleY() {
-			return rotateAngleY;
+			return this.rotateAngleY;
 		}
 		public float getRotateAngleZ() {
-			return rotateAngleZ;
+			return this.rotateAngleZ;
 		}
 	}
 }

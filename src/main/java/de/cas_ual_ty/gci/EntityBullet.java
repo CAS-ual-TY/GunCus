@@ -1,11 +1,11 @@
 package de.cas_ual_ty.gci;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -48,44 +48,44 @@ public class EntityBullet extends EntityArrow
 	private int ticksInAir;
 	private float damage;
 	private int knockbackStrength;
-
+	
 	public EntityBullet(World worldIn) {
 		super(worldIn);
 		this.xTile = -1;
 		this.yTile = -1;
 		this.zTile = -1;
 		this.damage = 2.0F;
-		setSize(0.5F, 0.5F);
+		this.setSize(0.5F, 0.5F);
 	}
-
+	
 	public EntityBullet(World worldIn, double x, double y, double z) {
 		this(worldIn);
-		setPosition(x, y, z);
+		this.setPosition(x, y, z);
 	}
-
+	
 	public EntityBullet(World worldIn, EntityLivingBase shooter) {
 		this(worldIn, shooter.posX, shooter.posY + shooter.getEyeHeight()
-				- 0.10000000149011612D, shooter.posZ);
+		- 0.10000000149011612D, shooter.posZ);
 		this.shootingEntity = shooter;
 		if ((shooter instanceof EntityPlayer)) {
 		}
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean isInRangeToRenderDist(double distance) {
-		double d0 = getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
+		double d0 = this.getEntityBoundingBox().getAverageEdgeLength() * 10.0D;
 		if (Double.isNaN(d0)) {
 			d0 = 1.0D;
 		}
-		d0 = d0 * 64.0D * getRenderDistanceWeight();
+		d0 = d0 * 64.0D * Entity.getRenderDistanceWeight();
 		return distance < d0 * d0;
 	}
-
+	
 	@Override
 	protected void entityInit() {
 	}
-
+	
 	@Override
 	public void shoot(Entity shooter, float pitch, float yaw,
 			float unused, float velocity, float inaccuracy) {
@@ -94,14 +94,14 @@ public class EntityBullet extends EntityArrow
 		float f1 = -MathHelper.sin(pitch * 0.017453292F);
 		float f2 = MathHelper.cos(yaw * 0.017453292F)
 				* MathHelper.cos(pitch * 0.017453292F);
-		shoot(f, f1, f2, velocity, inaccuracy);
+		this.shoot(f, f1, f2, velocity, inaccuracy);
 		this.motionX += shooter.motionX;
 		this.motionZ += shooter.motionZ;
 		if (!shooter.onGround) {
 			this.motionY += shooter.motionY;
 		}
 	}
-
+	
 	@Override
 	public void shoot(double x, double y, double z, float velocity,
 			float inaccuracy) {
@@ -124,15 +124,15 @@ public class EntityBullet extends EntityArrow
 		this.prevRotationYaw = this.rotationYaw;
 		this.prevRotationPitch = this.rotationPitch;
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z,
 			float yaw, float pitch, int posRotationIncrements, boolean teleport) {
-		setPosition(x, y, z);
-		setRotation(yaw, pitch);
+		this.setPosition(x, y, z);
+		this.setRotation(yaw, pitch);
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setVelocity(double x, double y, double z) {
@@ -145,11 +145,11 @@ public class EntityBullet extends EntityArrow
 			this.rotationYaw = ((float) (MathHelper.atan2(x, z) * 57.29577951308232D));
 			this.prevRotationPitch = this.rotationPitch;
 			this.prevRotationYaw = this.rotationYaw;
-			setLocationAndAngles(this.posX, this.posY, this.posZ,
+			this.setLocationAndAngles(this.posX, this.posY, this.posZ,
 					this.rotationYaw, this.rotationPitch);
 		}
 	}
-
+	
 	@Override
 	public void onUpdate() {
 		this.onEntityUpdate();
@@ -176,7 +176,7 @@ public class EntityBullet extends EntityArrow
 			this.arrowShake -= 1;
 		}
 		if (this.inGround) {
-			setDead();
+			this.setDead();
 		} else {
 			this.timeInGround = 0;
 			this.ticksInAir += 1;
@@ -198,7 +198,7 @@ public class EntityBullet extends EntityArrow
 				vec3d = new Vec3d(raytraceresult.hitVec.x,
 						raytraceresult.hitVec.y, raytraceresult.hitVec.z);
 			}
-			Entity entity = findEntityOnPath(vec3d1, vec3d);
+			Entity entity = this.findEntityOnPath(vec3d1, vec3d);
 			if (entity != null) {
 				raytraceresult = new RayTraceResult(entity);
 			}
@@ -214,7 +214,7 @@ public class EntityBullet extends EntityArrow
 			if ((raytraceresult != null)
 					&& (!ForgeEventFactory.onProjectileImpact(this,
 							raytraceresult))) {
-				onHit(raytraceresult);
+				this.onHit(raytraceresult);
 			}
 			this.posX += this.motionX;
 			this.posY += this.motionY;
@@ -240,31 +240,31 @@ public class EntityBullet extends EntityArrow
 			this.rotationYaw = (this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F);
 			float f1 = 0.99F;
 			float f2 = 0.05F;
-			if (isInWater()) {
+			if (this.isInWater()) {
 				this.setDead();
 			}
 			this.motionX *= f1;
 			this.motionY *= f1;
 			this.motionZ *= f1;
 			
-			setPosition(this.posX, this.posY, this.posZ);
+			this.setPosition(this.posX, this.posY, this.posZ);
 			
-			doBlockCollisions();
+			this.doBlockCollisions();
 		}
 	}
-
+	
 	@Override
 	protected void onHit(RayTraceResult raytraceResultIn) {
 		Entity entity = raytraceResultIn.entityHit;
 		if (entity != null) {
 			DamageSource damagesource = null;
 			if (this.shootingEntity == null) {
-				 damagesource = DamageSource.causeArrowDamage(this, this);
+				damagesource = DamageSource.causeArrowDamage(this, this);
 			} else {
-				 damagesource = DamageSource.causeArrowDamage(this,
-				 this.shootingEntity);
+				damagesource = DamageSource.causeArrowDamage(this,
+						this.shootingEntity);
 			}
-			if ((isBurning()) && (!(entity instanceof EntityEnderman))) {
+			if ((this.isBurning()) && (!(entity instanceof EntityEnderman))) {
 				entity.setFire(5);
 			}
 			if (entity.attackEntityFrom(damagesource, this.damage)) {
@@ -282,7 +282,7 @@ public class EntityBullet extends EntityArrow
 									* this.knockbackStrength
 									* 0.6000000238418579D / f1, 0.1D,
 									this.motionZ * this.knockbackStrength
-											* 0.6000000238418579D / f1);
+									* 0.6000000238418579D / f1);
 						}
 					}
 					if ((this.shootingEntity instanceof EntityLivingBase)) {
@@ -292,18 +292,18 @@ public class EntityBullet extends EntityArrow
 								(EntityLivingBase) this.shootingEntity,
 								entitylivingbase);
 					}
-					arrowHit(entitylivingbase);
+					this.arrowHit(entitylivingbase);
 					if ((this.shootingEntity != null)
 							&& (entitylivingbase != this.shootingEntity)
 							&& ((entitylivingbase instanceof EntityPlayer))
 							&& ((this.shootingEntity instanceof EntityPlayerMP))) {
 						((EntityPlayerMP) this.shootingEntity).connection
-								.sendPacket(new SPacketChangeGameState(6, 0.0F));
+						.sendPacket(new SPacketChangeGameState(6, 0.0F));
 					}
 				}
-//				playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F)); TODO
+				//				playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F)); TODO
 				if (!(entity instanceof EntityEnderman)) {
-					setDead();
+					this.setDead();
 				}
 			} else {
 				this.setDead();
@@ -322,7 +322,7 @@ public class EntityBullet extends EntityArrow
 			this.motionZ = ((float) (raytraceResultIn.hitVec.z - this.posZ));
 			float f2 = MathHelper
 					.sqrt(this.motionX * this.motionX + this.motionY
-							* this.motionY + this.motionZ * this.motionZ);
+			 * this.motionY + this.motionZ * this.motionZ);
 			this.posX -= this.motionX / f2 * 0.05000000074505806D;
 			this.posY -= this.motionY / f2 * 0.05000000074505806D;
 			this.posZ -= this.motionZ / f2 * 0.05000000074505806D;
@@ -337,7 +337,7 @@ public class EntityBullet extends EntityArrow
 			this.setDead();
 		}
 	}
-
+	
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
 		super.move(type, x, y, z);
@@ -347,38 +347,38 @@ public class EntityBullet extends EntityArrow
 			this.zTile = MathHelper.floor(this.posZ);
 		}
 	}
-
+	
 	@Override
 	protected void arrowHit(EntityLivingBase living) {
 	}
-
+	
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates
 			.and(new Predicate[] { EntitySelectors.NOT_SPECTATING,
 					EntitySelectors.IS_ALIVE, new Predicate() {
-						public boolean apply(@Nullable Entity e) {
-							return e.canBeCollidedWith();
-						}
-
-						@Override
-						public boolean test(Object arg0) {
-							return false;
-						}
-
-						@Override
-						public boolean apply(Object input) {
-							return input instanceof Entity ? this
-									.apply((Entity) input) : false;
-						}
-					} });
-
+				public boolean apply(@Nullable Entity e) {
+					return e.canBeCollidedWith();
+				}
+				
+				@Override
+				public boolean test(Object arg0) {
+					return false;
+				}
+				
+				@Override
+				public boolean apply(Object input) {
+					return input instanceof Entity ? this
+							.apply((Entity) input) : false;
+				}
+			} });
+	
 	@Override
 	@Nullable
 	protected Entity findEntityOnPath(Vec3d start, Vec3d end) {
 		Entity entity = null;
 		List<Entity> list = this.world.getEntitiesInAABBexcluding(
 				this,
-				getEntityBoundingBox().expand(this.motionX, this.motionY,
-						this.motionZ).grow(1.0D), ARROW_TARGETS);
+				this.getEntityBoundingBox().expand(this.motionX, this.motionY,
+						this.motionZ).grow(1.0D), EntityBullet.ARROW_TARGETS);
 		double d0 = 0.0D;
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity1 = list.get(i);
@@ -398,7 +398,7 @@ public class EntityBullet extends EntityArrow
 		}
 		return entity;
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		compound.setInteger("xTile", this.xTile);
@@ -413,7 +413,7 @@ public class EntityBullet extends EntityArrow
 		compound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
 		compound.setFloat("damage", this.damage);
 	}
-
+	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		this.xTile = compound.getInteger("xTile");
@@ -431,36 +431,36 @@ public class EntityBullet extends EntityArrow
 			this.damage = compound.getFloat("damage");
 		}
 	}
-
+	
 	@Override
 	public void onCollideWithPlayer(EntityPlayer entityIn)
 	{
 	}
-
+	
 	public void setDamage(float damageIn) {
 		this.damage = damageIn;
 	}
-
+	
 	@Override
 	public double getDamage() {
 		return this.damage;
 	}
-
+	
 	@Override
 	public void setKnockbackStrength(int knockbackStrengthIn) {
 		this.knockbackStrength = knockbackStrengthIn;
 	}
-
+	
 	@Override
 	public boolean canBeAttackedWithItem() {
 		return false;
 	}
-
+	
 	@Override
 	public float getEyeHeight() {
 		return 0.0F;
 	}
-
+	
 	@Override
 	protected ItemStack getArrowStack()
 	{

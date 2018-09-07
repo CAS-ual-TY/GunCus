@@ -33,27 +33,27 @@ public class BakedModelGun implements IBakedModel
 	
 	public BakedModelGunFinalized getModelFinal()
 	{
-		return modelFinal;
+		return this.modelFinal;
 	}
-
+	
 	@Override
 	public ItemOverrideList getOverrides()
 	{
 		return this.overridesList;
 	}
-
+	
 	@Override
 	public TextureAtlasSprite getParticleTexture()
 	{
 		return this.modelMain.getParticleTexture();
 	}
-
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState arg0, EnumFacing arg1, long arg2)
 	{
 		return this.modelMain.getQuads(arg0, arg1, arg2);
 	}
-
+	
 	@Override
 	public boolean isAmbientOcclusion()
 	{
@@ -65,7 +65,7 @@ public class BakedModelGun implements IBakedModel
 	{
 		return this.modelMain.isBuiltInRenderer();
 	}
-
+	
 	@Override
 	public boolean isGui3d()
 	{

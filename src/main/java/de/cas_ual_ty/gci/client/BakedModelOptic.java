@@ -11,8 +11,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -32,19 +32,19 @@ public class BakedModelOptic implements IBakedModel
 	{
 		return this.modelMain.getOverrides();
 	}
-
+	
 	@Override
 	public TextureAtlasSprite getParticleTexture()
 	{
 		return this.modelMain.getParticleTexture();
 	}
-
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState arg0, EnumFacing arg1, long arg2)
 	{
 		return this.modelMain.getQuads(arg0, arg1, arg2);
 	}
-
+	
 	@Override
 	public boolean isAmbientOcclusion()
 	{
@@ -56,7 +56,7 @@ public class BakedModelOptic implements IBakedModel
 	{
 		return this.modelMain.isBuiltInRenderer();
 	}
-
+	
 	@Override
 	public boolean isGui3d()
 	{
