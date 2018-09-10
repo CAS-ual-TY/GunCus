@@ -36,7 +36,7 @@ public class GunCus
 {
 	public static final String MOD_ID = "gci";
 	public static final String MOD_NAME = "Gun Customization: Infinity";
-	public static final String MOD_VERSION = "0.3-1.12.2";
+	public static final String MOD_VERSION = "0.4-1.12.2";
 	
 	public static final Random RANDOM = new Random();
 	
@@ -58,14 +58,14 @@ public class GunCus
 	public static final ItemCartridge CARTRIDGE__44_magnum 		= new ItemCartridge("cartridge__44_magnum").setDamage(8F);
 	public static final ItemCartridge CARTRIDGE__338_magnum 	= new ItemCartridge("cartridge__338_magnum").setDamage(8F);
 	
-	public static final Optic 		OPTIC_DEFAULT 				= new Optic(0, "default");
-	public static final Accessory 	ACCESSORY_DEFAULT 			= new Accessory(0, "default");
-	public static final Barrel 		BARREL_DEFAULT 				= new Barrel(0, "default");
-	public static final Underbarrel UNDERBARREL_DEFAULT 		= new Underbarrel(0, "default");
-	public static final Auxiliary 	AUXILIARY_DEFAULT 			= new Auxiliary(0, "default");
-	public static final Ammo 		AMMO_DEFAULT 				= new Ammo(0, "default");
-	public static final Magazine 	MAGAZINE_DEFAULT 			= new Magazine(0, "default");
-	public static final Paint 		PAINT_DEFAULT 				= new Paint(0, "default");
+	public static final Optic 		OPTIC_DEFAULT 				= new Optic(0, "optic_default");
+	public static final Accessory 	ACCESSORY_DEFAULT 			= new Accessory(0, "accessory_default");
+	public static final Barrel 		BARREL_DEFAULT 				= new Barrel(0, "barrel_default");
+	public static final Underbarrel UNDERBARREL_DEFAULT 		= new Underbarrel(0, "underbarrel_default");
+	public static final Auxiliary 	AUXILIARY_DEFAULT 			= new Auxiliary(0, "auxiliary_default");
+	public static final Ammo 		AMMO_DEFAULT 				= new Ammo(0, "ammo_default");
+	public static final Magazine 	MAGAZINE_DEFAULT 			= new Magazine(0, "magazine_default");
+	public static final Paint 		PAINT_DEFAULT 				= new Paint(0, "paint_default");
 	
 	public static final Optic 		OPTIC_REFLEX 				= new Optic(1, "optic_reflex");
 	public static final Optic 		OPTIC_COYOTE 				= new Optic(2, "optic_coyote");
@@ -236,7 +236,7 @@ public class GunCus
 			
 			for(int i = 0; i < Attachment.ATTACHMENTS_LIST.length; ++i)
 			{
-				for(j = 0; j < Attachment.getAmmountForSlot(i); ++j)
+				for(j = 1; j < Attachment.getAmmountForSlot(i); ++j)
 				{
 					attachment = Attachment.getAttachment(i, j);
 					

@@ -415,7 +415,7 @@ public class ItemGun extends ItemGCI
 	
 	public boolean canSetAttachment(int slot, int id)
 	{
-		return id == 0 || this.attachments[slot][id];
+		return this.attachments[slot][id];
 	}
 	
 	public <A extends Attachment> A getAttachmentCalled(ItemStack itemStack, int slot)
@@ -439,6 +439,7 @@ public class ItemGun extends ItemGCI
 			boolean include = true;
 			ItemStack itemStack;
 			boolean finalBreak = false;
+			int id;
 			
 			ArrayList<Integer> availableSlots = new ArrayList<Integer>();
 			
@@ -464,7 +465,7 @@ public class ItemGun extends ItemGCI
 						
 						for(slot = 0; slot < array.length; ++slot)
 						{
-							if(!this.canSetAttachment(slot, array[slot]))
+							if(array[slot] != 0 && !this.canSetAttachment(slot, array[slot]))
 							{
 								include = false;
 								break;
@@ -601,7 +602,7 @@ public class ItemGun extends ItemGCI
 					
 					for(slot = 0; slot < array.length; ++slot)
 					{
-						if(!this.canSetAttachment(slot, array[slot]))
+						if(array[slot] != 0 && !this.canSetAttachment(slot, array[slot]))
 						{
 							include = false;
 							break;

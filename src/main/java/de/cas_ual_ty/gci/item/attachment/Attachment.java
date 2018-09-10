@@ -48,6 +48,11 @@ public abstract class Attachment extends ItemGCI
 		Attachment.ATTACHMENTS_LIST[this.getSlot()].set(id, this);
 	}
 	
+	public boolean isDefault()
+	{
+		return this.getID() == 0;
+	}
+	
 	public int getID()
 	{
 		return this.id;
@@ -88,7 +93,7 @@ public abstract class Attachment extends ItemGCI
 	
 	public boolean shouldRegister()
 	{
-		return this.getID() != 0;
+		return true;
 	}
 	
 	public boolean shouldRender()

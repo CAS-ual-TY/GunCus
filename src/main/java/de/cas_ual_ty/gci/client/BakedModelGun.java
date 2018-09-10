@@ -3,6 +3,8 @@ package de.cas_ual_ty.gci.client;
 import java.util.Collections;
 import java.util.List;
 
+import javax.vecmath.Matrix4f;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -24,10 +26,10 @@ public class BakedModelGun implements IBakedModel
 	private final BakedModelGunFinalized modelFinal;
 	private final ItemOverrideListGCI overridesList;
 	
-	public BakedModelGun(IBakedModel modelMain, IBakedModel[][] attachmentModels)
+	public BakedModelGun(IBakedModel modelMain, IBakedModel[][] attachmentModels, Matrix4f aimMatrix)
 	{
 		this.modelMain = modelMain;
-		this.modelFinal = new BakedModelGunFinalized(this.modelMain, attachmentModels);
+		this.modelFinal = new BakedModelGunFinalized(this.modelMain, attachmentModels, aimMatrix);
 		this.overridesList = new ItemOverrideListGCI(this);
 	}
 	

@@ -27,12 +27,14 @@ public class BakedModelGunFinalized implements IBakedModel
 {
 	private final IBakedModel modelMain;
 	private final IBakedModel[][] attachmentModels;
+	private final Matrix4f aimMatrix;
 	private ItemStack itemStack;
 	
-	public BakedModelGunFinalized(IBakedModel modelMain, IBakedModel[][] attachmentModels)
+	public BakedModelGunFinalized(IBakedModel modelMain, IBakedModel[][] attachmentModels, Matrix4f aimMatrix)
 	{
 		this.modelMain = modelMain;
 		this.attachmentModels = attachmentModels;
+		this.aimMatrix = aimMatrix;
 		this.itemStack = null;
 	}
 	
@@ -66,7 +68,7 @@ public class BakedModelGunFinalized implements IBakedModel
 		Paint paint = gun.<Paint>getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT.getSlot());
 		IBakedModel model;
 		
-		if(paint != null && paint.shouldRegister())
+		if(paint != null && paint.shouldLoadModel())
 		{
 			model = this.attachmentModels[EnumAttachmentType.PAINT.getSlot()][paint.getID()];
 			
@@ -144,7 +146,14 @@ public class BakedModelGunFinalized implements IBakedModel
 				
 				if(optic != null && optic.canAim())
 				{
-					return Pair.of(this, BakedModelGunFinalized.NULL_MATRIX);
+					if(optic.isDefault())
+					{
+						return Pair.of(this, this.aimMatrix);
+					}
+					else
+					{
+						return Pair.of(this, BakedModelGunFinalized.NULL_MATRIX);
+					}
 				}
 			}
 		}

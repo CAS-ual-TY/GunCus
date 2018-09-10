@@ -1,11 +1,14 @@
 package de.cas_ual_ty.gci.client;
 
+import javax.vecmath.Matrix4f;
+
 import de.cas_ual_ty.gci.GunCus;
 import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Attachment;
 import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
 import de.cas_ual_ty.gci.item.attachment.Optic;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -63,7 +66,9 @@ public class BakeHandler
 			
 			main = event.getModelRegistry().getObject(mrl); //Get the model of the gun
 			
-			event.getModelRegistry().putObject(mrl, new BakedModelGun(main, models)); //Replace model of the gun with custom IBakedModel and pass all the attachment models to it
+			Matrix4f aimMatrix = event.getModelRegistry().getObject(new ModelResourceLocation(GunCus.MOD_ID + ":" + gun.getModelRL() + "/aim", "inventory")).handlePerspective(TransformType.FIRST_PERSON_RIGHT_HAND).getRight();
+			
+			event.getModelRegistry().putObject(mrl, new BakedModelGun(main, models, aimMatrix)); //Replace model of the gun with custom IBakedModel and pass all the attachment models to it
 		}
 	}
 }

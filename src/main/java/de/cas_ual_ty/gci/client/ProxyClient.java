@@ -31,19 +31,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ProxyClient extends Proxy
 {
-	public ProxyClient()
-	{
-		/*
-		try //TODO
-		{
-			generateAttachmentModelsForGun(GunCus.GUN_M16A4);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}*/
-	}
-	
 	public void registerItemRenderer(ItemGCI item)
 	{
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(GunCus.MOD_ID + ":" + item.getModelRL(), "inventory"));
@@ -99,6 +86,8 @@ public class ProxyClient extends Proxy
 			}
 		}
 		
+		list.add(new ModelResourceLocation(GunCus.MOD_ID + ":" + gun.getModelRL() + "/aim", "inventory"));
+		
 		ModelBakery.registerItemVariants(gun, list.toArray(new ModelResourceLocation[list.size()])); //Register all attachment MRLs found so that they will be loaded
 	}
 	
@@ -112,6 +101,8 @@ public class ProxyClient extends Proxy
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
+		
+//		generateAttachmentModels(); //TODO
 		
 		MinecraftForge.EVENT_BUS.register(new BakeHandler());
 	}
@@ -132,6 +123,21 @@ public class ProxyClient extends Proxy
 		return Minecraft.getMinecraft().player;
 	}
 	
+	public static void generateAttachmentModels()
+	{
+		for(ItemGun gun : ItemGun.GUNS_LIST)
+		{
+			try
+			{
+				generateAttachmentModelsForGun(gun);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void generateAttachmentModelsForGun(String path, ItemGun gun) throws IOException
 	{
 		String gunName = gun.getModelRL();
@@ -139,72 +145,13 @@ public class ProxyClient extends Proxy
 		File baseAttachmentFile = new File(path + "/models/item/base/attachment_name.json");
 		File baseGunFile = new File(path + "/models/item/base/gun_name.json");
 		
-		ArrayList<String> lines = new ArrayList<String>();
-		
-		String line;
-		
-		BufferedReader reader = new BufferedReader(new FileReader(baseAttachmentFile));
-		
-		while ((line = reader.readLine()) != null)
+		if(baseAttachmentFile.exists())
 		{
-			lines.add(line.replaceAll("gun_name", gunName));
-		}
-		
-		reader.close();
-		
-		String itemDirPath = path + "/models/item/" + gun.getModelRL();
-		File itemDir = new File(itemDirPath);
-		
-		if(!itemDir.exists())
-		{
-			itemDir.mkdirs();
-		}
-		
-		int j;
-		Attachment attachment;
-		BufferedWriter writer;
-		
-		for(int i = 0; i < EnumAttachmentType.values().length; ++i)
-		{
-			for(j = 0; j < Attachment.getAmmountForSlot(i); ++j)
-			{
-				if(gun.canSetAttachment(i, j))
-				{
-					attachment = Attachment.getAttachment(i, j);
-					
-					if(attachment != null && attachment.shouldLoadModel())
-					{
-						String attachmentModelPath = itemDirPath + "/" + attachment.getModelRL() + ".json";
-						File attachmentModel = new File(attachmentModelPath);
-						
-						if(!attachmentModel.exists())
-						{
-							attachmentModel.createNewFile();
-							
-							writer = new BufferedWriter(new FileWriter(attachmentModel));
-							
-							for(String line1 : lines)
-							{
-								writer.write(line1.replaceAll("attachment_name", attachment.getModelRL()));
-								writer.newLine();
-							}
-							
-							writer.close();
-						}
-					}
-				}
-			}
-		}
-		
-		File gunModel = new File(itemDirPath + "/gun.json");
-		
-		if(!gunModel.exists())
-		{
-			gunModel.createNewFile();
+			ArrayList<String> lines = new ArrayList<String>();
 			
-			lines.clear();
+			String line;
 			
-			reader = new BufferedReader(new FileReader(baseGunFile));
+			BufferedReader reader = new BufferedReader(new FileReader(baseAttachmentFile));
 			
 			while ((line = reader.readLine()) != null)
 			{
@@ -213,20 +160,87 @@ public class ProxyClient extends Proxy
 			
 			reader.close();
 			
-			writer = new BufferedWriter(new FileWriter(gunModel));
+			String itemDirPath = path + "/models/item/" + gun.getModelRL();
+			File itemDir = new File(itemDirPath);
 			
-			for(String line1 : lines)
+			if(!itemDir.exists())
 			{
-				writer.write(line1);
-				writer.newLine();
+				itemDir.mkdirs();
 			}
 			
-			writer.close();
+			int j;
+			Attachment attachment;
+			BufferedWriter writer;
+			
+			for(int i = 0; i < EnumAttachmentType.values().length; ++i)
+			{
+				for(j = 0; j < Attachment.getAmmountForSlot(i); ++j)
+				{
+					if(gun.canSetAttachment(i, j))
+					{
+						attachment = Attachment.getAttachment(i, j);
+						
+						if(attachment != null && attachment.shouldLoadModel())
+						{
+							String attachmentModelPath = itemDirPath + "/" + attachment.getModelRL() + ".json";
+							File attachmentModel = new File(attachmentModelPath);
+							
+							if(!attachmentModel.exists())
+							{
+								attachmentModel.createNewFile();
+								
+								writer = new BufferedWriter(new FileWriter(attachmentModel));
+								
+								for(String line1 : lines)
+								{
+									writer.write(line1.replaceAll("attachment_name", attachment.getModelRL()));
+									writer.newLine();
+								}
+								
+								writer.close();
+							}
+						}
+					}
+				}
+			}
+			
+			File gunModel = new File(itemDirPath + "/gun.json");
+			
+			if(!gunModel.exists())
+			{
+				gunModel.createNewFile();
+				
+				lines.clear();
+				
+				reader = new BufferedReader(new FileReader(baseGunFile));
+				
+				while ((line = reader.readLine()) != null)
+				{
+					lines.add(line.replaceAll("gun_name", gunName));
+				}
+				
+				reader.close();
+				
+				writer = new BufferedWriter(new FileWriter(gunModel));
+				
+				for(String line1 : lines)
+				{
+					writer.write(line1);
+					writer.newLine();
+				}
+				
+				writer.close();
+			}
+		}
+		else
+		{
+			baseAttachmentFile.mkdirs();
+			baseAttachmentFile.createNewFile();
 		}
 	}
 	
 	public static void generateAttachmentModelsForGun(ItemGun gun) throws IOException
 	{
-		ProxyClient.generateAttachmentModelsForGun("C:/Minecraft Coding 1.12/src/main/resources/assets/gci", gun);
+		ProxyClient.generateAttachmentModelsForGun("C:\\Minecraft Coding 1.12.2\\src\\main\\resources\\assets\\gci", gun);
 	}
 }

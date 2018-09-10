@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
 
+import de.cas_ual_ty.gci.item.ItemGun;
 import de.cas_ual_ty.gci.item.attachment.Optic;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
