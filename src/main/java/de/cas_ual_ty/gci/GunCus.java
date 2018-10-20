@@ -19,6 +19,7 @@ import de.cas_ual_ty.gci.item.attachment.Paint;
 import de.cas_ual_ty.gci.item.attachment.Underbarrel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -36,7 +37,7 @@ public class GunCus
 {
 	public static final String MOD_ID = "gci";
 	public static final String MOD_NAME = "Gun Customization: Infinity";
-	public static final String MOD_VERSION = "0.4-1.12.2";
+	public static final String MOD_VERSION = "0.5-1.12.2";
 	
 	public static final Random RANDOM = new Random();
 	
@@ -137,8 +138,8 @@ public class GunCus
 	public static final Paint 		PAINT_WHITE 				= new Paint(8, "paint_white");
 	public static final Paint 		PAINT_YELLOW 				= new Paint(9, "paint_yellow");
 	
-	public static final ItemGun GUN_AK_74M 	= GunCus.createAssaultRifle("gun_ak_74m", 3, 30, 5F, GunCus.CARTRIDGE_5_45x39mm);
-	public static final ItemGun GUN_M16A4 	= GunCus.createAssaultRifle("gun_m16a4", 3, 30, 5F, GunCus.CARTRIDGE_5_56x45mm);
+	public static final ItemGun GUN_AK_74M 		= GunCus.createAssaultRifle("gun_ak_74m", 3, 30, 5F, GunCus.CARTRIDGE_5_45x39mm);
+	public static final ItemGun GUN_M16A4 		= GunCus.createAssaultRifle("gun_m16a4", 3, 30, 5F, GunCus.CARTRIDGE_5_56x45mm);
 	
 	@SidedProxy(clientSide = "de.cas_ual_ty.gci.client.ProxyClient", serverSide = "de.cas_ual_ty.gci.Proxy")
 	public static Proxy proxy;
@@ -148,10 +149,15 @@ public class GunCus
 	@Instance
 	public static GunCus instance;
 	
+	public static boolean fullCreativeTabs = false;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		GunCus.proxy.preInit(event);
+		
+		Configuration config = new Configuration(event.getModConfigurationDirectory());
+		GunCus.fullCreativeTabs = config.getBoolean("fullCreativeTabs", "general", false, "If true, all guns come with their own creative tab containing all possible variants. Keep this off if you have JEI or similar mods installed.");
 	}
 	
 	@EventHandler

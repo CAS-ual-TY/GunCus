@@ -432,67 +432,88 @@ public class ItemGun extends ItemGCI
 		{
 			list.add(new ItemStack(this));
 			
-			int[] array = new int[Attachment.ATTACHMENTS_LIST.length];
-			
-			int slot;
-			int j;
-			boolean include = true;
-			ItemStack itemStack;
-			boolean finalBreak = false;
-			int id;
-			
-			ArrayList<Integer> availableSlots = new ArrayList<Integer>();
-			
-			for(j = 0; j < array.length; ++j)
+			if(GunCus.fullCreativeTabs)
 			{
-				if(this.isSlotAvailable(j))
+				int[] array = new int[Attachment.ATTACHMENTS_LIST.length];
+				
+				int slot;
+				int j;
+				boolean include = true;
+				ItemStack itemStack;
+				boolean finalBreak = false;
+				int id;
+				
+				ArrayList<Integer> availableSlots = new ArrayList<Integer>();
+				
+				for(j = 0; j < array.length; ++j)
 				{
-					availableSlots.add(j);
-				}
-			}
-			
-			while(!finalBreak)
-			{
-				for(j = 0; j < availableSlots.size(); ++j)
-				{
-					slot = availableSlots.get(j);
-					
-					array[slot]++;
-					
-					if(array[slot] < Attachment.getAmmountForSlot(slot))
+					if(this.isSlotAvailable(j))
 					{
-						include = true;
+						availableSlots.add(j);
+					}
+				}
+				
+				while(!finalBreak)
+				{
+					for(j = 0; j < availableSlots.size(); ++j)
+					{
+						slot = availableSlots.get(j);
 						
-						for(slot = 0; slot < array.length; ++slot)
-						{
-							if(array[slot] != 0 && !this.canSetAttachment(slot, array[slot]))
-							{
-								include = false;
-								break;
-							}
-						}
+						array[slot]++;
 						
-						if(include)
+						if(array[slot] < Attachment.getAmmountForSlot(slot))
 						{
-							itemStack = new ItemStack(this);
+							include = true;
 							
 							for(slot = 0; slot < array.length; ++slot)
 							{
-								this.setAttachment(itemStack, slot, array[slot]);
+								if(array[slot] != 0 && !this.canSetAttachment(slot, array[slot]))
+								{
+									include = false;
+									break;
+								}
 							}
 							
-							list.add(itemStack);
+							if(include)
+							{
+								itemStack = new ItemStack(this);
+								
+								for(slot = 0; slot < array.length; ++slot)
+								{
+									this.setAttachment(itemStack, slot, array[slot]);
+								}
+								
+								list.add(itemStack);
+							}
+							
+							break;
 						}
-						
-						break;
-					}
-					else
-					{
-						array[slot] = 0;
-						
-						if(slot == (availableSlots.get(availableSlots.size() - 1)))
+						else
 						{
-							finalBreak = true;
+							array[slot] = 0;
+							
+							if(slot == (availableSlots.get(availableSlots.size() - 1)))
+							{
+								finalBreak = true;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				int j;
+				boolean[] current;
+				
+				for(int i = 0; i < EnumAttachmentType.values().length; ++i)
+				{
+					current = this.attachments[i];
+					
+					for(j = 1; j < current.length; ++j)
+					{
+						if(current[j])
+						{
+							list.add(new ItemStack(Attachment.getAttachment(i, j)));
 						}
 					}
 				}

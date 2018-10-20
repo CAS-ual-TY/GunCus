@@ -11,7 +11,15 @@ local.gci:slot4.name=Auxiliary
 local.gci:slot5.name=Ammo
 local.gci:slot6.name=Magazine
 local.gci:slot7.name=Paint
-item.gci:default.name=--
+
+item.gci:optic_default.name=--
+item.gci:accessory_default.name=--
+item.gci:barrel_default.name=--
+item.gci:underbarrel_default.name=--
+item.gci:auxiliary_default.name=--
+item.gci:ammo_default.name=--
+item.gci:magazine_default.name=--
+item.gci:paint_default.name=--
 
 tile.gci:gun_table.name=Gun Table
 

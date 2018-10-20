@@ -1,9 +1,9 @@
 ﻿{
 	"display": {
-		"firstperson_righthand": {
-			"scale": [1.2, 1.2, 1.2],
-			"rotation": [0, 90, 0],
-			"translation": [-9, 6.85, 7]
-		}
+        "thirdperson_righthand": {
+            "rotation": [ -80, 260, -40 ],
+            "translation": [ -1, -2, 2.5 ],
+            "scale": [ 0.9, 0.9, 0.9 ]
+        }
 	}
 }

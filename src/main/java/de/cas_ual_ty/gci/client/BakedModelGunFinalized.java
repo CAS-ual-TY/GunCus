@@ -148,7 +148,8 @@ public class BakedModelGunFinalized implements IBakedModel
 				{
 					if(optic.isDefault())
 					{
-						return Pair.of(this, this.aimMatrix);
+						//						return Pair.of(this, this.aimMatrix);
+						return Pair.of(this, this.modelMain.handlePerspective(transformType).getRight());
 					}
 					else
 					{

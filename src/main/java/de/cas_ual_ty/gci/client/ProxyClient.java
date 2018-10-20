@@ -102,7 +102,7 @@ public class ProxyClient extends Proxy
 	{
 		super.preInit(event);
 		
-//		generateAttachmentModels(); //TODO
+		//		generateAttachmentModels(); //TODO
 		
 		MinecraftForge.EVENT_BUS.register(new BakeHandler());
 	}
@@ -129,7 +129,7 @@ public class ProxyClient extends Proxy
 		{
 			try
 			{
-				generateAttachmentModelsForGun(gun);
+				ProxyClient.generateAttachmentModelsForGun(gun);
 			}
 			catch (IOException e)
 			{

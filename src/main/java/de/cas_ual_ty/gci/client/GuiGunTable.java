@@ -1,19 +1,28 @@
 package de.cas_ual_ty.gci.client;
 
+import de.cas_ual_ty.gci.ContainerGunTable;
+import de.cas_ual_ty.gci.ContainerGunTable.SlotAttachment;
 import de.cas_ual_ty.gci.GunCus;
+import de.cas_ual_ty.gci.item.ItemGCI;
+import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiGunTable extends GuiContainer
 {
 	private static final ResourceLocation CRAFTING_TABLE_GUI_TEXTURES = new ResourceLocation(GunCus.MOD_ID, "textures/gui/gun_table.png");
 	
+	private ContainerGunTable c;
+	
 	public GuiGunTable(Container container)
 	{
 		super(container);
+		this.c = (ContainerGunTable) container;
 	}
 	
 	@Override
@@ -31,6 +40,27 @@ public class GuiGunTable extends GuiContainer
 		int i = this.guiLeft;
 		int j = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
+		
+		ItemStack itemStack = Minecraft.getMinecraft().player.inventory.getItemStack();
+		if(itemStack.getItem() instanceof ItemGCI)
+		{
+			if(this.c.gunSlot.isItemValid(itemStack))
+			{
+				this.drawTexturedModalRect(i + 61 + 18, j + 16 + 18, 176, 0, 18, 18);
+			}
+			else
+			{
+				EnumAttachmentType t;
+				for(SlotAttachment slot : this.c.attachmentSlots)
+				{
+					t = EnumAttachmentType.values()[slot.slot];
+					if(slot.isItemValid(itemStack))
+					{
+						this.drawTexturedModalRect(i + 61 + t.getX() * 18, j + 16 + t.getY() * 18, 176, 0, 18, 18);
+					}
+				}
+			}
+		}
 	}
 	
 	@Override

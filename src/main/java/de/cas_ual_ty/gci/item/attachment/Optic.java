@@ -1,7 +1,6 @@
 package de.cas_ual_ty.gci.item.attachment;
 
 import de.cas_ual_ty.gci.GunCus;
-import de.cas_ual_ty.gci.item.ItemGun;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 

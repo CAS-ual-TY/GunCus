@@ -21,8 +21,8 @@ public class ContainerGunTable extends Container
 	public World world;
 	public BlockPos pos;
 	
-	private Slot gunSlot;
-	private SlotAttachment[] attachmentSlots;
+	public Slot gunSlot;
+	public SlotAttachment[] attachmentSlots;
 	
 	public ContainerGunTable(EntityPlayer entityPlayer, World world, BlockPos pos)
 	{
@@ -30,12 +30,12 @@ public class ContainerGunTable extends Container
 		this.world = world;
 		this.pos = pos;
 		
-		this.gunSlot = new Slot(this.craftMatrix, 1 + 1 * 3, 80, 35)
+		this.gunSlot = new Slot(this.craftMatrix, 4, 80, 35)
 		{
 			@Override
 			public boolean isItemValid(ItemStack itemStack)
 			{
-				if(itemStack.getItem() instanceof ItemGun)
+				if(!this.getHasStack() && (itemStack.getItem() instanceof ItemGun))
 				{
 					for(EnumAttachmentType attachmentType : EnumAttachmentType.values())
 					{
@@ -253,7 +253,7 @@ public class ContainerGunTable extends Container
 		@Override
 		public boolean isItemValid(ItemStack itemStack)
 		{
-			if(this.main.getHasStack() && (itemStack.getItem() instanceof Attachment))
+			if(this.main.getHasStack() && !this.getHasStack() && (itemStack.getItem() instanceof Attachment))
 			{
 				ItemGun gun = (ItemGun) this.main.getStack().getItem();
 				Attachment attachment = (Attachment) itemStack.getItem();
