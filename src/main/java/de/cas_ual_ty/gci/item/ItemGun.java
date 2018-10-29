@@ -434,13 +434,30 @@ public class ItemGun extends ItemGCI
 		if(tab == this.gunTab)
 		{
 			list.add(new ItemStack(this));
+			list.add(new ItemStack(this.getCartridge()));
+			
+			int j;
+			boolean[] current;
+			
+			for(int i = 0; i < EnumAttachmentType.values().length; ++i)
+			{
+				current = this.attachments[i];
+				
+				for(j = 1; j < current.length; ++j)
+				{
+					if(current[j])
+					{
+						list.add(new ItemStack(Attachment.getAttachment(i, j)));
+					}
+				}
+			}
 			
 			if(GunCus.fullCreativeTabs)
 			{
 				int[] array = new int[Attachment.ATTACHMENTS_LIST.length];
 				
 				int slot;
-				int j;
+				j = 0;
 				boolean include = true;
 				ItemStack itemStack;
 				boolean finalBreak = false;
@@ -499,24 +516,6 @@ public class ItemGun extends ItemGCI
 							{
 								finalBreak = true;
 							}
-						}
-					}
-				}
-			}
-			else
-			{
-				int j;
-				boolean[] current;
-				
-				for(int i = 0; i < EnumAttachmentType.values().length; ++i)
-				{
-					current = this.attachments[i];
-					
-					for(j = 1; j < current.length; ++j)
-					{
-						if(current[j])
-						{
-							list.add(new ItemStack(Attachment.getAttachment(i, j)));
 						}
 					}
 				}

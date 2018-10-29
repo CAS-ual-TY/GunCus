@@ -37,7 +37,7 @@ public class GunCus
 {
 	public static final String MOD_ID = "gci";
 	public static final String MOD_NAME = "Gun Customization: Infinity";
-	public static final String MOD_VERSION = "0.5-1.12.2";
+	public static final String MOD_VERSION = "0.6-1.12.2";
 	
 	public static final Random RANDOM = new Random();
 	

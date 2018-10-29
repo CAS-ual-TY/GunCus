@@ -40,6 +40,7 @@ public abstract class Attachment extends ItemGCI
 		super(rl);
 		
 		this.id = id;
+		this.setMaxStackSize(1);
 		
 		while(Attachment.ATTACHMENTS_LIST[this.getSlot()].size() <= id)
 		{

@@ -5,6 +5,7 @@ import de.cas_ual_ty.gci.item.attachment.Attachment;
 import de.cas_ual_ty.gci.item.attachment.EnumAttachmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -235,6 +236,51 @@ public class ContainerGunTable extends Container
 		{
 			this.clearContainer(playerIn, this.world);
 		}
+	}
+	
+	
+	@Override
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player)
+	{
+		return super.slotClick(slotId, dragType, clickTypeIn, player);
+	}
+	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+	{
+		Slot slot = this.getSlot(index);
+		ItemStack itemStack = slot.getStack();
+		
+		if(index >= 9)
+		{
+			if(itemStack.getItem() instanceof ItemGun)
+			{
+				if(this.gunSlot.isItemValid(itemStack))
+				{
+					this.gunSlot.putStack(itemStack);
+					slot.putStack(ItemStack.EMPTY);
+				}
+			}
+			else if(itemStack.getItem() instanceof Attachment)
+			{
+				Attachment attachment = (Attachment) itemStack.getItem();
+				
+				if(this.attachmentSlots[attachment.getSlot()].isItemValid(itemStack))
+				{
+					this.attachmentSlots[attachment.getSlot()].putStack(itemStack);
+					slot.putStack(ItemStack.EMPTY);
+				}
+			}
+		}
+		else
+		{
+			if(playerIn.inventory.addItemStackToInventory(itemStack))
+			{
+				slot.putStack(ItemStack.EMPTY);
+			}
+		}
+		
+		return ItemStack.EMPTY;
 	}
 	
 	public static class SlotAttachment extends Slot
