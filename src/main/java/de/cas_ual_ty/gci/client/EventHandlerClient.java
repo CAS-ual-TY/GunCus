@@ -301,6 +301,7 @@ public class EventHandlerClient
 		if(Minecraft.getMinecraft().world != null)
 		{
 			World world = Minecraft.getMinecraft().world;
+			EntityPlayer clientPlayer = Minecraft.getMinecraft().player;
 			
 			ItemStack itemStack;
 			ItemGun gun;
@@ -309,7 +310,7 @@ public class EventHandlerClient
 			
 			Vec3d start;
 			Vec3d end;
-			Vec3d subtract;
+			Vec3d subtract = new Vec3d(clientPlayer.posX, clientPlayer.posY, clientPlayer.posZ);
 			RayTraceResult resultBlock;
 			RayTraceResult resultEntity;
 			
@@ -326,7 +327,7 @@ public class EventHandlerClient
 				if(!entityPlayer.isDead)
 				{
 					//					subtract = new Vec3d(entityPlayer.posX - entityPlayer.motionX * event.getPartialTicks(), entityPlayer.posY /*+ entityPlayer.getEyeHeight()*/ - (entityPlayer.onGround ? 0 : entityPlayer.motionY * event.getPartialTicks()), entityPlayer.posZ - entityPlayer.motionZ * event.getPartialTicks());
-					subtract = new Vec3d(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ);
+					//					subtract = new Vec3d(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ);
 					
 					for(EnumHand hand : EnumHand.values())
 					{
@@ -492,7 +493,7 @@ public class EventHandlerClient
 		
 		for(Entity entity : world.loadedEntityList)
 		{
-			if (entity != entityPlayer && !(entity instanceof EntityBullet))
+			if (entity.getEntityId() != entityPlayer.getEntityId() && !(entity instanceof EntityBullet))
 			{
 				AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(0.30000001192092896D);
 				
