@@ -33,6 +33,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class ItemGun extends ItemGCI
 {
@@ -61,6 +62,8 @@ public class ItemGun extends ItemGCI
 	public ItemGun(String rl, int fireRate, int maxAmmo, float damage, ItemCartridge cartridge)
 	{
 		super(rl);
+		
+		this.setMaxStackSize(1);
 		
 		this.fireRate = fireRate;
 		this.maxAmmo = maxAmmo;
@@ -236,11 +239,11 @@ public class ItemGun extends ItemGCI
 		
 		if(this.<Barrel>getAttachmentCalled(itemStack, EnumAttachmentType.BARREL.getSlot()) != null && this.<Barrel>getAttachmentCalled(itemStack, EnumAttachmentType.BARREL.getSlot()).getIsSilenced())
 		{
-			GunCus.channel.sendTo(new MessageSound(entityPlayer, this.soundShootSilenced, 1F, 1F), (EntityPlayerMP) entityPlayer);
+			GunCus.channel.sendToAllAround(new MessageSound(entityPlayer, this.soundShootSilenced, 1F, 1F), new TargetPoint(entityPlayer.world.provider.getDimension(), entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, 10F));
 		}
 		else
 		{
-			GunCus.channel.sendTo(new MessageSound(entityPlayer, this.soundShoot, 10F, 1F), (EntityPlayerMP) entityPlayer);
+			GunCus.channel.sendToAllAround(new MessageSound(entityPlayer, this.soundShoot, 10F, 1F), new TargetPoint(entityPlayer.world.provider.getDimension(), entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, 100F));
 		}
 		
 		return EnumActionResult.PASS;
