@@ -358,7 +358,7 @@ public class EventHandlerClient
 							resultBlock = EventHandlerClient.findBlockOnPath(world, entityPlayer, start, end);
 							resultEntity = EventHandlerClient.findEntityOnPath(world, entityPlayer, start, end);
 							
-							if(resultBlock != null && resultEntity != null)
+							if(resultBlock != null && (resultEntity != null && resultEntity.entityHit != null))
 							{
 								rangeBlockSq = resultBlock.hitVec.distanceTo(start);
 								rangeEntitySq = resultEntity.hitVec.distanceTo(start);
@@ -380,7 +380,7 @@ public class EventHandlerClient
 								
 								renderPoint = laser.isPoint();
 							}
-							else if(resultEntity != null)
+							else if(resultEntity != null && resultEntity.entityHit != null)
 							{
 								end = resultEntity.hitVec;
 								
@@ -493,7 +493,7 @@ public class EventHandlerClient
 		
 		for(Entity entity : world.loadedEntityList)
 		{
-			if (entity.getEntityId() != entityPlayer.getEntityId() && !(entity instanceof EntityBullet))
+			if (entity != null && (entity.getEntityId() != entityPlayer.getEntityId()) && !(entity instanceof EntityBullet))
 			{
 				AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(0.30000001192092896D);
 				

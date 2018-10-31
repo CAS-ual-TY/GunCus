@@ -531,7 +531,7 @@ public class ItemGun extends ItemGCI
 		list.add("§e" + this.getAmmo(itemStack) + "§f/" + this.maxAmmo + " §e" + ItemGun.getCardridgeTranslated(this.getCurrentlyUsedCardridge(itemStack)));
 		
 		Attachment attachment;
-		int ammount = 0;;
+		int ammount = 0;
 		int i;
 		
 		for(i = 0; i < this.attachments.length; ++i)
