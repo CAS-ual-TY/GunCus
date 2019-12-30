@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "guncus:block/gun_table_side",
+        "down": "guncus:block/gun_table_bottom",
+        "up": "guncus:block/gun_table_top",
+        "north": "guncus:block/gun_table_side",
+        "east": "guncus:block/gun_table_side",
+        "south": "guncus:block/gun_table_side",
+        "west": "guncus:block/gun_table_side"
+    }
+}

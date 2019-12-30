@@ -1,0 +1,26 @@
+{
+    "shoot":{
+        "category":"player",
+        "sounds":[
+            "guncus:shoot"
+        ]
+    },
+    "reload":{
+        "category":"player",
+        "sounds":[
+            "guncus:reload"
+        ]
+    },
+    "shoot_sniper":{
+        "category":"player",
+        "sounds":[
+            "guncus:shoot_sniper"
+        ]
+    },
+    "shoot_silenced":{
+        "category":"player",
+        "sounds":[
+            "guncus:shoot_silenced"
+        ]
+    }
+}

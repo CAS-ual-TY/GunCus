@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "guncus:item/gun_m27_iar/underbarrel_ergo_grip"
+    }
+}
