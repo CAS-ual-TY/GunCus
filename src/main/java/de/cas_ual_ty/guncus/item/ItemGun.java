@@ -11,6 +11,7 @@ import de.cas_ual_ty.guncus.item.attachments.Auxiliary;
 import de.cas_ual_ty.guncus.item.attachments.Barrel;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Magazine;
+import de.cas_ual_ty.guncus.item.attachments.Underbarrel;
 import de.cas_ual_ty.guncus.itemgroup.ItemGroupGun;
 import de.cas_ual_ty.guncus.registries.GunCusEntityTypes;
 import de.cas_ual_ty.guncus.registries.GunCusSoundEvents;
@@ -346,8 +347,8 @@ public class ItemGun extends Item
             
             if (entityPlayer.isSneaking())
             {
-                inaccuracy *= ((Auxiliary) attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getInaccuracyModifierShiftStill();
-                driftModifier *= ((Auxiliary) attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getDriftModifierShiftStill();
+                inaccuracy *= ((Underbarrel) attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getInaccuracyModifierShiftStill();
+                driftModifier *= ((Underbarrel) attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getDriftModifierShiftStill();
             }
         }
         

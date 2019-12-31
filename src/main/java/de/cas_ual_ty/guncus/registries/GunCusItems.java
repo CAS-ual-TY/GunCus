@@ -30,6 +30,8 @@ public class GunCusItems
 {
     public static final ItemBullet BULLET_5_56x45MM = null;
     public static final ItemBullet BULLET_5_45x39MM = null;
+    public static final ItemBullet BULLET_7_62x51MM = null;
+    public static final ItemBullet BULLET_7_62x54MM = null;
     public static final ItemBullet BULLET_12G_BUCKSHOT = null;
     public static final ItemBullet BULLET_12G_DART = null;
     public static final ItemBullet BULLET_12G_FRAG = null;
@@ -79,6 +81,7 @@ public class GunCusItems
     public static final Barrel BARREL_MODIFIED_CHOKE = null;
     public static final Barrel BARREL_FULL_CHOKE = null;
     
+    public static final Underbarrel UNDERBARREL_BIPOD = null;
     public static final Underbarrel UNDERBARREL_ERGO_GRIP = null;
     public static final Underbarrel UNDERBARREL_ANGLED_GRIP = null;
     public static final Underbarrel UNDERBARREL_STUBBY_GRIP = null;
@@ -86,9 +89,8 @@ public class GunCusItems
     public static final Underbarrel UNDERBARREL_FOLDING_GRIP = null;
     public static final Underbarrel UNDERBARREL_POTATO_GRIP = null;
     
-    public static final Auxiliary AUXILIARY_BIPOD = null;
     public static final Auxiliary AUXILIARY_STRAIGHT_PULL = null;
-    public static final Auxiliary RAPID_FIRE = null;
+    public static final Auxiliary AUXILIARY_RAPID_FIRE = null;
     
     public static final Ammo AMMO_12G_BUCKSHOT = null;
     public static final Ammo AMMO_12G_DART = null;
@@ -97,6 +99,7 @@ public class GunCusItems
     
     public static final Magazine MAGAZINE_QUICK_SWITCH = null;
     public static final Magazine MAGAZINE_EXTENDED_10 = null;
+    public static final Magazine MAGAZINE_EXTENDED_5 = null;
     
     public static final Paint PAINT_BLACK = null;
     public static final Paint PAINT_BLUE = null;
@@ -119,8 +122,10 @@ public class GunCusItems
     {
         IForgeRegistry<Item> registry = event.getRegistry();
         
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(5F).setRegistryName(GunCus.MOD_ID, "bullet_5_56x45mm"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(5F).setRegistryName(GunCus.MOD_ID, "bullet_5_45x39mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1F).setRegistryName(GunCus.MOD_ID, "bullet_5_56x45mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1F).setRegistryName(GunCus.MOD_ID, "bullet_5_45x39mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(2F).setRegistryName(GunCus.MOD_ID, "bullet_7_62x51mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(2F).setRegistryName(GunCus.MOD_ID, "bullet_7_62x54mm"));
         registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1.5F).setProjectileAmount(6).setRegistryName(GunCus.MOD_ID, "bullet_12g_buckshot"));
         registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1.5F).setProjectileAmount(6).setRegistryName(GunCus.MOD_ID, "bullet_12g_dart"));
         registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(5F).setRegistryName(GunCus.MOD_ID, "bullet_12g_frag"));
@@ -170,6 +175,7 @@ public class GunCusItems
         registry.register(new Barrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setSpreadModifierVertical(0.8F).setSpreadModifierHorizontal(0.8F).setRegistryName(GunCus.MOD_ID, "barrel_modified_choke"));
         registry.register(new Barrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setSpreadModifierVertical(0.6F).setSpreadModifierHorizontal(0.6F).setRegistryName(GunCus.MOD_ID, "barrel_full_choke"));
         
+        registry.register(new Underbarrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDriftModifierShiftStill(0.25F).setInaccuracyModifierShiftStill(0.25F).setRegistryName(GunCus.MOD_ID, "underbarrel_bipod"));
         registry.register(new Underbarrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setInaccuracyModifierMoving(0.75F).setRegistryName(GunCus.MOD_ID, "underbarrel_ergo_grip"));
         registry.register(new Underbarrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setInaccuracyModifierStill(0.75F).setRegistryName(GunCus.MOD_ID, "underbarrel_angled_grip"));
         registry.register(new Underbarrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDriftModifier(0.75F).setRegistryName(GunCus.MOD_ID, "underbarrel_stubby_grip"));
@@ -177,7 +183,6 @@ public class GunCusItems
         registry.register(new Underbarrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setInaccuracyModifierStill(0.75F).setRegistryName(GunCus.MOD_ID, "underbarrel_folding_grip"));
         registry.register(new Underbarrel(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDriftModifier(0.75F).setRegistryName(GunCus.MOD_ID, "underbarrel_potato_grip"));
         
-        registry.register(new Auxiliary(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDriftModifierShiftStill(0.25F).setInaccuracyModifierShiftStill(0.25F).setRegistryName(GunCus.MOD_ID, "auxiliary_bipod"));
         registry.register(new Auxiliary(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setIsAllowingReloadWhileZoomed(true).setRegistryName(GunCus.MOD_ID, "auxiliary_straight_pull"));
         registry.register(new Auxiliary(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setExtraFireRate(2).setRegistryName(GunCus.MOD_ID, "auxiliary_rapid_fire"));
         
@@ -188,6 +193,7 @@ public class GunCusItems
         
         registry.register(new Magazine(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setReloadTimeModifier(0.8F).setRegistryName(GunCus.MOD_ID, "magazine_quick_switch"));
         registry.register(new Magazine(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setExtraCapacity(10).setRegistryName(GunCus.MOD_ID, "magazine_extended_10"));
+        registry.register(new Magazine(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setExtraCapacity(5).setRegistryName(GunCus.MOD_ID, "magazine_extended_5"));
         
         registry.register(new Paint(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "paint_black"));
         registry.register(new Paint(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "paint_blue"));
@@ -203,7 +209,7 @@ public class GunCusItems
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_ak_74m").setRegistryName(GunCus.MOD_ID, "gun_ak_74m"));
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_scar_l").setRegistryName(GunCus.MOD_ID, "gun_scar_l"));
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m27_iar").setRegistryName(GunCus.MOD_ID, "gun_m27_iar"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.colorAttachments()).createGunTab("gun_sv98").setRegistryName(GunCus.MOD_ID, "gun_sv98"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.sniperRifleAttachments()).createGunTab("gun_sv98").setRegistryName(GunCus.MOD_ID, "gun_sv98"));
         
         registry.register(new BlockItem(GunCusBlocks.GUN_TABLE, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_table"));
     }
@@ -219,8 +225,6 @@ public class GunCusItems
                                         GunCusItems.OPTIC_HOLO,
                                         GunCusItems.OPTIC_HD33,
                                         GunCusItems.OPTIC_PKAS,
-                                        //      GunCusItems.OPTIC_IRNV,
-                                        //      GunCusItems.OPTIC_FLIR,
                                         GunCusItems.OPTIC_M145,
                                         GunCusItems.OPTIC_PRISMA,
                                         GunCusItems.OPTIC_PKA,
@@ -231,12 +235,9 @@ public class GunCusItems
                         {
                                         EnumAttachmentType.ACCESSORY.getDefault(),
                                         GunCusItems.ACCESSORY_MAGNIFIER,
-                                        //      GunCusItems.ACCESSORY_FLASH_LIGHT,
-                                        //      GunCusItems.ACCESSORY_TACTICAL_LIGHT,
                                         GunCusItems.ACCESSORY_LASER_SIGHT,
                                         GunCusItems.ACCESSORY_TRI_BEAM_LASER,
                                         GunCusItems.ACCESSORY_GREEN_LASER_SIGHT,
-                        //      GunCusItems.ACCESSORY_LASER_LIGHT_COMBO,
                         },
                         {
                                         EnumAttachmentType.BARREL.getDefault(),
@@ -268,6 +269,81 @@ public class GunCusItems
                                         EnumAttachmentType.MAGAZINE.getDefault(),
                                         GunCusItems.MAGAZINE_QUICK_SWITCH,
                                         GunCusItems.MAGAZINE_EXTENDED_10,
+                        },
+                        {
+                                        EnumAttachmentType.PAINT.getDefault(),
+                                        GunCusItems.PAINT_BLACK,
+                                        GunCusItems.PAINT_BLUE,
+                                        GunCusItems.PAINT_GREEN,
+                                        GunCusItems.PAINT_ORANGE,
+                                        GunCusItems.PAINT_PINK,
+                                        GunCusItems.PAINT_RED,
+                                        GunCusItems.PAINT_TURQUOISE,
+                                        GunCusItems.PAINT_WHITE,
+                                        GunCusItems.PAINT_YELLOW,
+                        }
+        };
+    }
+    
+    public static ItemAttachment[][] sniperRifleAttachments()
+    {
+        return new ItemAttachment[][] {
+                        {
+                                        EnumAttachmentType.OPTIC.getDefault(),
+                                        GunCusItems.OPTIC_REFLEX,
+                                        GunCusItems.OPTIC_COYOTE,
+                                        GunCusItems.OPTIC_KOBRA,
+                                        GunCusItems.OPTIC_HOLO,
+                                        GunCusItems.OPTIC_HD33,
+                                        GunCusItems.OPTIC_PKAS,
+                                        GunCusItems.OPTIC_M145,
+                                        GunCusItems.OPTIC_PRISMA,
+                                        GunCusItems.OPTIC_PKA,
+                                        GunCusItems.OPTIC_ACOG,
+                                        GunCusItems.OPTIC_JGM4,
+                                        GunCusItems.OPTIC_PSO1,
+                                        GunCusItems.OPTIC_CL6X,
+                                        GunCusItems.OPTIC_PKS07,
+                                        GunCusItems.OPTIC_RIFLE,
+                                        GunCusItems.OPTIC_HUNTER,
+                                        GunCusItems.OPTIC_BALLISTIC,
+                        },
+                        {
+                                        EnumAttachmentType.ACCESSORY.getDefault(),
+                                        GunCusItems.ACCESSORY_VARIABLE_ZOOM,
+                                        GunCusItems.ACCESSORY_MAGNIFIER,
+                                        GunCusItems.ACCESSORY_LASER_SIGHT,
+                                        GunCusItems.ACCESSORY_TRI_BEAM_LASER,
+                                        GunCusItems.ACCESSORY_GREEN_LASER_SIGHT,
+                                        GunCusItems.ACCESSORY_RANGE_FINDER,
+                        },
+                        {
+                                        EnumAttachmentType.BARREL.getDefault(),
+                                        GunCusItems.BARREL_HEAVY_BARREL,
+                                        GunCusItems.BARREL_SUPPRESSOR,
+                                        GunCusItems.BARREL_LS06_SUPPRESSOR,
+                                        GunCusItems.BARREL_PBS4_SUPPRESSOR,
+                                        GunCusItems.BARREL_R2_SUPPRESSOR,
+                                        GunCusItems.BARREL_FLASH_HIDER,
+                                        GunCusItems.BARREL_COMPENSATOR,
+                                        GunCusItems.BARREL_MUZZLE_BRAKE,
+                        },
+                        {
+                                        EnumAttachmentType.UNDERBARREL.getDefault(),
+                                        GunCusItems.UNDERBARREL_BIPOD,
+                        },
+                        {
+                                        EnumAttachmentType.AUXILIARY.getDefault(),
+                                        GunCusItems.AUXILIARY_STRAIGHT_PULL,
+                        
+                        },
+                        {
+                                        EnumAttachmentType.AMMO.getDefault(),
+                        },
+                        {
+                                        EnumAttachmentType.MAGAZINE.getDefault(),
+                                        GunCusItems.MAGAZINE_QUICK_SWITCH,
+                                        GunCusItems.MAGAZINE_EXTENDED_5,
                         },
                         {
                                         EnumAttachmentType.PAINT.getDefault(),

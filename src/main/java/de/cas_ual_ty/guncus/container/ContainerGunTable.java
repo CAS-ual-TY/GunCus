@@ -1,5 +1,6 @@
 package de.cas_ual_ty.guncus.container;
 
+import de.cas_ual_ty.guncus.item.ItemAttachment;
 import de.cas_ual_ty.guncus.item.ItemGun;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.registries.GunCusBlocks;
@@ -132,6 +133,44 @@ public class ContainerGunTable extends Container
         this.wasGunIn = this.gunSlot.getHasStack();
         
         super.onCraftMatrixChanged(inventoryIn);
+    }
+    
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
+    {
+        Slot slot = this.getSlot(index);
+        ItemStack itemStack = slot.getStack();
+        
+        if (index >= 9)
+        {
+            if (itemStack.getItem() instanceof ItemGun)
+            {
+                if (this.gunSlot.isItemValid(itemStack))
+                {
+                    this.gunSlot.putStack(itemStack);
+                    slot.putStack(ItemStack.EMPTY);
+                }
+            }
+            else if (itemStack.getItem() instanceof ItemAttachment)
+            {
+                ItemAttachment attachment = (ItemAttachment) itemStack.getItem();
+                
+                if (this.attachmentSlots[attachment.getSlot()].isItemValid(itemStack))
+                {
+                    this.attachmentSlots[attachment.getSlot()].putStack(itemStack);
+                    slot.putStack(ItemStack.EMPTY);
+                }
+            }
+        }
+        else
+        {
+            if (playerIn.inventory.addItemStackToInventory(itemStack))
+            {
+                slot.putStack(ItemStack.EMPTY);
+            }
+        }
+        
+        return ItemStack.EMPTY;
     }
     
     @Override

@@ -8,8 +8,6 @@ public class Auxiliary extends ItemAttachment
     
     protected boolean isAllowingReloadWhileZoomed;
     protected int extraFireRate;
-    protected float driftModifierShiftStill;
-    protected float inaccuracyModifierShiftStill;
     
     public Auxiliary(Properties properties)
     {
@@ -17,8 +15,6 @@ public class Auxiliary extends ItemAttachment
         
         this.isAllowingReloadWhileZoomed = false;
         this.extraFireRate = 0;
-        this.driftModifierShiftStill = 1F;
-        this.inaccuracyModifierShiftStill = 1F;
     }
     
     protected Auxiliary()
@@ -42,16 +38,6 @@ public class Auxiliary extends ItemAttachment
         return this.extraFireRate;
     }
     
-    public float getDriftModifierShiftStill()
-    {
-        return this.driftModifierShiftStill;
-    }
-    
-    public float getInaccuracyModifierShiftStill()
-    {
-        return this.inaccuracyModifierShiftStill;
-    }
-    
     public Auxiliary setIsAllowingReloadWhileZoomed(boolean isAllowingReloadWhileZoomed)
     {
         this.isAllowingReloadWhileZoomed = isAllowingReloadWhileZoomed;
@@ -61,18 +47,6 @@ public class Auxiliary extends ItemAttachment
     public Auxiliary setExtraFireRate(int extraFireRate)
     {
         this.extraFireRate = extraFireRate;
-        return this;
-    }
-    
-    public Auxiliary setDriftModifierShiftStill(float driftModifierShiftStill)
-    {
-        this.driftModifierShiftStill = driftModifierShiftStill;
-        return this;
-    }
-    
-    public Auxiliary setInaccuracyModifierShiftStill(float inaccuracyModifierShiftStill)
-    {
-        this.inaccuracyModifierShiftStill = inaccuracyModifierShiftStill;
         return this;
     }
 }
