@@ -206,7 +206,7 @@ public class BakedModelGunFinalized implements IBakedModel
                 
                 Optic optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                 
-                if (optic != null && optic.canAim())
+                if (gun.getNBTCanAimGun(itemStack) && optic.canAim())
                 {
                     if (optic.isDefault())
                     {

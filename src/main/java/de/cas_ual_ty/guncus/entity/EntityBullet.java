@@ -18,6 +18,9 @@ import net.minecraft.world.World;
 
 public class EntityBullet extends ThrowableEntity
 {
+    public static final float BASE_SPEED = 20F;
+    public static final int TICKS = 5;
+    
     protected static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityBullet.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> GRAVITY = EntityDataManager.createKey(EntityBullet.class, DataSerializers.FLOAT);
     
@@ -46,7 +49,12 @@ public class EntityBullet extends ThrowableEntity
     @Override
     public void tick()
     {
-        super.tick();
+        this.setMotion(this.getMotion().scale(1F / EntityBullet.TICKS));
+        for (int i = 0; i < EntityBullet.TICKS; ++i)
+        {
+            super.tick();
+        }
+        this.setMotion(this.getMotion().scale(EntityBullet.TICKS));
         
         this.spawnParticles();
         
@@ -78,7 +86,7 @@ public class EntityBullet extends ThrowableEntity
         {
             EntityRayTraceResult hit = (EntityRayTraceResult) result;
             
-            if (hit.getEntity() == this.getThrower() && this.ticksExisted <= 5)
+            if ((hit.getEntity() == this.getThrower()) && (this.ticksExisted <= 5))
             {
                 return;
             }

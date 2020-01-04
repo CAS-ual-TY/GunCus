@@ -19,7 +19,7 @@ public class SlotGun extends Slot
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        return stack.getItem() instanceof ItemGun;
+        return stack.getItem() instanceof ItemGun && ((ItemGun) stack.getItem()).getNBTCurrentAmmo(stack) <= 0;
     }
     
     @Override

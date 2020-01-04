@@ -270,14 +270,10 @@ public class ProxyClient implements IProxy
                         itemStack = entityPlayer.getHeldItemMainhand();
                         gun = (ItemGun) itemStack.getItem();
                         
-                        if (gun.getNBTCanAim(itemStack))
+                        if (gun.getNBTCanAimGun(itemStack))
                         {
                             Optic optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
-                            
-                            if (optic != null && optic.canAim())
-                            {
-                                aiming = true;
-                            }
+                            aiming = optic.canAim();
                         }
                     }
                 }
@@ -335,7 +331,7 @@ public class ProxyClient implements IProxy
                         ItemStack itemStack = entityPlayer.getHeldItemMainhand();
                         ItemGun gun = (ItemGun) itemStack.getItem();
                         
-                        if (gun.getNBTCanAim(itemStack))
+                        if (gun.getNBTCanAimGun(itemStack))
                         {
                             optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                         }
@@ -390,7 +386,7 @@ public class ProxyClient implements IProxy
                     ItemStack itemStack = entityPlayer.getHeldItemMainhand();
                     ItemGun gun = (ItemGun) itemStack.getItem();
                     
-                    if (gun.getNBTCanAim(itemStack))
+                    if (gun.getNBTCanAimGun(itemStack))
                     {
                         optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                     }

@@ -15,6 +15,7 @@ import de.cas_ual_ty.guncus.item.attachments.Underbarrel;
 import de.cas_ual_ty.guncus.itemgroup.ItemGroupGun;
 import de.cas_ual_ty.guncus.registries.GunCusEntityTypes;
 import de.cas_ual_ty.guncus.registries.GunCusSoundEvents;
+import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -40,6 +41,7 @@ public class ItemGun extends Item
     public static final ArrayList<ItemGun> GUNS_LIST = new ArrayList<ItemGun>();
     
     public static final String NBT_RELOAD_TIME = "ReloadTime";
+    public static final String NBT_RELOAD_TYPE = "ReloadType";
     public static final String NBT_AMMO = "Ammo";
     public static final String NBT_ACCESSORY_SWITCH = "AccessorySwitch";
     
@@ -49,10 +51,13 @@ public class ItemGun extends Item
     protected Supplier<ItemBullet> bullet;
     protected Supplier<Integer> switchTime;
     protected int reloadTime;
+    protected EnumFireMode fireMode;
+    protected EnumReloadType fullReloadType;
     
     protected Supplier<SoundEvent> soundShoot;
     protected Supplier<SoundEvent> soundShootSilenced;
     protected Supplier<SoundEvent> soundReload;
+    protected Supplier<SoundEvent> soundReloadBolt;
     
     public Supplier<ItemAttachment[][]> supplierAttachments;
     protected ItemAttachment[][] attachments;
@@ -69,6 +74,8 @@ public class ItemGun extends Item
         this.bullet = bullet;
         this.switchTime = () -> this.getBaseFireRate() * 3;
         this.reloadTime = 100;
+        this.fireMode = EnumFireMode.FULL_AUTO;
+        this.fullReloadType = EnumReloadType.MAGAZINE;
         
         this.supplierAttachments = ItemAttachment::buildDefaultArray;
         this.attachments = null;
@@ -118,6 +125,16 @@ public class ItemGun extends Item
         return this.reloadTime;
     }
     
+    public EnumFireMode getBaseFireMode()
+    {
+        return this.fireMode;
+    }
+    
+    public EnumReloadType getBaseFullReloadType()
+    {
+        return this.fullReloadType;
+    }
+    
     public ItemBullet calcCurrentBullet(ItemAttachment[] attachments)
     {
         return ((Ammo) attachments[EnumAttachmentType.AMMO.getSlot()]).getUsedBullet(this);
@@ -138,9 +155,49 @@ public class ItemGun extends Item
         return (int) (((Magazine) attachments[EnumAttachmentType.MAGAZINE.getSlot()]).getReloadTimeModifier() * this.getBaseReloadTime());
     }
     
+    public boolean calcIsAllowingReloadWhileZoomed(ItemAttachment[] attachments)
+    {
+        return ((Auxiliary) attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getIsAllowingReloadWhileZoomed();
+    }
+    
     public int calcCurrentSwitchTime(ItemAttachment[] attachments)
     {
         return this.getBaseSwitchTime();
+    }
+    
+    public ItemGun setSoundShoot(Supplier<SoundEvent> soundShoot)
+    {
+        this.soundShoot = soundShoot;
+        return this;
+    }
+    
+    public ItemGun setSoundShootSilenced(Supplier<SoundEvent> soundShootSilenced)
+    {
+        this.soundShootSilenced = soundShootSilenced;
+        return this;
+    }
+    
+    public ItemGun setSoundReload(Supplier<SoundEvent> soundReload)
+    {
+        this.soundReload = soundReload;
+        return this;
+    }
+    
+    public ItemGun setBoltAction(Supplier<SoundEvent> soundReloadBolt)
+    {
+        this.soundReloadBolt = soundReloadBolt;
+        return this.setFireMode(EnumFireMode.BOLT_ACTION);
+    }
+    
+    public ItemGun setSemiAuto()
+    {
+        return this.setFireMode(EnumFireMode.SEMI_AUTO);
+    }
+    
+    protected ItemGun setFireMode(EnumFireMode fireMode)
+    {
+        this.fireMode = fireMode;
+        return this;
     }
     
     public ItemGun setAttachments(Supplier<ItemAttachment[][]> attachments)
@@ -248,27 +305,50 @@ public class ItemGun extends Item
         if (entity instanceof PlayerEntity)
         {
             PlayerEntity entityPlayer = (PlayerEntity) entity;
+            boolean isInAnyHand = false;
+            
+            for (Hand hand : GunCusUtility.HANDS)
+            {
+                if (entityPlayer.getHeldItem(hand) == itemStack)
+                {
+                    isInAnyHand = true;
+                    break;
+                }
+            }
             
             int value = this.getNBTCurrentReloadTime(itemStack);
             
             if (value > 0)
             {
+                EnumReloadType type = this.getNBTCurrentReloadType(itemStack);
                 ItemAttachment[] attachments = this.getCurrentAttachments(itemStack);
+                boolean hasAmmo = this.getHasAmmo(entityPlayer, attachments, itemStack);
                 
-                if (isSelected)
+                if (type == EnumReloadType.MAGAZINE)
                 {
-                    if (value == this.calcCurrentReloadTime(attachments))
+                    if (!isInAnyHand || !hasAmmo)
                     {
-                        entityPlayer.playSound(this.soundReload.get(), 1F, 1F);
+                        value = 0;
                     }
-                    
-                    this.setNBTCurrentReloadTime(itemStack, --value);
+                    else if (--value == 0)
+                    {
+                        this.tryFinishReload(entityPlayer, attachments, itemStack);
+                    }
                 }
-                else
+                else if (type == EnumReloadType.BOLT)
                 {
-                    // Refresh reloading in case the player did not finish it
-                    this.setNBTCurrentReloadTime(itemStack, this.calcCurrentReloadTime(attachments));
+                    if (value == this.getBaseFireRate() && isInAnyHand)
+                    {
+                        --value;
+                        entityPlayer.playSound(this.soundReloadBolt.get(), 1F, 1F);
+                    }
+                    else if (--value > 0 && !isInAnyHand)
+                    {
+                        value = this.getBaseFireRate();
+                    }
                 }
+                
+                this.setNBTCurrentReloadTime(itemStack, value);
             }
         }
     }
@@ -285,7 +365,7 @@ public class ItemGun extends Item
             }
             else if (this.canReload(entityPlayer, hand, attachments, itemStack, aiming, moving, inaccuracy))
             {
-                return this.tryReload(entityPlayer, attachments, itemStack);
+                return this.tryStartReload(entityPlayer, attachments, itemStack);
             }
         }
         
@@ -299,8 +379,22 @@ public class ItemGun extends Item
     
     public boolean canReload(PlayerEntity entityPlayer, Hand hand, ItemAttachment[] attachments, ItemStack itemStack, boolean aiming, boolean moving, int inaccuracy)
     {
+        return this.getHasAmmo(entityPlayer, attachments, itemStack) && (this.getBaseFireMode() != EnumFireMode.BOLT_ACTION || !aiming || this.calcIsAllowingReloadWhileZoomed(attachments));
+    }
+    
+    public boolean getHasAmmo(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
+    {
+        ItemBullet bullet = this.calcCurrentBullet(attachments);
         
-        return true;
+        for (int index = 0; index < entityPlayer.inventory.getSizeInventory(); ++index)
+        {
+            if (entityPlayer.inventory.getStackInSlot(index).getItem() == bullet)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     public ActionResultType doShoot(PlayerEntity entityPlayer, Hand hand, ItemAttachment[] attachments, ItemStack itemStack, boolean aiming, boolean moving, int inaccuracyInt)
@@ -329,7 +423,7 @@ public class ItemGun extends Item
         ItemBullet bullet = this.calcCurrentBullet(attachments);
         
         float inaccuracy = inaccuracyInt * inaccuracyModifier;
-        float speed = 30F * speedModifier;
+        float speed = EntityBullet.BASE_SPEED * speedModifier;
         float damage = this.getBaseDamage() + extraDamage + bullet.getExtraDamage();
         
         if (aiming)
@@ -360,8 +454,10 @@ public class ItemGun extends Item
             
             for (int i = 0; i < bullet.getProjectileAmount(); ++i)
             {
-                rotationPitch = entityPlayer.rotationPitch + (Item.random.nextFloat() * 2 - 1) * spreadModifierVertical * inaccuracy * bullet.getSpreadModifier();
-                rotationYaw = entityPlayer.rotationYaw + (Item.random.nextFloat() * 2 - 1) * spreadModifierHorizontal * inaccuracy * bullet.getSpreadModifier();
+                float randomPitch = (Item.random.nextFloat() * 2 - 1) * spreadModifierVertical * inaccuracy * bullet.getSpreadModifier();
+                float randomYaw = (Item.random.nextFloat() * 2 - 1) * spreadModifierHorizontal * inaccuracy * bullet.getSpreadModifier();
+                rotationPitch = entityPlayer.rotationPitch + randomPitch;
+                rotationYaw = entityPlayer.rotationYaw + randomYaw;
                 
                 bulletEntity = new EntityBullet(GunCusEntityTypes.TYPE_BULLET, entityPlayer, entityPlayer.world);
                 bulletEntity.setPosition(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
@@ -373,6 +469,12 @@ public class ItemGun extends Item
             if (!entityPlayer.isCreative())
             {
                 this.setNBTCurrentAmmo(itemStack, this.getNBTCurrentAmmo(itemStack) - 1);
+            }
+            
+            if (this.getBaseFireMode() == EnumFireMode.BOLT_ACTION)
+            {
+                this.setNBTCurrentReloadTime(itemStack, this.getBaseFireRate());
+                this.setNBTCurrentReloadType(itemStack, EnumReloadType.BOLT);
             }
         }
         else
@@ -395,12 +497,39 @@ public class ItemGun extends Item
         return ActionResultType.SUCCESS;
     }
     
-    public ActionResultType tryReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
+    public ActionResultType tryStartReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
+    {
+        if (this.getHasAmmo(entityPlayer, attachments, itemStack))
+        {
+            return this.doStartReload(entityPlayer, attachments, itemStack);
+        }
+        
+        return ActionResultType.PASS;
+    }
+    
+    public ActionResultType doStartReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
+    {
+        if (!entityPlayer.world.isRemote)
+        {
+            this.setNBTCurrentReloadTime(itemStack, this.calcCurrentReloadTime(attachments));
+            
+            if (this.getBaseFireMode() == EnumFireMode.BOLT_ACTION)
+            {
+                this.setNBTCurrentReloadType(itemStack, this.getBaseFullReloadType());
+            }
+        }
+        
+        entityPlayer.playSound(this.soundReload.get(), 1F, 1F);
+        
+        return ActionResultType.SUCCESS;
+    }
+    
+    public ActionResultType tryFinishReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
     {
         ItemBullet bullet = this.calcCurrentBullet(attachments);
         
         int maxAmmo = this.calcCurrentMaxAmmo(attachments);
-        int ammount = 0;
+        int amount = this.getNBTCurrentAmmo(itemStack);
         int needed;
         
         ItemStack i;
@@ -410,40 +539,39 @@ public class ItemGun extends Item
             
             if (i.getItem() == bullet)
             {
-                needed = maxAmmo - ammount;
+                needed = maxAmmo - amount;
                 
                 if (i.getCount() > needed)
                 {
                     i.setCount(i.getCount() - needed);
-                    ammount += needed;
+                    amount += needed;
                 }
                 else
                 {
-                    ammount += i.getCount();
+                    amount += i.getCount();
                     i.setCount(0);
                 }
             }
             
-            if (ammount >= maxAmmo)
+            if (amount >= maxAmmo)
             {
                 break;
             }
         }
         
-        if (ammount > 0)
+        if (amount > 0)
         {
-            return this.doReload(entityPlayer, attachments, itemStack, ammount);
+            return this.doFinishReload(entityPlayer, attachments, itemStack, amount);
         }
         
         return ActionResultType.PASS;
     }
     
-    public ActionResultType doReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack, int ammount)
+    public ActionResultType doFinishReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack, int ammount)
     {
         if (!entityPlayer.world.isRemote)
         {
             this.setNBTCurrentAmmo(itemStack, ammount);
-            this.setNBTCurrentReloadTime(itemStack, this.calcCurrentReloadTime(attachments));
         }
         
         return ActionResultType.SUCCESS;
@@ -464,9 +592,19 @@ public class ItemGun extends Item
         this.getNBT(itemStack).putBoolean(ItemGun.NBT_ACCESSORY_SWITCH, b);
     }
     
+    public boolean getNBTCanAimGun(ItemStack itemStack)
+    {
+        return !this.getNBTIsReloading(itemStack) || (this.getBaseFireMode() == EnumFireMode.BOLT_ACTION && this.calcIsAllowingReloadWhileZoomed(this.getCurrentAttachments(itemStack)));
+    }
+    
     public int getNBTCurrentReloadTime(ItemStack itemStack)
     {
         return this.getNBT(itemStack).getInt(ItemGun.NBT_RELOAD_TIME);
+    }
+    
+    public EnumReloadType getNBTCurrentReloadType(ItemStack itemStack)
+    {
+        return this.getBaseFireMode() == EnumFireMode.BOLT_ACTION ? EnumReloadType.get(this.getNBT(itemStack).getInt(ItemGun.NBT_RELOAD_TYPE)) : EnumReloadType.MAGAZINE;
     }
     
     public void setNBTCurrentReloadTime(ItemStack itemStack, int i)
@@ -474,9 +612,10 @@ public class ItemGun extends Item
         this.getNBT(itemStack).putInt(ItemGun.NBT_RELOAD_TIME, i);
     }
     
-    public boolean getNBTCanAim(ItemStack itemStack)
+    public void setNBTCurrentReloadType(ItemStack itemStack, EnumReloadType type)
     {
-        return !this.getNBTIsReloading(itemStack);
+        // 0 Magazine, 1 Bolt
+        this.getNBT(itemStack).putInt(ItemGun.NBT_RELOAD_TYPE, type.index);
     }
     
     public boolean getNBTIsReloading(ItemStack itemStack)
@@ -573,6 +712,38 @@ public class ItemGun extends Item
         }
     }
     
+    @Override
+    public boolean showDurabilityBar(ItemStack stack)
+    {
+        return this.getNBTIsReloading(stack) || this.getNBTCurrentAmmo(stack) > 0;
+    }
+    
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack)
+    {
+        if (this.getNBTIsReloading(stack))
+        {
+            EnumReloadType type = this.getNBTCurrentReloadType(stack);
+            
+            if (type == EnumReloadType.BOLT)
+            {
+                return (double) this.getNBTCurrentReloadTime(stack) / this.getBaseFireRate();
+            }
+            
+            return (double) this.getNBTCurrentReloadTime(stack) / this.calcCurrentReloadTime(this.getCurrentAttachments(stack));
+        }
+        else
+        {
+            return 1D - (double) this.getNBTCurrentAmmo(stack) / this.calcCurrentMaxAmmo(this.getCurrentAttachments(stack));
+        }
+    }
+    
+    @Override
+    public int getRGBDurabilityForDisplay(ItemStack stack)
+    {
+        return this.getNBTIsReloading(stack) ? 0x00FF0000 : 0x0000FF00;
+    }
+    
     public static void tryShoot(PlayerEntity player, boolean aiming, int inaccuracy, Hand[] hands)
     {
         ItemStack item;
@@ -591,5 +762,36 @@ public class ItemGun extends Item
     public static String getSlotDisplaySuffix(EnumAttachmentType type)
     {
         return new StringTextComponent(" (" + type.getDisplayName().getFormattedText() + ")").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).getFormattedText();
+    }
+    
+    public static enum EnumFireMode
+    {
+        BOLT_ACTION("bolt_action"), SEMI_AUTO("semi_auto"), FULL_AUTO("full_auto");
+        
+        public final String key;
+        
+        private EnumFireMode(String key)
+        {
+            this.key = key;
+        }
+    }
+    
+    public static enum EnumReloadType
+    {
+        MAGAZINE(0), BOLT(1);
+        
+        public static final EnumReloadType[] VALUES = EnumReloadType.values();
+        
+        public final int index;
+        
+        private EnumReloadType(int index)
+        {
+            this.index = index;
+        }
+        
+        public static EnumReloadType get(int index)
+        {
+            return EnumReloadType.VALUES[index];
+        }
     }
 }

@@ -17,6 +17,7 @@ import de.cas_ual_ty.guncus.item.attachments.Underbarrel;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -114,6 +115,7 @@ public class GunCusItems
     public static final ItemGun GUN_M16A4 = null;
     public static final ItemGun GUN_AK_74M = null;
     public static final ItemGun GUN_SCAR_L = null;
+    public static final ItemGun GUN_SCAR_H = null;
     public static final ItemGun GUN_M27_IAR = null;
     public static final ItemGun GUN_SV98 = null;
     
@@ -207,9 +209,10 @@ public class GunCusItems
         
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 3, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m16a4").setRegistryName(GunCus.MOD_ID, "gun_m16a4"));
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_ak_74m").setRegistryName(GunCus.MOD_ID, "gun_ak_74m"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_scar_l").setRegistryName(GunCus.MOD_ID, "gun_scar_l"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m27_iar").setRegistryName(GunCus.MOD_ID, "gun_m27_iar"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.sniperRifleAttachments()).createGunTab("gun_sv98").setRegistryName(GunCus.MOD_ID, "gun_sv98"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_scar_l").setRegistryName(GunCus.MOD_ID, "gun_scar_l"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_7_62x51MM).setAttachments(() -> GunCusItems.assaultRifleLongAttachments()).createGunTab("gun_scar_h").setRegistryName(GunCus.MOD_ID, "gun_scar_h"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m27_iar").setRegistryName(GunCus.MOD_ID, "gun_m27_iar"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 25, 10, 7, () -> GunCusItems.BULLET_7_62x54MM).setAttachments(() -> GunCusItems.sniperRifleAttachments()).setSoundShoot(() -> GunCusSoundEvents.SHOOT_SNIPER).setBoltAction(() -> SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON).createGunTab("gun_sv98").setRegistryName(GunCus.MOD_ID, "gun_sv98"));
         
         registry.register(new BlockItem(GunCusBlocks.GUN_TABLE, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_table"));
     }
@@ -269,6 +272,85 @@ public class GunCusItems
                                         EnumAttachmentType.MAGAZINE.getDefault(),
                                         GunCusItems.MAGAZINE_QUICK_SWITCH,
                                         GunCusItems.MAGAZINE_EXTENDED_10,
+                        },
+                        {
+                                        EnumAttachmentType.PAINT.getDefault(),
+                                        GunCusItems.PAINT_BLACK,
+                                        GunCusItems.PAINT_BLUE,
+                                        GunCusItems.PAINT_GREEN,
+                                        GunCusItems.PAINT_ORANGE,
+                                        GunCusItems.PAINT_PINK,
+                                        GunCusItems.PAINT_RED,
+                                        GunCusItems.PAINT_TURQUOISE,
+                                        GunCusItems.PAINT_WHITE,
+                                        GunCusItems.PAINT_YELLOW,
+                        }
+        };
+    }
+    
+    public static ItemAttachment[][] assaultRifleLongAttachments()
+    {
+        return new ItemAttachment[][] {
+                        {
+                                        EnumAttachmentType.OPTIC.getDefault(),
+                                        GunCusItems.OPTIC_REFLEX,
+                                        GunCusItems.OPTIC_COYOTE,
+                                        GunCusItems.OPTIC_KOBRA,
+                                        GunCusItems.OPTIC_HOLO,
+                                        GunCusItems.OPTIC_HD33,
+                                        GunCusItems.OPTIC_PKAS,
+                                        GunCusItems.OPTIC_M145,
+                                        GunCusItems.OPTIC_PRISMA,
+                                        GunCusItems.OPTIC_PKA,
+                                        GunCusItems.OPTIC_ACOG,
+                                        GunCusItems.OPTIC_JGM4,
+                                        GunCusItems.OPTIC_PSO1,
+                                        GunCusItems.OPTIC_CL6X,
+                                        GunCusItems.OPTIC_PKS07,
+                                        GunCusItems.OPTIC_RIFLE,
+                                        GunCusItems.OPTIC_HUNTER,
+                                        GunCusItems.OPTIC_BALLISTIC,
+                        },
+                        {
+                                        EnumAttachmentType.ACCESSORY.getDefault(),
+                                        GunCusItems.ACCESSORY_VARIABLE_ZOOM,
+                                        GunCusItems.ACCESSORY_MAGNIFIER,
+                                        GunCusItems.ACCESSORY_LASER_SIGHT,
+                                        GunCusItems.ACCESSORY_TRI_BEAM_LASER,
+                                        GunCusItems.ACCESSORY_GREEN_LASER_SIGHT,
+                                        GunCusItems.ACCESSORY_RANGE_FINDER,
+                        },
+                        {
+                                        EnumAttachmentType.BARREL.getDefault(),
+                                        GunCusItems.BARREL_HEAVY_BARREL,
+                                        GunCusItems.BARREL_SUPPRESSOR,
+                                        GunCusItems.BARREL_LS06_SUPPRESSOR,
+                                        GunCusItems.BARREL_PBS4_SUPPRESSOR,
+                                        GunCusItems.BARREL_R2_SUPPRESSOR,
+                                        GunCusItems.BARREL_FLASH_HIDER,
+                                        GunCusItems.BARREL_COMPENSATOR,
+                                        GunCusItems.BARREL_MUZZLE_BRAKE,
+                        },
+                        {
+                                        EnumAttachmentType.UNDERBARREL.getDefault(),
+                                        GunCusItems.UNDERBARREL_BIPOD,
+                                        GunCusItems.UNDERBARREL_ERGO_GRIP,
+                                        GunCusItems.UNDERBARREL_ANGLED_GRIP,
+                                        GunCusItems.UNDERBARREL_STUBBY_GRIP,
+                                        GunCusItems.UNDERBARREL_VERTICAL_GRIP,
+                                        GunCusItems.UNDERBARREL_FOLDING_GRIP,
+                                        GunCusItems.UNDERBARREL_POTATO_GRIP,
+                        },
+                        {
+                                        EnumAttachmentType.AUXILIARY.getDefault(),
+                        },
+                        {
+                                        EnumAttachmentType.AMMO.getDefault(),
+                        },
+                        {
+                                        EnumAttachmentType.MAGAZINE.getDefault(),
+                                        GunCusItems.MAGAZINE_QUICK_SWITCH,
+                                        GunCusItems.MAGAZINE_EXTENDED_5,
                         },
                         {
                                         EnumAttachmentType.PAINT.getDefault(),

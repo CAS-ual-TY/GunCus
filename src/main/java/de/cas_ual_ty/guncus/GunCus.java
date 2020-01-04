@@ -25,7 +25,7 @@ public class GunCus
     public static IProxy proxy;
     public static SimpleChannel channel;
     
-    public static boolean fullCreativeTabs = true;
+    public static boolean fullCreativeTabs = false;
     
     public static final ItemGroupGunCus ITEM_GROUP_GUN_CUS = new ItemGroupGunCus();
     
