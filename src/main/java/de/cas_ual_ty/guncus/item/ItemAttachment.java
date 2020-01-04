@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
+import de.cas_ual_ty.guncus.util.RandomTradeBuilder;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,12 +49,13 @@ public abstract class ItemAttachment extends Item
         ItemAttachment.ATTACHMENTS_LIST.add(this);
     }
     
-    public abstract EnumAttachmentType getType();
-    
-    public static ArrayList<ItemAttachment> getAttachmentsList()
+    public ItemAttachment setDefaultTradeable()
     {
-        return ItemAttachment.ATTACHMENTS_LIST;
+        new RandomTradeBuilder(2, 5, 0.05F).setEmeraldPriceFor(16, this).registerLevel(2);
+        return this;
     }
+    
+    public abstract EnumAttachmentType getType();
     
     public float getZoomModifier()
     {

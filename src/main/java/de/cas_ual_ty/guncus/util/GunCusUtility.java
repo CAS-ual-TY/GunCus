@@ -1,16 +1,43 @@
 package de.cas_ual_ty.guncus.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import de.cas_ual_ty.guncus.item.ItemGun;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.village.PointOfInterestType;
 
 public class GunCusUtility
 {
+    private static Method blockStatesInjector;
+    
+    static
+    {
+        try
+        {
+            GunCusUtility.blockStatesInjector = PointOfInterestType.class.getDeclaredMethod("func_221052_a", PointOfInterestType.class);
+            GunCusUtility.blockStatesInjector.setAccessible(true);
+        }
+        catch (NoSuchMethodException | SecurityException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
     public static final Hand[] HANDS = Hand.values();
     
     public static Hand[] intToHands(int handsInt)
@@ -45,5 +72,27 @@ public class GunCusUtility
         });
         
         return itemStacks;
+    }
+    
+    public static Set<BlockState> getAllStates(Block block)
+    {
+        return ImmutableSet.copyOf(block.getStateContainer().getValidStates());
+    }
+    
+    public static Int2ObjectMap<VillagerTrades.ITrade[]> createTradesMap(ImmutableMap<Integer, VillagerTrades.ITrade[]> trades)
+    {
+        return new Int2ObjectOpenHashMap<>(trades);
+    }
+    
+    public static void fixPOITypeBlockStates(PointOfInterestType poiType)
+    {
+        try
+        {
+            GunCusUtility.blockStatesInjector.invoke(null, poiType);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

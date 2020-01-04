@@ -30,7 +30,7 @@ public class ContainerGunTable extends Container
     
     public ContainerGunTable(int windowId, PlayerInventory playerInv)
     {
-        super(GunCusContainerTypes.TYPE_GUN_TABLE, windowId);
+        super(GunCusContainerTypes.GUN_TABLE, windowId);
         
         this.pos = null;
         

@@ -25,6 +25,8 @@
 
     "block.guncus.gun_table": "Gun Table",
     "container.guncus.gun_table": "Gun Table",
+	
+	"entity.minecraft.villager.guncus.arms_dealer": "Arms Dealer",
 
     "item.guncus.gun_ak_74m": "AK-74M",
     "item.guncus.gun_m16a4": "M16A4",

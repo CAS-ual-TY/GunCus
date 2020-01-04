@@ -15,13 +15,13 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder(GunCus.MOD_ID)
 public class GunCusEntityTypes
 {
-    public static final EntityType<EntityBullet> TYPE_BULLET = null;
+    public static final EntityType<EntityBullet> BULLET = null;
     
     @SubscribeEvent
     public static void registerBlocks(Register<EntityType<?>> event)
     {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
         
-        registry.register(EntityType.Builder.<EntityBullet> create(EntityBullet::new, EntityClassification.MISC).build("bullet").setRegistryName(GunCus.MOD_ID, "type_bullet"));
+        registry.register(EntityType.Builder.<EntityBullet> create(EntityBullet::new, EntityClassification.MISC).build("bullet").setRegistryName(GunCus.MOD_ID, "bullet"));
     }
 }

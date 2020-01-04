@@ -16,6 +16,7 @@ import de.cas_ual_ty.guncus.itemgroup.ItemGroupGun;
 import de.cas_ual_ty.guncus.registries.GunCusEntityTypes;
 import de.cas_ual_ty.guncus.registries.GunCusSoundEvents;
 import de.cas_ual_ty.guncus.util.GunCusUtility;
+import de.cas_ual_ty.guncus.util.RandomTradeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -87,6 +88,12 @@ public class ItemGun extends Item
         this.gunTab = null;
         
         ItemGun.GUNS_LIST.add(this);
+    }
+    
+    public ItemGun setDefaultTradeable(int price, int level)
+    {
+        new RandomTradeBuilder(1, 5 * level, 0.1F).setEmeraldPriceFor(price, this, 1).registerLevel(level);
+        return this;
     }
     
     public ItemGun createGunTab(String label)
@@ -459,7 +466,7 @@ public class ItemGun extends Item
                 rotationPitch = entityPlayer.rotationPitch + randomPitch;
                 rotationYaw = entityPlayer.rotationYaw + randomYaw;
                 
-                bulletEntity = new EntityBullet(GunCusEntityTypes.TYPE_BULLET, entityPlayer, entityPlayer.world);
+                bulletEntity = new EntityBullet(GunCusEntityTypes.BULLET, entityPlayer, entityPlayer.world);
                 bulletEntity.setPosition(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
                 bulletEntity.shoot(entityPlayer, rotationPitch, rotationYaw, 0, speed, 0);
                 bulletEntity.setGravity(bullet.getGravity());

@@ -98,7 +98,7 @@ public class ProxyClient implements IProxy
     @Override
     public void init()
     {
-        ScreenManager.registerFactory(GunCusContainerTypes.TYPE_GUN_TABLE, GuiContainerGunTable::new);
+        ScreenManager.registerFactory(GunCusContainerTypes.GUN_TABLE, GuiContainerGunTable::new);
     }
     
     @Override

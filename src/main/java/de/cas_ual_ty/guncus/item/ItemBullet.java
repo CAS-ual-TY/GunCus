@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.util.RandomTradeBuilder;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,6 +35,12 @@ public class ItemBullet extends Item
         this.projectileAmount = 1;
         
         ItemBullet.BULLETS_LIST.add(this);
+    }
+    
+    public ItemBullet setDefaultTradeable(int amt)
+    {
+        new RandomTradeBuilder(3, 2, 0.05F).setEmeraldPriceFor(1, this, amt).registerLevel(1);
+        return this;
     }
     
     public float getExtraDamage()
