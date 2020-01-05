@@ -91,7 +91,7 @@ public class GunCus
         List<ITrade> genericList = event.getGenericTrades();
         RandomTradeBuilder.forEachWanderer((tradeBuild) -> genericList.add(tradeBuild.build()));
         
-        List<ITrade> rareList = event.getGenericTrades();
+        List<ITrade> rareList = event.getRareTrades();
         RandomTradeBuilder.forEachWandererRare((tradeBuild) -> rareList.add(tradeBuild.build()));
     }
     
