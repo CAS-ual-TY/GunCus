@@ -21,7 +21,8 @@ public class MessageHitmarker
     {
         Context context = ctx.get();
         
-        context.enqueueWork(() -> {
+        context.enqueueWork(() ->
+        {
             GunCus.proxy.addHitmarker(GunCus.proxy.getPlayerFromContext(context));
         });
         

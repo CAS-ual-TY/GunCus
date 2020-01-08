@@ -37,7 +37,8 @@ public class BlockGunTable extends Block
     @Override
     public INamedContainerProvider getContainer(BlockState state, World worldIn, BlockPos pos)
     {
-        return new SimpleNamedContainerProvider((windowId, inv, player) -> {
+        return new SimpleNamedContainerProvider((windowId, inv, player) ->
+        {
             return new ContainerGunTable(windowId, inv, pos);
         }, BlockGunTable.TITLE_GUN_TABLE);
     }

@@ -32,7 +32,7 @@ public class ProxyServer implements IProxy
     @Override
     public void addHitmarker(PlayerEntity player)
     {
-        GunCus.channel.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new MessageHitmarker());
+        GunCus.channel.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)player), new MessageHitmarker());
     }
     
     @Override

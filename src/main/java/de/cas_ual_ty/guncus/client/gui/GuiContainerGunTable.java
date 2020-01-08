@@ -18,7 +18,7 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
 {
     public static final ResourceLocation GUN_TABLE_GUI_TEXTURES = new ResourceLocation(GunCus.MOD_ID, "textures/gui/container/gun_table.png");
     
-    public GuiContainerGunTable(ContainerGunTable screenContainer, PlayerInventory inv, ITextComponent titleIn)
+    public GuiContainerGunTable(ContainerGunTable screenContainer,PlayerInventory inv,ITextComponent titleIn)
     {
         super(screenContainer, inv, titleIn);
     }
@@ -27,8 +27,8 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         String text = this.title.getFormattedText();
-        this.font.drawString(text, (float) (this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float) (this.ySize - 96 + 2), 4210752);
+        this.font.drawString(text, (float)(this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 4210752);
+        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
         
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GuiContainerGunTable.GUN_TABLE_GUI_TEXTURES);
@@ -36,26 +36,26 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
         ItemStack held = this.playerInventory.getItemStack();
         Slot slot = this.getContainer().gunSlot;
         
-        if (slot.getHasStack())
+        if(slot.getHasStack())
         {
-            ItemGun gun = (ItemGun) slot.getStack().getItem();
+            ItemGun gun = (ItemGun)slot.getStack().getItem();
             
-            for (EnumAttachmentType type : EnumAttachmentType.VALUES)
+            for(EnumAttachmentType type : EnumAttachmentType.VALUES)
             {
                 slot = this.getContainer().attachmentSlots[type.getSlot()];
                 
-                if (!gun.isSlotAvailable(type))
+                if(!gun.isSlotAvailable(type))
                 {
                     this.drawStrike(slot);
                 }
             }
             
-            if (held.getItem() instanceof ItemAttachment)
+            if(held.getItem() instanceof ItemAttachment)
             {
-                ItemAttachment attachment = (ItemAttachment) held.getItem();
+                ItemAttachment attachment = (ItemAttachment)held.getItem();
                 slot = this.getContainer().attachmentSlots[attachment.getSlot()];
                 
-                if (!slot.getHasStack() && gun.canSetAttachment(attachment))
+                if(!slot.getHasStack() && gun.canSetAttachment(attachment))
                 {
                     this.drawFocus(slot);
                 }
@@ -63,12 +63,12 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
         }
         else
         {
-            if (held.getItem() instanceof ItemGun)
+            if(held.getItem() instanceof ItemGun)
             {
                 this.drawFocus(slot);
             }
             
-            for (EnumAttachmentType type : EnumAttachmentType.VALUES)
+            for(EnumAttachmentType type : EnumAttachmentType.VALUES)
             {
                 slot = this.getContainer().attachmentSlots[type.getSlot()];
                 this.drawStrike(slot);

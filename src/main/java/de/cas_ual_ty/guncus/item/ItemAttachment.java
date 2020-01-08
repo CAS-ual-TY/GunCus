@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public abstract class ItemAttachment extends Item
 {
-    public static final ArrayList<ItemAttachment> ATTACHMENTS_LIST = new ArrayList<ItemAttachment>();
+    public static final ArrayList<ItemAttachment> ATTACHMENTS_LIST = new ArrayList<>();
     
     protected float zoomModifier;
     protected float extraZoom;
@@ -232,7 +232,7 @@ public abstract class ItemAttachment extends Item
     {
         ItemAttachment[][] attachments = new ItemAttachment[EnumAttachmentType.LENGTH][];
         
-        for (int i = 0; i < attachments.length; ++i)
+        for(int i = 0; i < attachments.length; ++i)
         {
             attachments[i] = new ItemAttachment[] { EnumAttachmentType.getSlot(i).getDefault() };
         }

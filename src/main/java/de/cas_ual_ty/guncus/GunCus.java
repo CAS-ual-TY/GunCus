@@ -45,7 +45,7 @@ public class GunCus
     public GunCus()
     {
         GunCus.instance = this;
-        GunCus.proxy = (IProxy) DistExecutor.runForDist(() -> de.cas_ual_ty.guncus.client.ProxyClient::new, () -> de.cas_ual_ty.guncus.server.ProxyServer::new);
+        GunCus.proxy = (IProxy)DistExecutor.runForDist(() -> de.cas_ual_ty.guncus.client.ProxyClient::new, () -> de.cas_ual_ty.guncus.server.ProxyServer::new);
         
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::init);
@@ -79,7 +79,7 @@ public class GunCus
     
     public void villagerTrades(VillagerTradesEvent event)
     {
-        if (event.getType() == GunCusVillagerProfessions.ARMS_DEALER)
+        if(event.getType() == GunCusVillagerProfessions.ARMS_DEALER)
         {
             event.getTrades().get(1).add((entity, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 16), new ItemStack(GunCusItems.GUN_TABLE), 8, 10, 0F));
             RandomTradeBuilder.forEachLevel((level, tradeBuild) -> event.getTrades().get(level.intValue()).add(tradeBuild.build()));

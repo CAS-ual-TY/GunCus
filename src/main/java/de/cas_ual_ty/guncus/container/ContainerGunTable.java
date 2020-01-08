@@ -28,7 +28,7 @@ public class ContainerGunTable extends Container
     protected BlockPos pos;
     protected IWorldPosCallable worldPosCallable;
     
-    public ContainerGunTable(int windowId, PlayerInventory playerInv)
+    public ContainerGunTable(int windowId,PlayerInventory playerInv)
     {
         super(GunCusContainerTypes.GUN_TABLE, windowId);
         
@@ -46,33 +46,33 @@ public class ContainerGunTable extends Container
         final int gunSlotY = 1;
         this.addSlot(this.gunSlot = new SlotGun(this.craftMatrix, EnumAttachmentType.LENGTH, attachmentsX + gunSlotX * 18, attachmentsY + gunSlotY * 18, this.player));
         
-        for (EnumAttachmentType type : EnumAttachmentType.VALUES)
+        for(EnumAttachmentType type : EnumAttachmentType.VALUES)
         {
             this.addSlot(this.attachmentSlots[type.getSlot()] = new SlotAttachment(this.craftMatrix, type.getSlot(), attachmentsX + type.getX() * 18, attachmentsY + type.getY() * 18, this.gunSlot, type, this.player));
         }
         
-        for (int y = 0; y < 3; ++y)
+        for(int y = 0; y < 3; ++y)
         {
-            for (int x = 0; x < 9; ++x)
+            for(int x = 0; x < 9; ++x)
             {
                 this.addSlot(new Slot(playerInv, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
             }
         }
         
-        for (int x = 0; x < 9; ++x)
+        for(int x = 0; x < 9; ++x)
         {
             this.addSlot(new Slot(playerInv, x, 8 + x * 18, 142));
         }
     }
     
-    public ContainerGunTable(int windowId, PlayerInventory playerInv, BlockPos pos)
+    public ContainerGunTable(int windowId,PlayerInventory playerInv,BlockPos pos)
     {
         this(windowId, playerInv);
         this.pos = pos;
         this.worldPosCallable = IWorldPosCallable.of(this.player.world, this.pos);
     }
     
-    public ContainerGunTable(int windowId, PlayerInventory playerInv, PacketBuffer extraData)
+    public ContainerGunTable(int windowId,PlayerInventory playerInv,PacketBuffer extraData)
     {
         this(windowId, playerInv, extraData.readBlockPos());
     }
@@ -89,31 +89,31 @@ public class ContainerGunTable extends Container
     @Override
     public void onCraftMatrixChanged(IInventory inventoryIn)
     {
-        if (inventoryIn == this.craftMatrix)
+        if(inventoryIn == this.craftMatrix)
         {
-            if (this.wasChanging)
+            if(this.wasChanging)
             {
                 return;
             }
             
             this.wasChanging = true;
             
-            if (this.gunSlot.getHasStack())
+            if(this.gunSlot.getHasStack())
             {
-                if (!this.wasGunIn)
+                if(!this.wasGunIn)
                 {
-                    ItemGun gun = (ItemGun) this.gunSlot.getStack().getItem();
+                    ItemGun gun = (ItemGun)this.gunSlot.getStack().getItem();
                     
-                    for (SlotAttachment slot : this.attachmentSlots)
+                    for(SlotAttachment slot : this.attachmentSlots)
                     {
                         slot.putStack(gun.getAttachmentItemStack(this.gunSlot.getStack(), slot.type));
                     }
                 }
                 else
                 {
-                    ItemGun gun = (ItemGun) this.gunSlot.getStack().getItem();
+                    ItemGun gun = (ItemGun)this.gunSlot.getStack().getItem();
                     
-                    for (SlotAttachment slot : this.attachmentSlots)
+                    for(SlotAttachment slot : this.attachmentSlots)
                     {
                         gun.setAttachment(this.gunSlot.getStack(), slot.getAttachment());
                     }
@@ -121,7 +121,7 @@ public class ContainerGunTable extends Container
             }
             else
             {
-                for (SlotAttachment slot : this.attachmentSlots)
+                for(SlotAttachment slot : this.attachmentSlots)
                 {
                     slot.putStack(ItemStack.EMPTY);
                 }
@@ -141,21 +141,21 @@ public class ContainerGunTable extends Container
         Slot slot = this.getSlot(index);
         ItemStack itemStack = slot.getStack();
         
-        if (index >= 9)
+        if(index >= 9)
         {
-            if (itemStack.getItem() instanceof ItemGun)
+            if(itemStack.getItem() instanceof ItemGun)
             {
-                if (this.gunSlot.isItemValid(itemStack))
+                if(this.gunSlot.isItemValid(itemStack))
                 {
                     this.gunSlot.putStack(itemStack);
                     slot.putStack(ItemStack.EMPTY);
                 }
             }
-            else if (itemStack.getItem() instanceof ItemAttachment)
+            else if(itemStack.getItem() instanceof ItemAttachment)
             {
-                ItemAttachment attachment = (ItemAttachment) itemStack.getItem();
+                ItemAttachment attachment = (ItemAttachment)itemStack.getItem();
                 
-                if (this.attachmentSlots[attachment.getSlot()].isItemValid(itemStack))
+                if(this.attachmentSlots[attachment.getSlot()].isItemValid(itemStack))
                 {
                     this.attachmentSlots[attachment.getSlot()].putStack(itemStack);
                     slot.putStack(ItemStack.EMPTY);
@@ -164,7 +164,7 @@ public class ContainerGunTable extends Container
         }
         else
         {
-            if (playerIn.inventory.addItemStackToInventory(itemStack))
+            if(playerIn.inventory.addItemStackToInventory(itemStack))
             {
                 slot.putStack(ItemStack.EMPTY);
             }
@@ -176,7 +176,7 @@ public class ContainerGunTable extends Container
     @Override
     public void onContainerClosed(PlayerEntity playerIn)
     {
-        if (this.gunSlot.getHasStack())
+        if(this.gunSlot.getHasStack())
         {
             playerIn.dropItem(this.gunSlot.getStack(), false);
         }

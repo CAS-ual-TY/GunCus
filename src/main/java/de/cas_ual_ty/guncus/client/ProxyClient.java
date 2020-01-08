@@ -128,13 +128,13 @@ public class ProxyClient implements IProxy
         
         Optic optic;
         
-        for (ItemAttachment attachment : ItemAttachment.ATTACHMENTS_LIST)
+        for(ItemAttachment attachment : ItemAttachment.ATTACHMENTS_LIST)
         {
-            if (attachment.getType() == EnumAttachmentType.OPTIC)
+            if(attachment.getType() == EnumAttachmentType.OPTIC)
             {
-                optic = (Optic) attachment;
+                optic = (Optic)attachment;
                 
-                if (optic != null && optic.canAim())
+                if(optic != null && optic.canAim())
                 {
                     mrl = new ModelResourceLocation(optic.getRegistryName().toString(), "inventory");
                     main = event.getModelRegistry().get(mrl);
@@ -149,21 +149,21 @@ public class ProxyClient implements IProxy
         
         IBakedModel[][] models; //These are the ItemAttachment models which will be passed onto the gun model for use
         
-        for (ItemGun gun : ItemGun.GUNS_LIST) //Cycle through all guns
+        for(ItemGun gun : ItemGun.GUNS_LIST) //Cycle through all guns
         {
             models = new IBakedModel[EnumAttachmentType.LENGTH][];
             
-            for (EnumAttachmentType type : EnumAttachmentType.VALUES) //This represents the layers
+            for(EnumAttachmentType type : EnumAttachmentType.VALUES) //This represents the layers
             {
                 i = type.getSlot();
                 
                 models[i] = new IBakedModel[gun.getAmmountForSlot(type)];
                 
-                for (j = 0; j < models[i].length; ++j) //Ammount of ItemAttachments for each layer
+                for(j = 0; j < models[i].length; ++j) //Ammount of ItemAttachments for each layer
                 {
                     attachment = gun.getAttachment(type, j);
                     
-                    if (attachment != null && attachment.shouldLoadModel()) //Make sure its not null-attachment and the model is needed
+                    if(attachment != null && attachment.shouldLoadModel()) //Make sure its not null-attachment and the model is needed
                     {
                         models[i][j] = event.getModelRegistry().get(new ModelResourceLocation(gun.getRegistryName().toString() + "/" + attachment.getRegistryName().getPath(), "inventory")); //Add ItemAttachment model to the array
                     }
@@ -185,17 +185,17 @@ public class ProxyClient implements IProxy
         int i;
         ItemAttachment attachment;
         
-        for (ItemGun gun : ItemGun.GUNS_LIST)
+        for(ItemGun gun : ItemGun.GUNS_LIST)
         {
             ModelLoader.addSpecialModel(new ModelResourceLocation(gun.getRegistryName().toString() + "/gun", "inventory"));
             
-            for (EnumAttachmentType type : EnumAttachmentType.VALUES) //All layers
+            for(EnumAttachmentType type : EnumAttachmentType.VALUES) //All layers
             {
-                for (i = 0; i < gun.getAmmountForSlot(type); ++i) //All attachments per layer
+                for(i = 0; i < gun.getAmmountForSlot(type); ++i) //All attachments per layer
                 {
                     attachment = gun.getAttachment(type, i);
                     
-                    if (attachment != null && attachment.shouldLoadModel()) //null-attachment exists, as well as some which are not visible
+                    if(attachment != null && attachment.shouldLoadModel()) //null-attachment exists, as well as some which are not visible
                     {
                         ModelLoader.addSpecialModel(new ModelResourceLocation(gun.getRegistryName().toString() + "/" + attachment.getRegistryName().getPath(), "inventory")); //Add MRL to the list
                     }
@@ -208,11 +208,11 @@ public class ProxyClient implements IProxy
     
     public void clientTick(ClientTickEvent event)
     {
-        if (event.phase == Phase.START)
+        if(event.phase == Phase.START)
         {
             PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
             
-            if (entityPlayer == null)
+            if(entityPlayer == null)
             {
                 return;
             }
@@ -221,26 +221,26 @@ public class ProxyClient implements IProxy
             ItemGun gun;
             
             int i = 0;
-            for (Hand hand : GunCusUtility.HANDS)
+            for(Hand hand : GunCusUtility.HANDS)
             {
-                if (ProxyClient.shootTime[i] > 0)
+                if(ProxyClient.shootTime[i] > 0)
                 {
                     --ProxyClient.shootTime[i];
                 }
                 
                 itemStack = entityPlayer.getHeldItem(hand);
                 
-                if (itemStack.getItem() instanceof ItemGun)
+                if(itemStack.getItem() instanceof ItemGun)
                 {
-                    gun = (ItemGun) itemStack.getItem();
+                    gun = (ItemGun)itemStack.getItem();
                     
-                    if (gun.getNBTIsReloading(itemStack))
+                    if(gun.getNBTIsReloading(itemStack))
                     {
                         ProxyClient.shootTime[i] = 1;
                     }
-                    else if (hand == Hand.MAIN_HAND)
+                    else if(hand == Hand.MAIN_HAND)
                     {
-                        if (entityPlayer.inventory.currentItem != ProxyClient.prevSelectedMain)
+                        if(entityPlayer.inventory.currentItem != ProxyClient.prevSelectedMain)
                         {
                             ProxyClient.shootTime[i] += gun.calcCurrentSwitchTime(gun.getCurrentAttachments(itemStack));
                         }
@@ -252,25 +252,25 @@ public class ProxyClient implements IProxy
             
             ProxyClient.prevSelectedMain = entityPlayer.inventory.currentItem;
             
-            if (ProxyClient.inaccuracyTime > 0)
+            if(ProxyClient.inaccuracyTime > 0)
             {
                 --ProxyClient.inaccuracyTime;
             }
             
             // ---
             
-            if (ProxyClient.BUTTON_SHOOT_DOWN.get() && (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun))
+            if(ProxyClient.BUTTON_SHOOT_DOWN.get() && (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun))
             {
                 boolean aiming = false;
                 
-                if (ProxyClient.BUTTON_AIM_DOWN.get() && !entityPlayer.isSprinting())
+                if(ProxyClient.BUTTON_AIM_DOWN.get() && !entityPlayer.isSprinting())
                 {
-                    if (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty())
+                    if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty())
                     {
                         itemStack = entityPlayer.getHeldItemMainhand();
-                        gun = (ItemGun) itemStack.getItem();
+                        gun = (ItemGun)itemStack.getItem();
                         
-                        if (gun.getNBTCanAimGun(itemStack))
+                        if(gun.getNBTCanAimGun(itemStack))
                         {
                             Optic optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                             aiming = optic.canAim();
@@ -281,15 +281,15 @@ public class ProxyClient implements IProxy
                 i = 0;
                 int handsInt = 0;
                 
-                for (i = 0; i < ProxyClient.shootTime.length; ++i)
+                for(i = 0; i < ProxyClient.shootTime.length; ++i)
                 {
-                    if (entityPlayer.getHeldItem(GunCusUtility.HANDS[i]).getItem() instanceof ItemGun && ProxyClient.shootTime[i] <= 0)
+                    if(entityPlayer.getHeldItem(GunCusUtility.HANDS[i]).getItem() instanceof ItemGun && ProxyClient.shootTime[i] <= 0)
                     {
                         handsInt += i + 1;
                     }
                 }
                 
-                if (handsInt > 0)
+                if(handsInt > 0)
                 {
                     GunCus.channel.sendToServer(new MessageShoot(aiming, ProxyClient.inaccuracyTime, handsInt));
                     ItemGun.tryShoot(entityPlayer, aiming, ProxyClient.inaccuracyTime, GunCusUtility.intToHands(handsInt));
@@ -298,14 +298,14 @@ public class ProxyClient implements IProxy
             
             // ---
             
-            for (ItemGroupShuffle group : ItemGroupShuffle.GROUPS_LIST)
+            for(ItemGroupShuffle group : ItemGroupShuffle.GROUPS_LIST)
             {
                 group.tick();
             }
         }
-        else if (event.phase == Phase.END)
+        else if(event.phase == Phase.END)
         {
-            if (ProxyClient.hitmarkerTick > 0)
+            if(ProxyClient.hitmarkerTick > 0)
             {
                 --ProxyClient.hitmarkerTick;
             }
@@ -316,49 +316,49 @@ public class ProxyClient implements IProxy
     {
         PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
         
-        if (entityPlayer != null && ProxyClient.BUTTON_AIM_DOWN.get())
+        if(entityPlayer != null && ProxyClient.BUTTON_AIM_DOWN.get())
         {
-            if (!entityPlayer.isSprinting())
+            if(!entityPlayer.isSprinting())
             {
                 Optic optic = null;
                 float modifier = 1F;
                 float extra = 0F;
                 
-                if (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
+                if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
                 {
-                    if (entityPlayer.getHeldItemOffhand().isEmpty())
+                    if(entityPlayer.getHeldItemOffhand().isEmpty())
                     {
                         ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                        ItemGun gun = (ItemGun) itemStack.getItem();
+                        ItemGun gun = (ItemGun)itemStack.getItem();
                         
-                        if (gun.getNBTCanAimGun(itemStack))
+                        if(gun.getNBTCanAimGun(itemStack))
                         {
                             optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                         }
                         
-                        if (optic != null && gun.isNBTAccessoryTurnedOn(itemStack) && !gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY).isDefault())
+                        if(optic != null && gun.isNBTAccessoryTurnedOn(itemStack) && !gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY).isDefault())
                         {
                             Accessory accessory = gun.<Accessory> getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
                             
-                            if (optic.isCompatibleWithMagnifiers())
+                            if(optic.isCompatibleWithMagnifiers())
                             {
                                 modifier = accessory.getZoomModifier();
                             }
                             
-                            if (optic.isCompatibleWithExtraZoom())
+                            if(optic.isCompatibleWithExtraZoom())
                             {
                                 extra = accessory.getExtraZoom();
                             }
                         }
                     }
                 }
-                else if (entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
+                else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
                 {
                     ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                    optic = (Optic) itemStack.getItem();
+                    optic = (Optic)itemStack.getItem();
                 }
                 
-                if (optic != null && optic.canAim())
+                if(optic != null && optic.canAim())
                 {
                     event.setNewfov(ProxyClient.calculateFov(optic.getZoom() * modifier + 0.1F + extra, event.getFov()));
                 }
@@ -368,25 +368,25 @@ public class ProxyClient implements IProxy
     
     public static float calculateFov(float zoom, float fov)
     {
-        return (float) Math.atan(Math.tan(fov) / zoom);
+        return (float)Math.atan(Math.tan(fov) / zoom);
     }
     
     public void renderGameOverlay(RenderGameOverlayEvent event)
     {
         PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
         
-        if (event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
+        if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
         {
             Optic optic = null;
             
-            if (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
+            if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
             {
-                if (entityPlayer.getHeldItemOffhand().isEmpty())
+                if(entityPlayer.getHeldItemOffhand().isEmpty())
                 {
                     ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                    ItemGun gun = (ItemGun) itemStack.getItem();
+                    ItemGun gun = (ItemGun)itemStack.getItem();
                     
-                    if (gun.getNBTCanAimGun(itemStack))
+                    if(gun.getNBTCanAimGun(itemStack))
                     {
                         optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                     }
@@ -394,16 +394,16 @@ public class ProxyClient implements IProxy
                 
                 event.setCanceled(true);
             }
-            else if (entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
+            else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
             {
-                optic = (Optic) entityPlayer.getHeldItemMainhand().getItem();
+                optic = (Optic)entityPlayer.getHeldItemMainhand().getItem();
             }
             
-            if (optic != null && optic.canAim() && !entityPlayer.isSprinting() && ProxyClient.BUTTON_AIM_DOWN.get())
+            if(optic != null && optic.canAim() && !entityPlayer.isSprinting() && ProxyClient.BUTTON_AIM_DOWN.get())
             {
                 ProxyClient.drawSight(optic, event.getWindow());
                 
-                if (!event.isCanceled())
+                if(!event.isCanceled())
                 {
                     event.setCanceled(true);
                 }
@@ -411,7 +411,7 @@ public class ProxyClient implements IProxy
             
             // ---
             
-            if (ProxyClient.hitmarkerTick > 0)
+            if(ProxyClient.hitmarkerTick > 0)
             {
                 ProxyClient.drawHitmarker(event.getWindow());
             }
@@ -467,7 +467,7 @@ public class ProxyClient implements IProxy
     {
         PlayerEntity clientPlayer = ProxyClient.getClientPlayer();
         
-        if (clientPlayer != null)
+        if(clientPlayer != null)
         {
             World world = clientPlayer.world;
             
@@ -486,30 +486,30 @@ public class ProxyClient implements IProxy
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder b = tessellator.getBuffer();
             
-            for (PlayerEntity entityPlayer : world.getPlayers())
+            for(PlayerEntity entityPlayer : world.getPlayers())
             {
-                if (entityPlayer.isAlive())
+                if(entityPlayer.isAlive())
                 {
-                    for (Hand hand : GunCusUtility.HANDS)
+                    for(Hand hand : GunCusUtility.HANDS)
                     {
                         accessory = null;
                         itemStack = entityPlayer.getHeldItem(hand);
                         
-                        if (itemStack.getItem() instanceof ItemGun)
+                        if(itemStack.getItem() instanceof ItemGun)
                         {
-                            gun = (ItemGun) itemStack.getItem();
+                            gun = (ItemGun)itemStack.getItem();
                             
-                            if (gun.isNBTAccessoryTurnedOn(itemStack))
+                            if(gun.isNBTAccessoryTurnedOn(itemStack))
                             {
                                 accessory = gun.<Accessory> getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
                             }
                         }
-                        else if (itemStack.getItem() instanceof Accessory)
+                        else if(itemStack.getItem() instanceof Accessory)
                         {
-                            accessory = (Accessory) itemStack.getItem();
+                            accessory = (Accessory)itemStack.getItem();
                         }
                         
-                        if (accessory != null && accessory.getLaser() != null)
+                        if(accessory != null && accessory.getLaser() != null)
                         {
                             laser = accessory.getLaser();
                             
@@ -525,12 +525,12 @@ public class ProxyClient implements IProxy
                             
                             GlStateManager.disableTexture();
                             
-                            if (laser.isPoint() && !ProxyClient.tmpHitNothing)
+                            if(laser.isPoint() && !ProxyClient.tmpHitNothing)
                             {
                                 ProxyClient.renderLaserPoint(b, tessellator, laser, start, end);
                             }
                             
-                            if (laser.isBeam())
+                            if(laser.isBeam())
                             {
                                 ProxyClient.renderLaserBeam(b, tessellator, laser, start.add(ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw)), end);
                             }
@@ -594,8 +594,8 @@ public class ProxyClient implements IProxy
     
     public static Vec3d getVectorForRotation(float pitch, float yaw)
     {
-        float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
-        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
+        float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
+        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
         float f2 = -MathHelper.cos(-pitch * 0.017453292F);
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
         return new Vec3d(f1 * f2, f3, f * f2);
@@ -605,12 +605,12 @@ public class ProxyClient implements IProxy
     {
         Vec3d vec = ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + 1, entityPlayer.rotationYaw + 90F);
         
-        if (hand == Hand.OFF_HAND)
+        if(hand == Hand.OFF_HAND)
         {
             vec = vec.scale(-1);
         }
         
-        if (entityPlayer.rotationPitch >= 89)
+        if(entityPlayer.rotationPitch >= 89)
         {
             vec = vec.scale(-1);
         }
@@ -634,12 +634,12 @@ public class ProxyClient implements IProxy
         BlockRayTraceResult resultBlock = ProxyClient.findBlockOnPath(world, entityPlayer, start, end);
         EntityRayTraceResult resultEntity = ProxyClient.findEntityOnPath(world, entityPlayer, start, end);
         
-        if (resultEntity != null)
+        if(resultEntity != null)
         {
             double rangeBlockSq = resultBlock.getHitVec().squareDistanceTo(start);
             double rangeEntitySq = resultEntity.getHitVec().squareDistanceTo(start);
             
-            if (rangeBlockSq < rangeEntitySq)
+            if(rangeBlockSq < rangeEntitySq)
             {
                 return resultBlock.getHitVec();
             }
@@ -669,19 +669,19 @@ public class ProxyClient implements IProxy
         double rangeSq = 0;
         double currentRangeSq;
         
-        for (Entity entity : world.getEntitiesInAABBexcluding(entityPlayer, GunCusUtility.aabbFromVec3ds(start, end), (entity1) -> true))
+        for(Entity entity : world.getEntitiesInAABBexcluding(entityPlayer, GunCusUtility.aabbFromVec3ds(start, end), (entity1) -> true))
         {
-            if (entity != null && (entity.getEntityId() != entityPlayer.getEntityId()) && !(entity instanceof EntityBullet))
+            if(entity != null && (entity.getEntityId() != entityPlayer.getEntityId()) && !(entity instanceof EntityBullet))
             {
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(0.30000001192092896D);
                 
                 opt = axisalignedbb.rayTrace(start, end);
                 
-                if (opt.isPresent())
+                if(opt.isPresent())
                 {
                     currentRangeSq = start.squareDistanceTo(entity.getPositionVec());
                     
-                    if (currentRangeSq < rangeSq || result == null)
+                    if(currentRangeSq < rangeSq || result == null)
                     {
                         result = new EntityRayTraceResult(entity, opt.get());
                         rangeSq = currentRangeSq;

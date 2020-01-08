@@ -14,7 +14,7 @@ public class SlotAttachment extends Slot
     public final EnumAttachmentType type;
     public final PlayerEntity player;
     
-    public SlotAttachment(IInventory inventoryIn, int index, int xPosition, int yPosition, SlotGun gunSlot, EnumAttachmentType type, PlayerEntity player)
+    public SlotAttachment(IInventory inventoryIn,int index,int xPosition,int yPosition,SlotGun gunSlot,EnumAttachmentType type,PlayerEntity player)
     {
         super(inventoryIn, index, xPosition, yPosition);
         this.gunSlot = gunSlot;
@@ -24,16 +24,16 @@ public class SlotAttachment extends Slot
     
     public ItemAttachment getAttachment()
     {
-        return this.getHasStack() ? (ItemAttachment) this.getStack().getItem() : this.type.getDefault();
+        return this.getHasStack() ? (ItemAttachment)this.getStack().getItem() : this.type.getDefault();
     }
     
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        if (this.gunSlot.getHasStack() && !this.getHasStack() && (stack.getItem() instanceof ItemAttachment))
+        if(this.gunSlot.getHasStack() && !this.getHasStack() && (stack.getItem() instanceof ItemAttachment))
         {
-            ItemGun gun = (ItemGun) this.gunSlot.getStack().getItem();
-            ItemAttachment attachment = (ItemAttachment) stack.getItem();
+            ItemGun gun = (ItemGun)this.gunSlot.getStack().getItem();
+            ItemAttachment attachment = (ItemAttachment)stack.getItem();
             
             return (attachment.getType() == this.type) && gun.canSetAttachment(attachment);
         }

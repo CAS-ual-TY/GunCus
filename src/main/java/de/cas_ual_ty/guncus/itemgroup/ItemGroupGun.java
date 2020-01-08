@@ -13,7 +13,7 @@ public class ItemGroupGun extends ItemGroupShuffle
 {
     protected final ItemGun gun;
     
-    public ItemGroupGun(String label, ItemGun gun)
+    public ItemGroupGun(String label,ItemGun gun)
     {
         super(label);
         this.gun = gun;
@@ -25,7 +25,7 @@ public class ItemGroupGun extends ItemGroupShuffle
     {
         super.fill(items);
         
-        if (GunCus.fullCreativeTabs)
+        if(GunCus.fullCreativeTabs)
         {
             items.addAll(GunCusUtility.createAllVariants(this.gun));
         }
@@ -36,21 +36,21 @@ public class ItemGroupGun extends ItemGroupShuffle
             
             Ammo ammo;
             
-            for (ItemAttachment attachment : this.gun.getAttachments()[EnumAttachmentType.AMMO.getSlot()])
+            for(ItemAttachment attachment : this.gun.getAttachments()[EnumAttachmentType.AMMO.getSlot()])
             {
-                ammo = (Ammo) attachment;
+                ammo = (Ammo)attachment;
                 
-                if (!ammo.isDefault() && ammo.getReplacementBullet() != null && ammo.getReplacementBullet() != this.gun.getBaseBullet())
+                if(!ammo.isDefault() && ammo.getReplacementBullet() != null && ammo.getReplacementBullet() != this.gun.getBaseBullet())
                 {
                     items.add(new ItemStack(ammo.getReplacementBullet()));
                 }
             }
             
-            for (ItemAttachment[] attachments : this.gun.getAttachments())
+            for(ItemAttachment[] attachments : this.gun.getAttachments())
             {
-                for (ItemAttachment attachment : attachments)
+                for(ItemAttachment attachment : attachments)
                 {
-                    if (!attachment.isDefault())
+                    if(!attachment.isDefault())
                     {
                         items.add(new ItemStack(attachment));
                     }

@@ -14,7 +14,7 @@ public class MessageShoot
     public int inaccuracy;
     public int handsInt;
     
-    public MessageShoot(boolean aiming, int inaccuracy, int handsInt)
+    public MessageShoot(boolean aiming,int inaccuracy,int handsInt)
     {
         this.aiming = aiming;
         this.inaccuracy = inaccuracy;
@@ -37,10 +37,11 @@ public class MessageShoot
     {
         Context context = ctx.get();
         
-        context.enqueueWork(() -> {
+        context.enqueueWork(() ->
+        {
             PlayerEntity player = context.getSender();
             
-            if (player != null)
+            if(player != null)
             {
                 ItemGun.tryShoot(player, msg.aiming, msg.inaccuracy, GunCusUtility.intToHands(msg.handsInt));
             }

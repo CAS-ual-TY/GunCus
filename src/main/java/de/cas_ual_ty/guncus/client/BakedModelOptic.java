@@ -82,16 +82,16 @@ public class BakedModelOptic implements IBakedModel
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType transformType)
     {
-        if (transformType == TransformType.FIRST_PERSON_RIGHT_HAND)
+        if(transformType == TransformType.FIRST_PERSON_RIGHT_HAND)
         {
             PlayerEntity entityPlayer = Minecraft.getInstance().player;
             
-            if (entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof Optic && ProxyClient.BUTTON_AIM_DOWN.get())
+            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof Optic && ProxyClient.BUTTON_AIM_DOWN.get())
             {
                 ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                Optic optic = (Optic) itemStack.getItem();
+                Optic optic = (Optic)itemStack.getItem();
                 
-                if (optic != null && optic.canAim())
+                if(optic != null && optic.canAim())
                 {
                     return Pair.of(this, BakedModelGunFinalized.NULL_MATRIX);
                 }

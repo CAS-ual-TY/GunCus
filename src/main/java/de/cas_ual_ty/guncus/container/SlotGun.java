@@ -10,7 +10,7 @@ public class SlotGun extends Slot
 {
     public final PlayerEntity player;
     
-    public SlotGun(IInventory inventoryIn, int index, int xPosition, int yPosition, PlayerEntity player)
+    public SlotGun(IInventory inventoryIn,int index,int xPosition,int yPosition,PlayerEntity player)
     {
         super(inventoryIn, index, xPosition, yPosition);
         this.player = player;
@@ -19,7 +19,7 @@ public class SlotGun extends Slot
     @Override
     public boolean isItemValid(ItemStack stack)
     {
-        return stack.getItem() instanceof ItemGun && ((ItemGun) stack.getItem()).getNBTCurrentAmmo(stack) <= 0;
+        return stack.getItem() instanceof ItemGun && ((ItemGun)stack.getItem()).getNBTCurrentAmmo(stack) <= 0;
     }
     
     @Override

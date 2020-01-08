@@ -14,26 +14,29 @@ public class CommandGunCus
 {
     public static void register(CommandDispatcher<CommandSource> dispatcher)
     {
-        dispatcher.register(Commands.literal("guncus").requires((arg1) -> {
+        dispatcher.register(Commands.literal("guncus").requires((arg1) ->
+        {
             return arg1.getServer().isSinglePlayer() || arg1.hasPermissionLevel(0);
-        }).then((Commands.literal("on").executes((context) -> {
+        }).then((Commands.literal("on").executes((context) ->
+        {
             return CommandGunCus.change(context.getSource(), true);
-        }))).then(Commands.literal("off").executes((context) -> {
+        }))).then(Commands.literal("off").executes((context) ->
+        {
             return CommandGunCus.change(context.getSource(), false);
         })));
     }
     
     public static int change(CommandSource source, boolean on)
     {
-        if (source.getEntity() instanceof PlayerEntity)
+        if(source.getEntity() instanceof PlayerEntity)
         {
-            PlayerEntity player = (PlayerEntity) source.getEntity();
+            PlayerEntity player = (PlayerEntity)source.getEntity();
             
-            for (Hand hand : GunCusUtility.HANDS)
+            for(Hand hand : GunCusUtility.HANDS)
             {
-                if (player.getHeldItem(hand).getItem() instanceof ItemGun)
+                if(player.getHeldItem(hand).getItem() instanceof ItemGun)
                 {
-                    ItemGun gun = (ItemGun) player.getHeldItem(hand).getItem();
+                    ItemGun gun = (ItemGun)player.getHeldItem(hand).getItem();
                     gun.setNBTAccessoryTurnedOn(player.getHeldItem(hand), on);
                 }
             }

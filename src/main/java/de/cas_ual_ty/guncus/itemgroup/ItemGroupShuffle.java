@@ -9,7 +9,7 @@ import net.minecraft.util.NonNullList;
 
 public abstract class ItemGroupShuffle extends ItemGroup
 {
-    public static final ArrayList<ItemGroupShuffle> GROUPS_LIST = new ArrayList<ItemGroupShuffle>();
+    public static final ArrayList<ItemGroupShuffle> GROUPS_LIST = new ArrayList<>();
     
     public final NonNullList<ItemStack> items;
     protected Random random;
@@ -23,7 +23,7 @@ public abstract class ItemGroupShuffle extends ItemGroup
         this(label, new Random());
     }
     
-    public ItemGroupShuffle(String label, Random random)
+    public ItemGroupShuffle(String label,Random random)
     {
         super(label);
         this.items = NonNullList.create();
@@ -55,7 +55,7 @@ public abstract class ItemGroupShuffle extends ItemGroup
     
     public ItemStack shuffle()
     {
-        if (!this.items.isEmpty())
+        if(!this.items.isEmpty())
         {
             this.icon = this.items.get(this.random.nextInt(this.items.size()));
         }
@@ -74,7 +74,7 @@ public abstract class ItemGroupShuffle extends ItemGroup
     
     public void tick()
     {
-        if (++this.tick >= this.interval)
+        if(++this.tick >= this.interval)
         {
             this.interval = this.getInterval();
             this.tick = 0;

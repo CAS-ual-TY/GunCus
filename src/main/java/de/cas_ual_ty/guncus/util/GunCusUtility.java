@@ -5,16 +5,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.cas_ual_ty.guncus.item.ItemGun;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.merchant.villager.VillagerTrades;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -35,15 +31,15 @@ public class GunCusUtility
     
     public static Hand[] intToHands(int handsInt)
     {
-        if (handsInt == 1)
+        if(handsInt == 1)
         {
             return new Hand[] { Hand.MAIN_HAND };
         }
-        else if (handsInt == 2)
+        else if(handsInt == 2)
         {
             return new Hand[] { Hand.OFF_HAND };
         }
-        else if (handsInt == 3)
+        else if(handsInt == 3)
         {
             return new Hand[] { Hand.MAIN_HAND, Hand.OFF_HAND };
         }
@@ -58,9 +54,10 @@ public class GunCusUtility
     
     public static ArrayList<ItemStack> createAllVariants(ItemGun gun)
     {
-        ArrayList<ItemStack> itemStacks = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> itemStacks = new ArrayList<>();
         
-        EnumAttachmentType.callForAll(gun, (attachments) -> {
+        EnumAttachmentType.callForAll(gun, (attachments) ->
+        {
             itemStacks.add(gun.createVariant(attachments));
         });
         

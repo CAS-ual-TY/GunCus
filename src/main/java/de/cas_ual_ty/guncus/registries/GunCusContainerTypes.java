@@ -22,6 +22,6 @@ public class GunCusContainerTypes
     {
         IForgeRegistry<ContainerType<? extends Container>> registry = event.getRegistry();
         
-        registry.register(new ContainerType<ContainerGunTable>(ContainerGunTable::new).setRegistryName(GunCus.MOD_ID, "gun_table"));
+        registry.register(new ContainerType<>(ContainerGunTable::new).setRegistryName(GunCus.MOD_ID, "gun_table"));
     }
 }

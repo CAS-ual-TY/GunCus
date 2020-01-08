@@ -27,7 +27,7 @@ public enum EnumAttachmentType
     private final int y;
     private final ItemAttachment _default;
     
-    private EnumAttachmentType(String key, int slot, int x, int y, ItemAttachment _default)
+    private EnumAttachmentType(String key,int slot,int x,int y,ItemAttachment _default)
     {
         this.key = key;
         this.slot = slot;
@@ -93,9 +93,9 @@ public enum EnumAttachmentType
     
     private static void recCallForAll(Consumer<ItemAttachment[]> consumer, ItemAttachment[][] attachments, ItemAttachment[] current, int slot)
     {
-        if (slot < EnumAttachmentType.LENGTH)
+        if(slot < EnumAttachmentType.LENGTH)
         {
-            for (int i = 0; i < attachments[slot].length; ++i)
+            for(int i = 0; i < attachments[slot].length; ++i)
             {
                 current[slot] = attachments[slot][i];
                 

@@ -39,7 +39,7 @@ import net.minecraft.world.World;
 
 public class ItemGun extends Item
 {
-    public static final ArrayList<ItemGun> GUNS_LIST = new ArrayList<ItemGun>();
+    public static final ArrayList<ItemGun> GUNS_LIST = new ArrayList<>();
     
     public static final String NBT_RELOAD_TIME = "ReloadTime";
     public static final String NBT_RELOAD_TYPE = "ReloadType";
@@ -65,7 +65,7 @@ public class ItemGun extends Item
     
     public ItemGroupGun gunTab;
     
-    public ItemGun(Properties properties, int fireRate, int maxAmmo, float baseDamage, Supplier<ItemBullet> bullet)
+    public ItemGun(Properties properties,int fireRate,int maxAmmo,float baseDamage,Supplier<ItemBullet> bullet)
     {
         super(properties);
         
@@ -144,27 +144,27 @@ public class ItemGun extends Item
     
     public ItemBullet calcCurrentBullet(ItemAttachment[] attachments)
     {
-        return ((Ammo) attachments[EnumAttachmentType.AMMO.getSlot()]).getUsedBullet(this);
+        return ((Ammo)attachments[EnumAttachmentType.AMMO.getSlot()]).getUsedBullet(this);
     }
     
     public int calcCurrentMaxAmmo(ItemAttachment[] attachments)
     {
-        return ((Magazine) attachments[EnumAttachmentType.MAGAZINE.getSlot()]).getExtraCapacity() + this.getBaseMaxAmmo();
+        return ((Magazine)attachments[EnumAttachmentType.MAGAZINE.getSlot()]).getExtraCapacity() + this.getBaseMaxAmmo();
     }
     
     public int calcCurrentFireRate(ItemAttachment[] attachments)
     {
-        return Math.max(1, this.getBaseFireRate() - ((Auxiliary) attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getExtraFireRare());
+        return Math.max(1, this.getBaseFireRate() - ((Auxiliary)attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getExtraFireRare());
     }
     
     public int calcCurrentReloadTime(ItemAttachment[] attachments)
     {
-        return (int) (((Magazine) attachments[EnumAttachmentType.MAGAZINE.getSlot()]).getReloadTimeModifier() * this.getBaseReloadTime());
+        return (int)(((Magazine)attachments[EnumAttachmentType.MAGAZINE.getSlot()]).getReloadTimeModifier() * this.getBaseReloadTime());
     }
     
     public boolean calcIsAllowingReloadWhileZoomed(ItemAttachment[] attachments)
     {
-        return ((Auxiliary) attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getIsAllowingReloadWhileZoomed();
+        return ((Auxiliary)attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getIsAllowingReloadWhileZoomed();
     }
     
     public int calcCurrentSwitchTime(ItemAttachment[] attachments)
@@ -216,7 +216,7 @@ public class ItemGun extends Item
     
     public ItemAttachment[][] getAttachments()
     {
-        if (this.attachments == null)
+        if(this.attachments == null)
         {
             this.attachments = this.supplierAttachments.get();
         }
@@ -231,9 +231,9 @@ public class ItemGun extends Item
     
     public int getIndexForAttachment(ItemAttachment attachment)
     {
-        for (int i = 0; i < this.getAttachments()[attachment.getSlot()].length; ++i)
+        for(int i = 0; i < this.getAttachments()[attachment.getSlot()].length; ++i)
         {
-            if (this.getAttachments()[attachment.getSlot()][i] == attachment)
+            if(this.getAttachments()[attachment.getSlot()][i] == attachment)
             {
                 return i;
             }
@@ -277,7 +277,7 @@ public class ItemGun extends Item
     
     public ItemStack setAttachments(ItemStack itemStack, ItemAttachment[] attachments)
     {
-        for (ItemAttachment attachment : attachments)
+        for(ItemAttachment attachment : attachments)
         {
             this.setAttachment(itemStack, attachment);
         }
@@ -297,26 +297,26 @@ public class ItemGun extends Item
     @SuppressWarnings("unchecked")
     public <A extends ItemAttachment> A getAttachmentCalled(ItemStack itemStack, EnumAttachmentType type)
     {
-        return (A) this.getAttachment(itemStack, type);
+        return (A)this.getAttachment(itemStack, type);
     }
     
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn)
     {
-        return new ActionResult<ItemStack>(ActionResultType.PASS, playerIn.getHeldItem(handIn));
+        return new ActionResult<>(ActionResultType.PASS, playerIn.getHeldItem(handIn));
     }
     
     @Override
     public void inventoryTick(ItemStack itemStack, World world, Entity entity, int itemSlot, boolean isSelected)
     {
-        if (entity instanceof PlayerEntity)
+        if(entity instanceof PlayerEntity)
         {
-            PlayerEntity entityPlayer = (PlayerEntity) entity;
+            PlayerEntity entityPlayer = (PlayerEntity)entity;
             boolean isInAnyHand = false;
             
-            for (Hand hand : GunCusUtility.HANDS)
+            for(Hand hand : GunCusUtility.HANDS)
             {
-                if (entityPlayer.getHeldItem(hand) == itemStack)
+                if(entityPlayer.getHeldItem(hand) == itemStack)
                 {
                     isInAnyHand = true;
                     break;
@@ -325,31 +325,31 @@ public class ItemGun extends Item
             
             int value = this.getNBTCurrentReloadTime(itemStack);
             
-            if (value > 0)
+            if(value > 0)
             {
                 EnumReloadType type = this.getNBTCurrentReloadType(itemStack);
                 ItemAttachment[] attachments = this.getCurrentAttachments(itemStack);
                 boolean hasAmmo = this.getHasAmmo(entityPlayer, attachments, itemStack);
                 
-                if (type == EnumReloadType.MAGAZINE)
+                if(type == EnumReloadType.MAGAZINE)
                 {
-                    if (!isInAnyHand || !hasAmmo)
+                    if(!isInAnyHand || !hasAmmo)
                     {
                         value = 0;
                     }
-                    else if (--value == 0)
+                    else if(--value == 0)
                     {
                         this.tryFinishReload(entityPlayer, attachments, itemStack);
                     }
                 }
-                else if (type == EnumReloadType.BOLT)
+                else if(type == EnumReloadType.BOLT)
                 {
-                    if (value == this.getBaseFireRate() && isInAnyHand)
+                    if(value == this.getBaseFireRate() && isInAnyHand)
                     {
                         --value;
                         entityPlayer.playSound(this.soundReloadBolt.get(), 1F, 1F);
                     }
-                    else if (--value > 0 && !isInAnyHand)
+                    else if(--value > 0 && !isInAnyHand)
                     {
                         value = this.getBaseFireRate();
                     }
@@ -364,13 +364,13 @@ public class ItemGun extends Item
     {
         ItemAttachment[] attachments = this.getCurrentAttachments(itemStack);
         
-        if (this.getNBTCurrentReloadTime(itemStack) <= 0)
+        if(this.getNBTCurrentReloadTime(itemStack) <= 0)
         {
-            if (this.canShoot(entityPlayer, hand, attachments, itemStack, aiming, moving, inaccuracy))
+            if(this.canShoot(entityPlayer, hand, attachments, itemStack, aiming, moving, inaccuracy))
             {
                 return this.doShoot(entityPlayer, hand, attachments, itemStack, aiming, moving, inaccuracy);
             }
-            else if (this.canReload(entityPlayer, hand, attachments, itemStack, aiming, moving, inaccuracy))
+            else if(this.canReload(entityPlayer, hand, attachments, itemStack, aiming, moving, inaccuracy))
             {
                 return this.tryStartReload(entityPlayer, attachments, itemStack);
             }
@@ -393,9 +393,9 @@ public class ItemGun extends Item
     {
         ItemBullet bullet = this.calcCurrentBullet(attachments);
         
-        for (int index = 0; index < entityPlayer.inventory.getSizeInventory(); ++index)
+        for(int index = 0; index < entityPlayer.inventory.getSizeInventory(); ++index)
         {
-            if (entityPlayer.inventory.getStackInSlot(index).getItem() == bullet)
+            if(entityPlayer.inventory.getStackInSlot(index).getItem() == bullet)
             {
                 return true;
             }
@@ -415,7 +415,7 @@ public class ItemGun extends Item
         float inaccuracyModifierMoving = 1F;
         float inaccuracyModifierStill = 1F;
         
-        for (ItemAttachment attachment : attachments)
+        for(ItemAttachment attachment : attachments)
         {
             extraDamage += attachment.getExtraDamage();
             driftModifier *= attachment.getDriftModifier();
@@ -433,12 +433,12 @@ public class ItemGun extends Item
         float speed = EntityBullet.BASE_SPEED * speedModifier;
         float damage = this.getBaseDamage() + extraDamage + bullet.getExtraDamage();
         
-        if (aiming)
+        if(aiming)
         {
             inaccuracy *= 0.5F;
         }
         
-        if (moving)
+        if(moving)
         {
             inaccuracy *= inaccuracyModifierMoving;
         }
@@ -446,20 +446,20 @@ public class ItemGun extends Item
         {
             inaccuracy *= inaccuracyModifierStill;
             
-            if (entityPlayer.isSneaking())
+            if(entityPlayer.isSneaking())
             {
-                inaccuracy *= ((Underbarrel) attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getInaccuracyModifierShiftStill();
-                driftModifier *= ((Underbarrel) attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getDriftModifierShiftStill();
+                inaccuracy *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getInaccuracyModifierShiftStill();
+                driftModifier *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getDriftModifierShiftStill();
             }
         }
         
-        if (!entityPlayer.world.isRemote)
+        if(!entityPlayer.world.isRemote)
         {
             float rotationPitch;
             float rotationYaw;
             EntityBullet bulletEntity;
             
-            for (int i = 0; i < bullet.getProjectileAmount(); ++i)
+            for(int i = 0; i < bullet.getProjectileAmount(); ++i)
             {
                 float randomPitch = (Item.random.nextFloat() * 2 - 1) * spreadModifierVertical * inaccuracy * bullet.getSpreadModifier();
                 float randomYaw = (Item.random.nextFloat() * 2 - 1) * spreadModifierHorizontal * inaccuracy * bullet.getSpreadModifier();
@@ -473,12 +473,12 @@ public class ItemGun extends Item
                 entityPlayer.world.addEntity(bulletEntity.setDamage(damage));
             }
             
-            if (!entityPlayer.isCreative())
+            if(!entityPlayer.isCreative())
             {
                 this.setNBTCurrentAmmo(itemStack, this.getNBTCurrentAmmo(itemStack) - 1);
             }
             
-            if (this.getBaseFireMode() == EnumFireMode.BOLT_ACTION)
+            if(this.getBaseFireMode() == EnumFireMode.BOLT_ACTION)
             {
                 this.setNBTCurrentReloadTime(itemStack, this.getBaseFireRate());
                 this.setNBTCurrentReloadType(itemStack, EnumReloadType.BOLT);
@@ -490,7 +490,7 @@ public class ItemGun extends Item
             entityPlayer.rotationYaw += (Item.random.nextFloat() * 2 - 1) * driftModifier;
         }
         
-        if (((Barrel) attachments[EnumAttachmentType.BARREL.getSlot()]).getIsSilenced())
+        if(((Barrel)attachments[EnumAttachmentType.BARREL.getSlot()]).getIsSilenced())
         {
             entityPlayer.playSound(this.soundShootSilenced.get(), 3.0F, 0.9F + Item.random.nextFloat() * 0.2F);
         }
@@ -506,7 +506,7 @@ public class ItemGun extends Item
     
     public ActionResultType tryStartReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
     {
-        if (this.getHasAmmo(entityPlayer, attachments, itemStack))
+        if(this.getHasAmmo(entityPlayer, attachments, itemStack))
         {
             return this.doStartReload(entityPlayer, attachments, itemStack);
         }
@@ -516,11 +516,11 @@ public class ItemGun extends Item
     
     public ActionResultType doStartReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack)
     {
-        if (!entityPlayer.world.isRemote)
+        if(!entityPlayer.world.isRemote)
         {
             this.setNBTCurrentReloadTime(itemStack, this.calcCurrentReloadTime(attachments));
             
-            if (this.getBaseFireMode() == EnumFireMode.BOLT_ACTION)
+            if(this.getBaseFireMode() == EnumFireMode.BOLT_ACTION)
             {
                 this.setNBTCurrentReloadType(itemStack, this.getBaseFullReloadType());
             }
@@ -540,15 +540,15 @@ public class ItemGun extends Item
         int needed;
         
         ItemStack i;
-        for (int index = 0; index < entityPlayer.inventory.getSizeInventory(); ++index)
+        for(int index = 0; index < entityPlayer.inventory.getSizeInventory(); ++index)
         {
             i = entityPlayer.inventory.getStackInSlot(index);
             
-            if (i.getItem() == bullet)
+            if(i.getItem() == bullet)
             {
                 needed = maxAmmo - amount;
                 
-                if (i.getCount() > needed)
+                if(i.getCount() > needed)
                 {
                     i.setCount(i.getCount() - needed);
                     amount += needed;
@@ -560,13 +560,13 @@ public class ItemGun extends Item
                 }
             }
             
-            if (amount >= maxAmmo)
+            if(amount >= maxAmmo)
             {
                 break;
             }
         }
         
-        if (amount > 0)
+        if(amount > 0)
         {
             return this.doFinishReload(entityPlayer, attachments, itemStack, amount);
         }
@@ -576,7 +576,7 @@ public class ItemGun extends Item
     
     public ActionResultType doFinishReload(PlayerEntity entityPlayer, ItemAttachment[] attachments, ItemStack itemStack, int ammount)
     {
-        if (!entityPlayer.world.isRemote)
+        if(!entityPlayer.world.isRemote)
         {
             this.setNBTCurrentAmmo(itemStack, ammount);
         }
@@ -586,7 +586,7 @@ public class ItemGun extends Item
     
     public boolean isNBTAccessoryTurnedOn(ItemStack itemStack)
     {
-        if (!this.getNBT(itemStack).contains(ItemGun.NBT_ACCESSORY_SWITCH))
+        if(!this.getNBT(itemStack).contains(ItemGun.NBT_ACCESSORY_SWITCH))
         {
             this.setNBTAccessoryTurnedOn(itemStack, true);
         }
@@ -649,7 +649,7 @@ public class ItemGun extends Item
     {
         ItemAttachment[] attachments = new ItemAttachment[EnumAttachmentType.LENGTH];
         
-        for (EnumAttachmentType type : EnumAttachmentType.VALUES)
+        for(EnumAttachmentType type : EnumAttachmentType.VALUES)
         {
             attachments[type.getSlot()] = this.getAttachment(itemStack, type);
         }
@@ -689,24 +689,24 @@ public class ItemGun extends Item
         int ammount = 0;
         int i;
         
-        for (i = 0; i < attachments.length; ++i)
+        for(i = 0; i < attachments.length; ++i)
         {
-            if (!attachments[i].isDefault())
+            if(!attachments[i].isDefault())
             {
                 ++ammount;
             }
         }
         
-        if (ammount > 0)
+        if(ammount > 0)
         {
             list.add(ItemAttachment.getAttachmentTranslated(ammount > 1).setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendText(":"));
-            for (EnumAttachmentType type : EnumAttachmentType.VALUES)
+            for(EnumAttachmentType type : EnumAttachmentType.VALUES)
             {
-                if (this.isSlotAvailable(type))
+                if(this.isSlotAvailable(type))
                 {
                     attachment = this.getAttachment(itemStack, type);
                     
-                    if (attachment != null)
+                    if(attachment != null)
                     {
                         list.add(new StringTextComponent(attachment.getInformationString().getFormattedText() + ItemGun.getSlotDisplaySuffix(type)));
                     }
@@ -728,20 +728,20 @@ public class ItemGun extends Item
     @Override
     public double getDurabilityForDisplay(ItemStack stack)
     {
-        if (this.getNBTIsReloading(stack))
+        if(this.getNBTIsReloading(stack))
         {
             EnumReloadType type = this.getNBTCurrentReloadType(stack);
             
-            if (type == EnumReloadType.BOLT)
+            if(type == EnumReloadType.BOLT)
             {
-                return (double) this.getNBTCurrentReloadTime(stack) / this.getBaseFireRate();
+                return (double)this.getNBTCurrentReloadTime(stack) / this.getBaseFireRate();
             }
             
-            return (double) this.getNBTCurrentReloadTime(stack) / this.calcCurrentReloadTime(this.getCurrentAttachments(stack));
+            return (double)this.getNBTCurrentReloadTime(stack) / this.calcCurrentReloadTime(this.getCurrentAttachments(stack));
         }
         else
         {
-            return 1D - (double) this.getNBTCurrentAmmo(stack) / this.calcCurrentMaxAmmo(this.getCurrentAttachments(stack));
+            return 1D - (double)this.getNBTCurrentAmmo(stack) / this.calcCurrentMaxAmmo(this.getCurrentAttachments(stack));
         }
     }
     
@@ -755,13 +755,13 @@ public class ItemGun extends Item
     {
         ItemStack item;
         
-        for (Hand hand : hands)
+        for(Hand hand : hands)
         {
             item = player.getHeldItem(hand);
             
-            if (item.getItem() instanceof ItemGun)
+            if(item.getItem() instanceof ItemGun)
             {
-                ((ItemGun) item.getItem()).tryShootOrReload(player, hand, item, aiming, player.getMotion().lengthSquared() > 0, inaccuracy);
+                ((ItemGun)item.getItem()).tryShootOrReload(player, hand, item, aiming, player.getMotion().lengthSquared() > 0, inaccuracy);
             }
         }
     }

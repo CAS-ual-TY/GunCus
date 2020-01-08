@@ -15,11 +15,11 @@ import net.minecraft.item.MerchantOffer;
 public class RandomTradeBuilder
 {
     /** 0-4 = Arms Dealer Levels ; 5 = Wanderer ; 6 = Wanderer Rare */
-    private static final ArrayList<ArrayList<RandomTradeBuilder>> TRADES_LIST = new ArrayList<ArrayList<RandomTradeBuilder>>();
+    private static final ArrayList<ArrayList<RandomTradeBuilder>> TRADES_LIST = new ArrayList<>();
     
     static
     {
-        for (int i = 0; i <= 6; ++i)
+        for(int i = 0; i <= 6; ++i)
         {
             RandomTradeBuilder.TRADES_LIST.add(new ArrayList<RandomTradeBuilder>());
         }
@@ -39,11 +39,11 @@ public class RandomTradeBuilder
     {
         ArrayList<RandomTradeBuilder> list;
         
-        for (int i = 1; i <= 5; ++i)
+        for(int i = 1; i <= 5; ++i)
         {
             list = RandomTradeBuilder.TRADES_LIST.get(i - 1);
             
-            for (RandomTradeBuilder tradeBuilder : list)
+            for(RandomTradeBuilder tradeBuilder : list)
             {
                 consumer.accept(i, tradeBuilder);
             }
@@ -59,7 +59,7 @@ public class RandomTradeBuilder
     {
         ArrayList<RandomTradeBuilder> list = RandomTradeBuilder.TRADES_LIST.get(5);
         
-        for (RandomTradeBuilder tradeBuilder : list)
+        for(RandomTradeBuilder tradeBuilder : list)
         {
             consumer.accept(tradeBuilder);
         }
@@ -69,7 +69,7 @@ public class RandomTradeBuilder
     {
         ArrayList<RandomTradeBuilder> list = RandomTradeBuilder.TRADES_LIST.get(6);
         
-        for (RandomTradeBuilder tradeBuilder : list)
+        for(RandomTradeBuilder tradeBuilder : list)
         {
             consumer.accept(tradeBuilder);
         }
@@ -85,7 +85,7 @@ public class RandomTradeBuilder
     
     protected boolean rare;
     
-    public RandomTradeBuilder(int maxTrades, int xp, float priceMult)
+    public RandomTradeBuilder(int maxTrades,int xp,float priceMult)
     {
         this.price = null;
         this.price2 = (random) -> ItemStack.EMPTY;

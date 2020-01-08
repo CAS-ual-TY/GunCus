@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 public class ItemBullet extends Item
 {
-    public static final ArrayList<ItemBullet> BULLETS_LIST = new ArrayList<ItemBullet>();
+    public static final ArrayList<ItemBullet> BULLETS_LIST = new ArrayList<>();
     
     protected float extraDamage;
     protected float gravity;
