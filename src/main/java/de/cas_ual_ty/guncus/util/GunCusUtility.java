@@ -20,6 +20,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.PointOfInterestType;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class GunCusUtility
 {
@@ -27,15 +28,7 @@ public class GunCusUtility
     
     static
     {
-        try
-        {
-            GunCusUtility.blockStatesInjector = PointOfInterestType.class.getDeclaredMethod("func_221052_a", PointOfInterestType.class);
-            GunCusUtility.blockStatesInjector.setAccessible(true);
-        }
-        catch (NoSuchMethodException | SecurityException e)
-        {
-            e.printStackTrace();
-        }
+        GunCusUtility.blockStatesInjector = ObfuscationReflectionHelper.findMethod(PointOfInterestType.class, "func_221052_a", PointOfInterestType.class);
     }
     
     public static final Hand[] HANDS = Hand.values();
@@ -77,11 +70,6 @@ public class GunCusUtility
     public static Set<BlockState> getAllStates(Block block)
     {
         return ImmutableSet.copyOf(block.getStateContainer().getValidStates());
-    }
-    
-    public static Int2ObjectMap<VillagerTrades.ITrade[]> createTradesMap(ImmutableMap<Integer, VillagerTrades.ITrade[]> trades)
-    {
-        return new Int2ObjectOpenHashMap<>(trades);
     }
     
     public static void fixPOITypeBlockStates(PointOfInterestType poiType)
