@@ -14,7 +14,6 @@ import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import de.cas_ual_ty.guncus.item.attachments.Paint;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -197,7 +196,7 @@ public class BakedModelGunFinalized implements IBakedModel
     {
         if(transformType == TransformType.FIRST_PERSON_RIGHT_HAND)
         {
-            PlayerEntity entityPlayer = Minecraft.getInstance().player;
+            PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
             
             if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty() && ProxyClient.BUTTON_AIM_DOWN.get())
             {

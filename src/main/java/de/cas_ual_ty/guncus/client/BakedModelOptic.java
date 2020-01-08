@@ -9,7 +9,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -84,7 +83,7 @@ public class BakedModelOptic implements IBakedModel
     {
         if(transformType == TransformType.FIRST_PERSON_RIGHT_HAND)
         {
-            PlayerEntity entityPlayer = Minecraft.getInstance().player;
+            PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
             
             if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof Optic && ProxyClient.BUTTON_AIM_DOWN.get())
             {

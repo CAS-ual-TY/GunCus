@@ -29,6 +29,7 @@ import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -65,8 +66,8 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class ProxyClient implements IProxy
 {
-    public static final Supplier<KeyBinding> BUTTON_AIM = () -> Minecraft.getInstance().gameSettings.keyBindUseItem;
-    public static final Supplier<KeyBinding> BUTTON_SHOOT = () -> Minecraft.getInstance().gameSettings.keyBindAttack;
+    public static final Supplier<KeyBinding> BUTTON_AIM = () -> ProxyClient.getMC().gameSettings.keyBindUseItem;
+    public static final Supplier<KeyBinding> BUTTON_SHOOT = () -> ProxyClient.getMC().gameSettings.keyBindAttack;
     public static final Supplier<Boolean> BUTTON_AIM_DOWN = () -> ProxyClient.BUTTON_AIM.get().isKeyDown();
     public static final Supplier<Boolean> BUTTON_SHOOT_DOWN = () -> ProxyClient.BUTTON_SHOOT.get().isKeyDown();
     
@@ -374,6 +375,8 @@ public class ProxyClient implements IProxy
     public void renderGameOverlay(RenderGameOverlayEvent event)
     {
         PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+        ItemStack itemStack;
+        ItemGun gun;
         
         if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
         {
@@ -383,8 +386,8 @@ public class ProxyClient implements IProxy
             {
                 if(entityPlayer.getHeldItemOffhand().isEmpty())
                 {
-                    ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                    ItemGun gun = (ItemGun)itemStack.getItem();
+                    itemStack = entityPlayer.getHeldItemMainhand();
+                    gun = (ItemGun)itemStack.getItem();
                     
                     if(gun.getNBTCanAimGun(itemStack))
                     {
@@ -411,6 +414,35 @@ public class ProxyClient implements IProxy
             
             // ---
             
+            Accessory accessory;
+            Vec3d start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
+            Vec3d end;
+            Vec3d hit;
+            
+            for(Hand hand : GunCusUtility.HANDS)
+            {
+                accessory = null;
+                itemStack = entityPlayer.getHeldItem(hand);
+                
+                if(itemStack.getItem() instanceof ItemGun)
+                {
+                    gun = (ItemGun)itemStack.getItem();
+                    accessory = gun.getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                    
+                    if(accessory.getLaser() != null && accessory.getLaser().isRangeFinder())
+                    {
+                        end = start.add(entityPlayer.getLookVec().normalize().scale(accessory.getLaser().getMaxRange()));
+                        hit = ProxyClient.findHit(entityPlayer.world, entityPlayer, start, end);
+                        
+                        hit = hit.subtract(start);
+                        
+                        ProxyClient.drawRangeFinder(event.getWindow(), hand, hit.length());
+                    }
+                }
+            }
+            
+            // ---
+            
             if(ProxyClient.hitmarkerTick > 0)
             {
                 ProxyClient.drawHitmarker(event.getWindow());
@@ -421,6 +453,19 @@ public class ProxyClient implements IProxy
     public static void drawSight(Optic optic, MainWindow sr)
     {
         ProxyClient.drawDrawFullscreenImage(optic.getOverlay(), 1024, 256, sr);
+    }
+    
+    public static void drawRangeFinder(MainWindow sr, Hand hand, double range)
+    {
+        ProxyClient.drawRangeFinder(sr, hand, (int)range + "");
+    }
+    
+    public static void drawRangeFinder(MainWindow sr, Hand hand, String text)
+    {
+        FontRenderer font = ProxyClient.getMC().fontRenderer;
+        int off = font.getStringWidth(text) / 2 + (hand == Hand.OFF_HAND ? -8 : 8);
+        
+        font.drawString(text, sr.getWidth() / 2 + off, sr.getHeight() / 2, 0x00FFFFFF);
     }
     
     public static void drawHitmarker(MainWindow sr)
@@ -439,7 +484,7 @@ public class ProxyClient implements IProxy
         GlStateManager.color4f(1F, 1F, 1F, 1F);
         GlStateManager.disableAlphaTest();
         
-        Minecraft.getInstance().getTextureManager().bindTexture(rl);
+        ProxyClient.getMC().getTextureManager().bindTexture(rl);
         
         double x = sr.getScaledWidth();
         double y = sr.getScaledHeight();
@@ -692,9 +737,14 @@ public class ProxyClient implements IProxy
         return result;
     }
     
+    public static Minecraft getMC()
+    {
+        return Minecraft.getInstance();
+    }
+    
     @Nullable
     public static PlayerEntity getClientPlayer()
     {
-        return Minecraft.getInstance().player;
+        return ProxyClient.getMC().player;
     }
 }
