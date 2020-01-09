@@ -2,8 +2,10 @@ package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.container.ContainerGunTable;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.Items;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -18,9 +20,9 @@ public class GunCusContainerTypes
     public static final ContainerType<ContainerGunTable> GUN_TABLE = null;
     
     @SubscribeEvent
-    public static void registerContainerTypes(Register<ContainerType<? extends Container>> event)
+    public static void registerContainerTypes(Register<ContainerType<?>> event)
     {
-        IForgeRegistry<ContainerType<? extends Container>> registry = event.getRegistry();
+        IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
         
         registry.register(new ContainerType<>(ContainerGunTable::new).setRegistryName(GunCus.MOD_ID, "gun_table"));
     }
