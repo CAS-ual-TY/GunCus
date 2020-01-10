@@ -92,7 +92,7 @@ public class ProxyClient implements IProxy
     {
         bus.addListener(this::clientTick);
         bus.addListener(this::fovUpdate);
-        bus.addListener(this::renderGameOverlay);
+        bus.addListener(this::renderGameOverlayPre);
         bus.addListener(this::renderWorldLast);
     }
     
@@ -372,7 +372,7 @@ public class ProxyClient implements IProxy
         return (float)Math.atan(Math.tan(fov) / zoom);
     }
     
-    public void renderGameOverlay(RenderGameOverlayEvent event)
+    public void renderGameOverlayPre(RenderGameOverlayEvent.Pre event)
     {
         PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
         ItemStack itemStack;
@@ -421,23 +421,30 @@ public class ProxyClient implements IProxy
             
             for(Hand hand : GunCusUtility.HANDS)
             {
-                accessory = null;
                 itemStack = entityPlayer.getHeldItem(hand);
                 
                 if(itemStack.getItem() instanceof ItemGun)
                 {
                     gun = (ItemGun)itemStack.getItem();
                     accessory = gun.getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                }
+                else if(itemStack.getItem() instanceof Accessory)
+                {
+                    accessory = (Accessory)itemStack.getItem();
+                }
+                else
+                {
+                    accessory = (Accessory)EnumAttachmentType.ACCESSORY.getDefault();
+                }
+                
+                if(accessory.getLaser() != null && accessory.getLaser().isRangeFinder())
+                {
+                    end = start.add(entityPlayer.getLookVec().normalize().scale(accessory.getLaser().getMaxRange()));
+                    hit = ProxyClient.findHit(entityPlayer.world, entityPlayer, start, end);
                     
-                    if(accessory.getLaser() != null && accessory.getLaser().isRangeFinder())
-                    {
-                        end = start.add(entityPlayer.getLookVec().normalize().scale(accessory.getLaser().getMaxRange()));
-                        hit = ProxyClient.findHit(entityPlayer.world, entityPlayer, start, end);
-                        
-                        hit = hit.subtract(start);
-                        
-                        ProxyClient.drawRangeFinder(event.getWindow(), hand, hit.length());
-                    }
+                    hit = hit.subtract(start);
+                    
+                    ProxyClient.drawRangeFinder(event.getWindow(), hand, hit.length());
                 }
             }
             
@@ -462,10 +469,18 @@ public class ProxyClient implements IProxy
     
     public static void drawRangeFinder(MainWindow sr, Hand hand, String text)
     {
-        FontRenderer font = ProxyClient.getMC().fontRenderer;
-        int off = font.getStringWidth(text) / 2 + (hand == Hand.OFF_HAND ? -8 : 8);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.color4f(1F, 1F, 1F, 1F);
         
-        font.drawString(text, sr.getWidth() / 2 + off, sr.getHeight() / 2, 0x00FFFFFF);
+        int off = 8;
+        FontRenderer font = ProxyClient.getMC().fontRenderer;
+        off = hand == Hand.OFF_HAND ? -(font.getStringWidth(text) + 1 + off) : off;
+        
+        font.drawStringWithShadow(text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
+        
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
     }
     
     public static void drawHitmarker(MainWindow sr)
