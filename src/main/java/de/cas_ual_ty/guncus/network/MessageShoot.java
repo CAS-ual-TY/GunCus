@@ -14,7 +14,7 @@ public class MessageShoot
     public int inaccuracy;
     public int handsInt;
     
-    public MessageShoot(boolean aiming,int inaccuracy,int handsInt)
+    public MessageShoot(boolean aiming, int inaccuracy, int handsInt)
     {
         this.aiming = aiming;
         this.inaccuracy = inaccuracy;

@@ -14,7 +14,7 @@ public class SlotAttachment extends Slot
     public final EnumAttachmentType type;
     public final PlayerEntity player;
     
-    public SlotAttachment(IInventory inventoryIn,int index,int xPosition,int yPosition,SlotGun gunSlot,EnumAttachmentType type,PlayerEntity player)
+    public SlotAttachment(IInventory inventoryIn, int index, int xPosition, int yPosition, SlotGun gunSlot, EnumAttachmentType type, PlayerEntity player)
     {
         super(inventoryIn, index, xPosition, yPosition);
         this.gunSlot = gunSlot;

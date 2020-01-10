@@ -18,7 +18,7 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
 {
     public static final ResourceLocation GUN_TABLE_GUI_TEXTURES = new ResourceLocation(GunCus.MOD_ID, "textures/gui/container/gun_table.png");
     
-    public GuiContainerGunTable(ContainerGunTable screenContainer,PlayerInventory inv,ITextComponent titleIn)
+    public GuiContainerGunTable(ContainerGunTable screenContainer, PlayerInventory inv, ITextComponent titleIn)
     {
         super(screenContainer, inv, titleIn);
     }

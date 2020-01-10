@@ -28,7 +28,7 @@ public class ContainerGunTable extends Container
     protected BlockPos pos;
     protected IWorldPosCallable worldPosCallable;
     
-    public ContainerGunTable(int windowId,PlayerInventory playerInv)
+    public ContainerGunTable(int windowId, PlayerInventory playerInv)
     {
         super(GunCusContainerTypes.GUN_TABLE, windowId);
         
@@ -65,14 +65,14 @@ public class ContainerGunTable extends Container
         }
     }
     
-    public ContainerGunTable(int windowId,PlayerInventory playerInv,BlockPos pos)
+    public ContainerGunTable(int windowId, PlayerInventory playerInv, BlockPos pos)
     {
         this(windowId, playerInv);
         this.pos = pos;
         this.worldPosCallable = IWorldPosCallable.of(this.player.world, this.pos);
     }
     
-    public ContainerGunTable(int windowId,PlayerInventory playerInv,PacketBuffer extraData)
+    public ContainerGunTable(int windowId, PlayerInventory playerInv, PacketBuffer extraData)
     {
         this(windowId, playerInv, extraData.readBlockPos());
     }

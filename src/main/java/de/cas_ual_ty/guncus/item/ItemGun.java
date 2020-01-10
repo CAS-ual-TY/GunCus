@@ -65,7 +65,7 @@ public class ItemGun extends Item
     
     public ItemGroupGun gunTab;
     
-    public ItemGun(Properties properties,int fireRate,int maxAmmo,float baseDamage,Supplier<ItemBullet> bullet)
+    public ItemGun(Properties properties, int fireRate, int maxAmmo, float baseDamage, Supplier<ItemBullet> bullet)
     {
         super(properties);
         

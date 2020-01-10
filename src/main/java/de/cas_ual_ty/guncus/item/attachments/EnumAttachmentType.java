@@ -27,7 +27,7 @@ public enum EnumAttachmentType
     private final int y;
     private final ItemAttachment _default;
     
-    private EnumAttachmentType(String key,int slot,int x,int y,ItemAttachment _default)
+    private EnumAttachmentType(String key, int slot, int x, int y, ItemAttachment _default)
     {
         this.key = key;
         this.slot = slot;

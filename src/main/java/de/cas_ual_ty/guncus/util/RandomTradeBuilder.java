@@ -85,7 +85,7 @@ public class RandomTradeBuilder
     
     protected boolean rare;
     
-    public RandomTradeBuilder(int maxTrades,int xp,float priceMult)
+    public RandomTradeBuilder(int maxTrades, int xp, float priceMult)
     {
         this.price = null;
         this.price2 = (random) -> ItemStack.EMPTY;

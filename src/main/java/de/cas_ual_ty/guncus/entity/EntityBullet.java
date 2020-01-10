@@ -24,12 +24,12 @@ public class EntityBullet extends ThrowableEntity
     protected static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityBullet.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> GRAVITY = EntityDataManager.createKey(EntityBullet.class, DataSerializers.FLOAT);
     
-    public EntityBullet(EntityType<EntityBullet> type,World worldIn)
+    public EntityBullet(EntityType<EntityBullet> type, World worldIn)
     {
         super(type, worldIn);
     }
     
-    public EntityBullet(EntityType<EntityBullet> type,LivingEntity livingEntityIn,World worldIn)
+    public EntityBullet(EntityType<EntityBullet> type, LivingEntity livingEntityIn, World worldIn)
     {
         super(type, livingEntityIn, worldIn);
     }

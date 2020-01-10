@@ -49,7 +49,7 @@ public class Accessory extends ItemAttachment
         protected boolean isPoint;
         protected boolean isRangeFinder;
         
-        public Laser(float r,float g,float b,double maxRange,boolean isBeam,boolean isPoint,boolean isRangeFinder)
+        public Laser(float r, float g, float b, double maxRange, boolean isBeam, boolean isPoint, boolean isRangeFinder)
         {
             this.r = r;
             this.g = g;

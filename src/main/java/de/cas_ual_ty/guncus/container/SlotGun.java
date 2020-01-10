@@ -10,7 +10,7 @@ public class SlotGun extends Slot
 {
     public final PlayerEntity player;
     
-    public SlotGun(IInventory inventoryIn,int index,int xPosition,int yPosition,PlayerEntity player)
+    public SlotGun(IInventory inventoryIn, int index, int xPosition, int yPosition, PlayerEntity player)
     {
         super(inventoryIn, index, xPosition, yPosition);
         this.player = player;

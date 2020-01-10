@@ -30,7 +30,7 @@ public class BakedModelGunFinalized implements IBakedModel
     private final IBakedModel[][] attachmentModels;
     private ItemStack itemStack;
     
-    public BakedModelGunFinalized(IBakedModel modelMain,IBakedModel[][] attachmentModels,Matrix4f aimMatrix)
+    public BakedModelGunFinalized(IBakedModel modelMain, IBakedModel[][] attachmentModels, Matrix4f aimMatrix)
     {
         this.modelMain = modelMain;
         this.attachmentModels = attachmentModels;

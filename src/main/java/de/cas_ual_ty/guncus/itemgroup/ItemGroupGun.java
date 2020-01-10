@@ -13,7 +13,7 @@ public class ItemGroupGun extends ItemGroupShuffle
 {
     protected final ItemGun gun;
     
-    public ItemGroupGun(String label,ItemGun gun)
+    public ItemGroupGun(String label, ItemGun gun)
     {
         super(label);
         this.gun = gun;

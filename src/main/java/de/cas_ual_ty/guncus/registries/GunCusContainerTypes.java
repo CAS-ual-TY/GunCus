@@ -2,10 +2,7 @@ package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.container.ContainerGunTable;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Items;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

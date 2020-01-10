@@ -23,7 +23,7 @@ public abstract class ItemGroupShuffle extends ItemGroup
         this(label, new Random());
     }
     
-    public ItemGroupShuffle(String label,Random random)
+    public ItemGroupShuffle(String label, Random random)
     {
         super(label);
         this.items = NonNullList.create();

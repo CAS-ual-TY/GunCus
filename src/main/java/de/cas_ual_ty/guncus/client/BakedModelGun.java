@@ -28,7 +28,7 @@ public class BakedModelGun implements IBakedModel
     private final BakedModelGunFinalized modelFinal;
     private final ItemOverrideListGCI overridesList;
     
-    public BakedModelGun(IBakedModel modelMain,IBakedModel[][] attachmentModels,Matrix4f aimMatrix)
+    public BakedModelGun(IBakedModel modelMain, IBakedModel[][] attachmentModels, Matrix4f aimMatrix)
     {
         this.modelMain = modelMain;
         this.modelFinal = new BakedModelGunFinalized(this.modelMain, attachmentModels, aimMatrix);
