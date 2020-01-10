@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 public class EntityBullet extends ThrowableEntity
 {
     public static final float BASE_SPEED = 20F;
-    public static final int TICKS = 5;
+    public static final int TICKS = 10;
     
     protected static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityBullet.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> GRAVITY = EntityDataManager.createKey(EntityBullet.class, DataSerializers.FLOAT);
@@ -116,7 +116,7 @@ public class EntityBullet extends ThrowableEntity
     @Override
     protected float getGravityVelocity()
     {
-        return super.getGravityVelocity() * this.getBulletGravity();
+        return super.getGravityVelocity() * this.getBulletGravity() / TICKS;
     }
     
     protected float getBulletDamage()
