@@ -27,8 +27,8 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         String text = this.title.getFormattedText();
-        this.font.drawString(text, (float)(this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
+        this.font.drawString(text, (float)(this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 0x404040);
+        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 0x404040);
         
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GuiContainerGunTable.GUN_TABLE_GUI_TEXTURES);
