@@ -116,7 +116,7 @@ public class EntityBullet extends ThrowableEntity
     @Override
     protected float getGravityVelocity()
     {
-        return super.getGravityVelocity() * this.getBulletGravity() / TICKS;
+        return super.getGravityVelocity() * this.getBulletGravity() / EntityBullet.TICKS;
     }
     
     protected float getBulletDamage()
