@@ -25,7 +25,7 @@ public class ItemGroupGun extends ItemGroupShuffle
     {
         super.fill(items);
         
-        if(GunCus.fullCreativeTabs)
+        if(GunCus.FULL_CREATIVE_TABS)
         {
             items.addAll(GunCusUtility.createAllVariants(this.gun));
         }
@@ -68,6 +68,6 @@ public class ItemGroupGun extends ItemGroupShuffle
     @Override
     public ItemStack shuffle()
     {
-        return GunCus.fullCreativeTabs ? super.shuffle() : this.icon;
+        return GunCus.FULL_CREATIVE_TABS ? super.shuffle() : this.icon;
     }
 }
