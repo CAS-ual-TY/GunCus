@@ -138,6 +138,7 @@ public class ContainerGunTable extends Container
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
     {
+        /* TODO fix transferStackInSlot: You can shift click more than 1 attachment right now into the slots.
         Slot slot = this.getSlot(index);
         ItemStack itemStack = slot.getStack();
         
@@ -169,6 +170,7 @@ public class ContainerGunTable extends Container
                 slot.putStack(ItemStack.EMPTY);
             }
         }
+        */
         
         return ItemStack.EMPTY;
     }
