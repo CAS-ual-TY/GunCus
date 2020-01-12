@@ -1,6 +1,5 @@
 package de.cas_ual_ty.guncus.container;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
 import de.cas_ual_ty.guncus.item.ItemGun;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.registries.GunCusBlocks;

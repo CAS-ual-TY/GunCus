@@ -17,7 +17,7 @@ public class ItemGroupGunCus extends ItemGroupShuffle
         super(GunCus.MOD_ID, new Random(1776));
     }
     
-//    @Override
+    //    @Override
     public void fill2(NonNullList<ItemStack> items)
     {
         // TODO info book
@@ -34,7 +34,6 @@ public class ItemGroupGunCus extends ItemGroupShuffle
         nbt.put("author", new StringNBT("CAS_ual_TY"));
         
         items.add(stack);
-        
         
         super.fill(items);
     }
