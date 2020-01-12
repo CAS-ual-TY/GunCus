@@ -61,6 +61,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
@@ -527,6 +528,13 @@ public class ProxyClient implements IProxy
     {
         PlayerEntity clientPlayer = ProxyClient.getClientPlayer();
         
+        Vec3d view = Vec3d.ZERO;
+        
+        if(getMC().getRenderViewEntity() != null)
+        {
+            getMC().getRenderViewEntity().getPositionVec();
+        }
+        
         if(clientPlayer != null)
         {
             World world = clientPlayer.world;
@@ -580,8 +588,8 @@ public class ProxyClient implements IProxy
                             
                             end = ProxyClient.findHit(world, entityPlayer, start, end);
                             
-                            start = start.subtract(clientPos);
-                            end = end.subtract(clientPos);
+                            start = start.subtract(view);
+                            end = end.subtract(view);
                             
                             GlStateManager.disableTexture();
                             
@@ -687,12 +695,12 @@ public class ProxyClient implements IProxy
     
     private static boolean tmpHitNothing = false;
     
-    public static Vec3d findHit(World world, PlayerEntity entityPlayer, Vec3d start, Vec3d end)
+    public static Vec3d findHit(World world, Entity entity, Vec3d start, Vec3d end)
     {
         ProxyClient.tmpHitNothing = false;
         
-        BlockRayTraceResult resultBlock = ProxyClient.findBlockOnPath(world, entityPlayer, start, end);
-        EntityRayTraceResult resultEntity = ProxyClient.findEntityOnPath(world, entityPlayer, start, end);
+        BlockRayTraceResult resultBlock = ProxyClient.findBlockOnPath(world, entity, start, end);
+        EntityRayTraceResult resultEntity = ProxyClient.findEntityOnPath(world, entity, start, end);
         
         if(resultEntity != null)
         {
@@ -716,12 +724,12 @@ public class ProxyClient implements IProxy
         }
     }
     
-    public static BlockRayTraceResult findBlockOnPath(World world, PlayerEntity entityPlayer, Vec3d start, Vec3d end)
+    public static BlockRayTraceResult findBlockOnPath(World world, Entity entity, Vec3d start, Vec3d end)
     {
-        return world.rayTraceBlocks(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, entityPlayer));
+        return world.rayTraceBlocks(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, entity));
     }
     
-    public static EntityRayTraceResult findEntityOnPath(World world, PlayerEntity entityPlayer, Vec3d start, Vec3d end)
+    public static EntityRayTraceResult findEntityOnPath(World world, Entity entity0, Vec3d start, Vec3d end)
     {
         EntityRayTraceResult result = null;
         Optional<Vec3d> opt;
@@ -729,9 +737,9 @@ public class ProxyClient implements IProxy
         double rangeSq = 0;
         double currentRangeSq;
         
-        for(Entity entity : world.getEntitiesInAABBexcluding(entityPlayer, GunCusUtility.aabbFromVec3ds(start, end), (entity1) -> true))
+        for(Entity entity : world.getEntitiesInAABBexcluding(entity0, GunCusUtility.aabbFromVec3ds(start, end), (entity1) -> true))
         {
-            if(entity != null && (entity.getEntityId() != entityPlayer.getEntityId()) && !(entity instanceof EntityBullet))
+            if(entity != null && (entity.getEntityId() != entity0.getEntityId()) && !(entity instanceof EntityBullet))
             {
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(0.30000001192092896D);
                 
