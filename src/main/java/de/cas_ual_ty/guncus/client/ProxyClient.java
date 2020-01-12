@@ -61,8 +61,8 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class ProxyClient implements IProxy
@@ -84,6 +84,7 @@ public class ProxyClient implements IProxy
     @Override
     public void registerModEventListeners(IEventBus bus)
     {
+        bus.addListener(this::clientSetup);
         bus.addListener(this::modelBake);
         bus.addListener(this::modelRegistry);
     }
@@ -121,6 +122,11 @@ public class ProxyClient implements IProxy
         int fireRate = gun.calcCurrentFireRate(gun.getCurrentAttachments(itemStack));
         ProxyClient.shootTime[hand == Hand.MAIN_HAND ? 0 : 1] = fireRate;
         ProxyClient.inaccuracyTime = Math.min(15, ProxyClient.inaccuracyTime + 2 + fireRate);
+    }
+    
+    public void clientSetup(FMLClientSetupEvent event)
+    {
+        // TODO
     }
     
     public void modelBake(ModelBakeEvent event)
@@ -526,89 +532,99 @@ public class ProxyClient implements IProxy
     
     public void renderWorldLast(RenderWorldLastEvent event)
     {
-        PlayerEntity clientPlayer = ProxyClient.getClientPlayer();
+        GlStateManager.pushMatrix();
         
-        Vec3d view = Vec3d.ZERO;
+        //        PlayerEntity clientPlayer = ProxyClient.getClientPlayer();
         
-        if(getMC().getRenderViewEntity() != null)
+        if(ProxyClient.getMC().getRenderViewEntity() != null)
         {
-            getMC().getRenderViewEntity().getPositionVec();
+            Vec3d projectedView = ProxyClient.getMC().getRenderViewEntity().getEyePosition(1F);
+            GlStateManager.translated(-projectedView.x, -projectedView.y, -projectedView.z);
+            
+            // Other possibilities
+            //            view = getMC().getRenderViewEntity().getPositionVec().add(0, getMC().getRenderViewEntity().getEyeHeight(), 0);
+            //            view = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
         }
         
-        if(clientPlayer != null)
+        if(ProxyClient.getMC().getRenderViewEntity() != null)
         {
-            World world = clientPlayer.world;
+            World world = ProxyClient.getMC().getRenderViewEntity().world;
             
-            ItemStack itemStack;
-            ItemGun gun;
-            Accessory accessory;
-            Laser laser;
-            
-            Vec3d start;
-            Vec3d end;
-            
-            Vec3d clientPos = new Vec3d(clientPlayer.posX, clientPlayer.posY + clientPlayer.getEyeHeight(), clientPlayer.posZ);
-            Vec3d clientLook = clientPlayer.getLookVec().normalize();
-            Vec3d handOff;
-            
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder b = tessellator.getBuffer();
-            
-            for(PlayerEntity entityPlayer : world.getPlayers())
+            for(PlayerEntity player : world.getPlayers())
             {
-                if(entityPlayer.isAlive())
+                ItemStack itemStack;
+                ItemGun gun;
+                Accessory accessory;
+                Laser laser;
+                
+                Vec3d start;
+                Vec3d end;
+                
+                Vec3d playerPos = player.getEyePosition(1F);
+                Vec3d playerLook = player.getLookVec().normalize();
+                Vec3d handOff;
+                
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder b = tessellator.getBuffer();
+                
+                for(PlayerEntity entityPlayer : world.getPlayers())
                 {
-                    for(Hand hand : GunCusUtility.HANDS)
+                    if(entityPlayer.isAlive())
                     {
-                        accessory = null;
-                        itemStack = entityPlayer.getHeldItem(hand);
-                        
-                        if(itemStack.getItem() instanceof ItemGun)
+                        for(Hand hand : GunCusUtility.HANDS)
                         {
-                            gun = (ItemGun)itemStack.getItem();
+                            accessory = null;
+                            itemStack = entityPlayer.getHeldItem(hand);
                             
-                            if(gun.isNBTAccessoryTurnedOn(itemStack))
+                            if(itemStack.getItem() instanceof ItemGun)
                             {
-                                accessory = gun.<Accessory> getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                                gun = (ItemGun)itemStack.getItem();
+                                
+                                if(gun.isNBTAccessoryTurnedOn(itemStack))
+                                {
+                                    accessory = gun.<Accessory> getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                                }
                             }
-                        }
-                        else if(itemStack.getItem() instanceof Accessory)
-                        {
-                            accessory = (Accessory)itemStack.getItem();
-                        }
-                        
-                        if(accessory != null && accessory.getLaser() != null)
-                        {
-                            laser = accessory.getLaser();
-                            
-                            handOff = ProxyClient.getOffsetForHand(entityPlayer, hand);
-                            
-                            start = clientPos.add(handOff);
-                            end = start.add(clientLook.scale(laser.getMaxRange()));
-                            
-                            end = ProxyClient.findHit(world, entityPlayer, start, end);
-                            
-                            start = start.subtract(view);
-                            end = end.subtract(view);
-                            
-                            GlStateManager.disableTexture();
-                            
-                            if(laser.isPoint() && !ProxyClient.tmpHitNothing)
+                            else if(itemStack.getItem() instanceof Accessory)
                             {
-                                ProxyClient.renderLaserPoint(b, tessellator, laser, start, end);
+                                accessory = (Accessory)itemStack.getItem();
                             }
                             
-                            if(laser.isBeam())
+                            if(accessory != null && accessory.getLaser() != null)
                             {
-                                ProxyClient.renderLaserBeam(b, tessellator, laser, start.add(ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw)), end);
+                                laser = accessory.getLaser();
+                                
+                                handOff = ProxyClient.getOffsetForHand(entityPlayer, hand);
+                                
+                                start = playerPos.add(handOff);
+                                end = start.add(playerLook.scale(laser.getMaxRange()));
+                                
+                                end = ProxyClient.findHit(world, entityPlayer, start, end);
+                                
+                                //                            start = start.subtract(view);
+                                //                            end = end.subtract(view);
+                                
+                                GlStateManager.disableTexture();
+                                
+                                if(laser.isPoint() && !ProxyClient.tmpHitNothing)
+                                {
+                                    ProxyClient.renderLaserPoint(b, tessellator, laser, start, end);
+                                }
+                                
+                                if(laser.isBeam())
+                                {
+                                    ProxyClient.renderLaserBeam(b, tessellator, laser, start.add(ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw)), end);
+                                }
+                                
+                                GlStateManager.enableTexture();
                             }
-                            
-                            GlStateManager.enableTexture();
                         }
                     }
                 }
             }
         }
+        
+        GlStateManager.popMatrix();
     }
     
     public static void renderLaserPoint(BufferBuilder b, Tessellator tessellator, Laser laser, Vec3d start, Vec3d end)
