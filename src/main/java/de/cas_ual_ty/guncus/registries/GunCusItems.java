@@ -29,6 +29,8 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder(GunCus.MOD_ID)
 public class GunCusItems
 {
+    public static final BlockItem GUN_TABLE = null;
+    
     public static final ItemBullet BULLET_5_56x45MM = null;
     public static final ItemBullet BULLET_5_45x39MM = null;
     public static final ItemBullet BULLET_7_62x51MM = null;
@@ -119,12 +121,12 @@ public class GunCusItems
     public static final ItemGun GUN_M27_IAR = null;
     public static final ItemGun GUN_SV98 = null;
     
-    public static final BlockItem GUN_TABLE = null;
-    
     @SubscribeEvent
     public static void registerItems(Register<Item> event)
     {
         IForgeRegistry<Item> registry = event.getRegistry();
+        
+        registry.register(new BlockItem(GunCusBlocks.GUN_TABLE, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_table"));
         
         registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1F).setDefaultTradeable(32).setRegistryName(GunCus.MOD_ID, "bullet_5_56x45mm"));
         registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1F).setDefaultTradeable(32).setRegistryName(GunCus.MOD_ID, "bullet_5_45x39mm"));
@@ -215,8 +217,6 @@ public class GunCusItems
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_7_62x51MM).setAttachments(() -> GunCusItems.assaultRifleLongAttachments()).createGunTab("gun_scar_h").setDefaultTradeable(32, 5).setRegistryName(GunCus.MOD_ID, "gun_scar_h"));
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m27_iar").setDefaultTradeable(32, 4).setRegistryName(GunCus.MOD_ID, "gun_m27_iar"));
         registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 25, 10, 7, () -> GunCusItems.BULLET_7_62x54MM).setAttachments(() -> GunCusItems.sniperRifleAttachments()).setSoundShoot(() -> GunCusSoundEvents.SHOOT_SNIPER).setBoltAction(() -> SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON).createGunTab("gun_sv98").setDefaultTradeable(32, 4).setRegistryName(GunCus.MOD_ID, "gun_sv98"));
-        
-        registry.register(new BlockItem(GunCusBlocks.GUN_TABLE, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_table"));
     }
     
     public static ItemAttachment[][] assaultRifleAttachments()
