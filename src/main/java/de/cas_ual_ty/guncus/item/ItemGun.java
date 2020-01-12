@@ -453,6 +453,9 @@ public class ItemGun extends Item
             }
         }
         
+        // TODO temporary until there is a proper bullet renderer
+        inaccuracy *= 0;
+        
         if(!entityPlayer.world.isRemote)
         {
             float rotationPitch;
@@ -469,7 +472,7 @@ public class ItemGun extends Item
                 bulletEntity = new EntityBullet(GunCusEntityTypes.BULLET, entityPlayer, entityPlayer.world);
                 bulletEntity.setPosition(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
                 bulletEntity.shoot(entityPlayer, rotationPitch, rotationYaw, 0, speed, 0);
-                bulletEntity.setGravity(bullet.getGravity());
+                bulletEntity.setGravity(0);//bullet.getGravity()); // TODO temporary until there is a proper bullet renderer
                 entityPlayer.world.addEntity(bulletEntity.setDamage(damage));
             }
             
