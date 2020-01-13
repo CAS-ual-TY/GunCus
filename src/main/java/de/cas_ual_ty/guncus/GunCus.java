@@ -61,9 +61,9 @@ public class GunCus
     public void init(FMLCommonSetupEvent event)
     {
         GunCus.channel = NetworkRegistry.newSimpleChannel(new ResourceLocation(GunCus.MOD_ID, "main"),
-                        () -> GunCus.PROTOCOL_VERSION,
-                        GunCus.PROTOCOL_VERSION::equals,
-                        GunCus.PROTOCOL_VERSION::equals);
+            () -> GunCus.PROTOCOL_VERSION,
+            GunCus.PROTOCOL_VERSION::equals,
+            GunCus.PROTOCOL_VERSION::equals);
         GunCus.channel.registerMessage(0, MessageShoot.class, MessageShoot::encode, MessageShoot::decode, MessageShoot::handle);
         GunCus.channel.registerMessage(1, MessageHitmarker.class, MessageHitmarker::encode, MessageHitmarker::decode, MessageHitmarker::handle);
         
