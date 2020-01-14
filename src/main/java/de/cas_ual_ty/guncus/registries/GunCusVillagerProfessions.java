@@ -18,7 +18,7 @@ public class GunCusVillagerProfessions
     public static final VillagerProfession ARMS_DEALER = null;
     
     @SubscribeEvent
-    public static void registerProfessions(Register<VillagerProfession> event)
+    public static void registerVillagerProfessions(Register<VillagerProfession> event)
     {
         IForgeRegistry<VillagerProfession> registry = event.getRegistry();
         

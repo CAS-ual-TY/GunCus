@@ -18,7 +18,7 @@ public class GunCusEntityTypes
     public static final EntityType<EntityBullet> BULLET = null;
     
     @SubscribeEvent
-    public static void registerBlocks(Register<EntityType<?>> event)
+    public static void registerEntityTypes(Register<EntityType<?>> event)
     {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
         

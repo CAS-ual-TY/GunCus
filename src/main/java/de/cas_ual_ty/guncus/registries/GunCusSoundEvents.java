@@ -20,7 +20,7 @@ public class GunCusSoundEvents
     public static final SoundEvent SHOOT = null;
     
     @SubscribeEvent
-    public static void registerBlocks(Register<SoundEvent> event)
+    public static void registerSoundEvents(Register<SoundEvent> event)
     {
         IForgeRegistry<SoundEvent> registry = event.getRegistry();
         
