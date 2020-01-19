@@ -1,5 +1,6 @@
 package de.cas_ual_ty.guncus.container;
 
+import de.cas_ual_ty.guncus.item.ItemAttachment;
 import de.cas_ual_ty.guncus.item.ItemGun;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.registries.GunCusBlocks;
@@ -137,7 +138,6 @@ public class ContainerGunTable extends Container
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
     {
-        /* TODO fix transferStackInSlot: You can shift click more than 1 attachment right now into the slots.
         Slot slot = this.getSlot(index);
         ItemStack itemStack = slot.getStack();
         
@@ -157,8 +157,8 @@ public class ContainerGunTable extends Container
                 
                 if(this.attachmentSlots[attachment.getSlot()].isItemValid(itemStack))
                 {
-                    this.attachmentSlots[attachment.getSlot()].putStack(itemStack);
-                    slot.putStack(ItemStack.EMPTY);
+                    this.attachmentSlots[attachment.getSlot()].putStack(new ItemStack(attachment));
+                    itemStack.shrink(1);
                 }
             }
         }
@@ -169,7 +169,6 @@ public class ContainerGunTable extends Container
                 slot.putStack(ItemStack.EMPTY);
             }
         }
-        */
         
         return ItemStack.EMPTY;
     }
