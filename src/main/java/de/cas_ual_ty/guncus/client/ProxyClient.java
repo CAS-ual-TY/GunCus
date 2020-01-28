@@ -4,10 +4,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
@@ -32,6 +32,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -182,7 +183,9 @@ public class ProxyClient implements IProxy
             
             main = event.getModelRegistry().get(mrl); //Get the model of the gun
             
-            Matrix4f aimMatrix = event.getModelRegistry().get(new ModelResourceLocation(gun.getRegistryName().toString() + "/aim", "inventory")).handlePerspective(TransformType.FIRST_PERSON_RIGHT_HAND).getRight();
+            MatrixStack stack = new MatrixStack();
+            event.getModelRegistry().get(new ModelResourceLocation(gun.getRegistryName().toString() + "/aim", "inventory")).handlePerspective(TransformType.FIRST_PERSON_RIGHT_HAND, stack);
+            Matrix4f aimMatrix = stack.func_227866_c_().func_227870_a_();
             
             event.getModelRegistry().put(mrl, new BakedModelGun(main, models, aimMatrix)); //Replace model of the gun with custom IBakedModel and pass all the ItemAttachment models to it
         }
@@ -422,7 +425,7 @@ public class ProxyClient implements IProxy
             // ---
             
             Accessory accessory;
-            Vec3d start = new Vec3d(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
+            Vec3d start = new Vec3d(entityPlayer.func_226277_ct_(), entityPlayer.func_226279_cv_() + entityPlayer.getEyeHeight(), entityPlayer.func_226281_cx_());
             Vec3d end;
             Vec3d hit;
             

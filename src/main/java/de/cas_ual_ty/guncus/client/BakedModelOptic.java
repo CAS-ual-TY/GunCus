@@ -3,12 +3,14 @@ package de.cas_ual_ty.guncus.client;
 import java.util.List;
 import java.util.Random;
 
-import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -73,13 +75,19 @@ public class BakedModelOptic implements IBakedModel
     }
     
     @Override
+    public boolean func_230044_c_()
+    {
+        return this.modelMain.func_230044_c_();
+    }
+    
+    @Override
     public boolean isGui3d()
     {
         return this.modelMain.isGui3d();
     }
     
     @Override
-    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType transformType)
+    public IBakedModel handlePerspective(TransformType transformType, MatrixStack mat)
     {
         if(transformType == TransformType.FIRST_PERSON_RIGHT_HAND)
         {
@@ -92,11 +100,12 @@ public class BakedModelOptic implements IBakedModel
                 
                 if(optic != null && optic.canAim())
                 {
-                    return Pair.of(this, BakedModelGunFinalized.NULL_MATRIX);
+                    mat.func_227863_a_(Quaternion.field_227060_a_);
+                    return this;
                 }
             }
         }
         
-        return Pair.of(this, this.modelMain.handlePerspective(transformType).getRight());
+        return this.modelMain.handlePerspective(transformType, mat);
     }
 }

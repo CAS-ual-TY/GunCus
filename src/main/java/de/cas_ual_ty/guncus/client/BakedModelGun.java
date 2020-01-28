@@ -3,9 +3,8 @@ package de.cas_ual_ty.guncus.client;
 import java.util.List;
 import java.util.Random;
 
-import javax.vecmath.Matrix4f;
-
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
@@ -82,6 +81,12 @@ public class BakedModelGun implements IBakedModel
     public boolean isBuiltInRenderer()
     {
         return this.modelMain.isBuiltInRenderer();
+    }
+    
+    @Override
+    public boolean func_230044_c_()
+    {
+        return this.modelMain.func_230044_c_();
     }
     
     @Override
