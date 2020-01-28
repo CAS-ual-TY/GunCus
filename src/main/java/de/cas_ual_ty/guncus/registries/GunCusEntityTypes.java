@@ -22,6 +22,6 @@ public class GunCusEntityTypes
     {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
         
-        registry.register(EntityType.Builder.<EntityBullet> create(EntityBullet::new, EntityClassification.MISC).build("bullet").setRegistryName(GunCus.MOD_ID, "bullet"));
+        registry.register(EntityType.Builder.<EntityBullet>create(EntityBullet::new, EntityClassification.MISC).build("bullet").setRegistryName(GunCus.MOD_ID, "bullet"));
     }
 }

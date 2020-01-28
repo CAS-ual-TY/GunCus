@@ -280,7 +280,7 @@ public class ProxyClient implements IProxy
                         
                         if(gun.getNBTCanAimGun(itemStack))
                         {
-                            Optic optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                            Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                             aiming = optic.canAim();
                         }
                     }
@@ -341,12 +341,12 @@ public class ProxyClient implements IProxy
                         
                         if(gun.getNBTCanAimGun(itemStack))
                         {
-                            optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                            optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                         }
                         
                         if(optic != null && gun.isNBTAccessoryTurnedOn(itemStack) && !gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY).isDefault())
                         {
-                            Accessory accessory = gun.<Accessory> getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                            Accessory accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
                             
                             if(optic.isCompatibleWithMagnifiers())
                             {
@@ -398,7 +398,7 @@ public class ProxyClient implements IProxy
                     
                     if(gun.getNBTCanAimGun(itemStack))
                     {
-                        optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                        optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                     }
                 }
                 
@@ -582,7 +582,7 @@ public class ProxyClient implements IProxy
                                 
                                 if(gun.isNBTAccessoryTurnedOn(itemStack))
                                 {
-                                    accessory = gun.<Accessory> getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                                    accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
                                 }
                             }
                             else if(itemStack.getItem() instanceof Accessory)

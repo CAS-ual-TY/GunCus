@@ -72,7 +72,7 @@ public class BakedModelGunFinalized implements IBakedModel
         
         ItemGun gun = (ItemGun)this.itemStack.getItem();
         
-        Paint paint = gun.<Paint> getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT);
+        Paint paint = gun.<Paint>getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT);
         IBakedModel model;
         
         if(paint != null && paint.shouldLoadModel())
@@ -126,7 +126,7 @@ public class BakedModelGunFinalized implements IBakedModel
         
         ItemGun gun = (ItemGun)this.itemStack.getItem();
         
-        Paint paint = gun.<Paint> getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT);
+        Paint paint = gun.<Paint>getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT);
         IBakedModel model;
         
         if(paint != null && paint.shouldLoadModel())
@@ -203,7 +203,7 @@ public class BakedModelGunFinalized implements IBakedModel
                 ItemStack itemStack = entityPlayer.getHeldItemMainhand();
                 ItemGun gun = (ItemGun)itemStack.getItem();
                 
-                Optic optic = gun.<Optic> getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
                 
                 if(gun.getNBTCanAimGun(itemStack) && optic.canAim())
                 {
