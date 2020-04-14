@@ -25,7 +25,7 @@ public class BlockGunTable extends Block
     }
     
     @Override //onBlockActivated
-    public ActionResultType func_225533_a_(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
     {
         player.openContainer(state.getContainer(worldIn, pos));
         /*if (!worldIn.isRemote)

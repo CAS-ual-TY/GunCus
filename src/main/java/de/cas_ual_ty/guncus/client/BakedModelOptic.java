@@ -3,14 +3,10 @@ package de.cas_ual_ty.guncus.client;
 import java.util.List;
 import java.util.Random;
 
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -100,12 +96,14 @@ public class BakedModelOptic implements IBakedModel
                 
                 if(optic != null && optic.canAim())
                 {
-                    mat.func_227863_a_(Quaternion.field_227060_a_);
+                    mat.push();
+                    mat.scale(0, 0, 0);
                     return this;
                 }
             }
         }
         
-        return this.modelMain.handlePerspective(transformType, mat);
+        this.modelMain.handlePerspective(transformType, mat);
+        return this;
     }
 }

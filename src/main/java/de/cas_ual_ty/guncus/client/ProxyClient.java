@@ -1,6 +1,7 @@
 package de.cas_ual_ty.guncus.client;
 
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -11,6 +12,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.IProxy;
@@ -31,8 +34,12 @@ import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -76,6 +83,27 @@ public class ProxyClient implements IProxy
     public static final ResourceLocation HITMARKER_TEXTURE = new ResourceLocation(GunCus.MOD_ID, "textures/gui/hitmarker.png");
     
     public static final int HITMARKER_RESET = 4;
+    
+    // --- RENDER STUFF - COPIED FROM RenderType CLASS ---
+    
+    public static final RenderState.TransparencyState LASER_TRANSPARENCY = new RenderState.TransparencyState("laser_transparency", () ->
+    {
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+    }, () ->
+    {
+        RenderSystem.disableBlend();
+        RenderSystem.defaultBlendFunc();
+    });
+    
+    public static final RenderState.ShadeModelState SHADE_ENABLED = new RenderState.ShadeModelState(true);
+    public static final RenderState.WriteMaskState COLOR_WRITE = new RenderState.WriteMaskState(true, false);
+    
+    // Lightning Copied
+    public static final RenderType LASER_POINT = RenderType.makeType("laser_point", DefaultVertexFormats.POSITION_COLOR, GL11.GL_QUADS, 256, false, true, RenderType.State.getBuilder().writeMask(ProxyClient.COLOR_WRITE).transparency(ProxyClient.LASER_TRANSPARENCY).shadeModel(ProxyClient.SHADE_ENABLED).build(false));
+    public static final RenderType LASER_BEAM = RenderType.makeType("laser_beam", DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256, false, true, RenderType.State.getBuilder().line(new RenderState.LineState(OptionalDouble.empty())).writeMask(ProxyClient.COLOR_WRITE).transparency(ProxyClient.LASER_TRANSPARENCY).shadeModel(ProxyClient.SHADE_ENABLED).build(false));
+    
+    // --- RENDER STUFF END ---
     
     private static int hitmarkerTick = 0;
     private static int shootTime[] = new int[GunCusUtility.HANDS.length];
@@ -185,7 +213,7 @@ public class ProxyClient implements IProxy
             
             MatrixStack stack = new MatrixStack();
             event.getModelRegistry().get(new ModelResourceLocation(gun.getRegistryName().toString() + "/aim", "inventory")).handlePerspective(TransformType.FIRST_PERSON_RIGHT_HAND, stack);
-            Matrix4f aimMatrix = stack.func_227866_c_().func_227870_a_();
+            Matrix4f aimMatrix = stack.getLast().getMatrix();
             
             event.getModelRegistry().put(mrl, new BakedModelGun(main, models, aimMatrix)); //Replace model of the gun with custom IBakedModel and pass all the ItemAttachment models to it
         }
@@ -425,7 +453,7 @@ public class ProxyClient implements IProxy
             // ---
             
             Accessory accessory;
-            Vec3d start = new Vec3d(entityPlayer.func_226277_ct_(), entityPlayer.func_226279_cv_() + entityPlayer.getEyeHeight(), entityPlayer.func_226281_cx_());
+            Vec3d start = new Vec3d(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
             Vec3d end;
             Vec3d hit;
             
@@ -479,9 +507,9 @@ public class ProxyClient implements IProxy
     
     public static void drawRangeFinder(MainWindow sr, Hand hand, String text)
     {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
+        RenderSystem.pushMatrix();
+        RenderSystem.enableBlend();
+        RenderSystem.color4f(1F, 1F, 1F, 1F);
         
         int off = 8;
         FontRenderer font = ProxyClient.getMC().fontRenderer;
@@ -489,8 +517,8 @@ public class ProxyClient implements IProxy
         
         font.drawStringWithShadow(text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
         
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
+        RenderSystem.disableBlend();
+        RenderSystem.popMatrix();
     }
     
     public static void drawHitmarker(MainWindow sr)
@@ -500,14 +528,14 @@ public class ProxyClient implements IProxy
     
     public static void drawDrawFullscreenImage(ResourceLocation rl, int texWidth, int texHeight, MainWindow sr)
     {
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
         
-        GlStateManager.enableBlend();
-        GlStateManager.disableDepthTest();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color4f(1F, 1F, 1F, 1F);
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.color4f(1F, 1F, 1F, 1F);
+        RenderSystem.disableAlphaTest();
         
         ProxyClient.getMC().getTextureManager().bindTexture(rl);
         
@@ -519,35 +547,31 @@ public class ProxyClient implements IProxy
         
         b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         
-        b.pos(x * 0.5D - 2 * y, y, -90D).tex(0D, 1D).endVertex();
-        b.pos(x * 0.5D + 2 * y, y, -90D).tex(1D, 1D).endVertex();
-        b.pos(x * 0.5D + 2 * y, 0D, -90D).tex(1D, 0D).endVertex();
-        b.pos(x * 0.5D - 2 * y, 0D, -90D).tex(0D, 0D).endVertex();
+        b.pos(x * 0.5D - 2 * y, y, -90D).tex(0F, 1F).endVertex();
+        b.pos(x * 0.5D + 2 * y, y, -90D).tex(1F, 1F).endVertex();
+        b.pos(x * 0.5D + 2 * y, 0D, -90D).tex(1F, 0F).endVertex();
+        b.pos(x * 0.5D - 2 * y, 0D, -90D).tex(0F, 0F).endVertex();
         
         tessellator.draw();
         
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepthTest();
-        GlStateManager.enableAlphaTest();
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableAlphaTest();
         
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
     
     public void renderWorldLast(RenderWorldLastEvent event)
     {
-        GlStateManager.pushMatrix();
+        IRenderTypeBuffer.Impl b = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+        MatrixStack matrixStack = event.getMatrixStack();
         
-        //        PlayerEntity clientPlayer = ProxyClient.getClientPlayer();
+        matrixStack.push();
         
-        if(ProxyClient.getMC().getRenderViewEntity() != null)
-        {
-            Vec3d projectedView = ProxyClient.getMC().getRenderViewEntity().getEyePosition(1F);
-            GlStateManager.translated(-projectedView.x, -projectedView.y, -projectedView.z);
-            
-            // Other possibilities
-            //            view = getMC().getRenderViewEntity().getPositionVec().add(0, getMC().getRenderViewEntity().getEyeHeight(), 0);
-            //            view = Minecraft.getInstance().gameRenderer.getActiveRenderInfo().getProjectedView();
-        }
+        ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
+        Vec3d v = renderInfo.getProjectedView();
+        v = v.inverse();
+        matrixStack.translate(v.x, v.y, v.z);
         
         if(ProxyClient.getMC().getRenderViewEntity() != null)
         {
@@ -563,12 +587,9 @@ public class ProxyClient implements IProxy
                 Vec3d start;
                 Vec3d end;
                 
-                Vec3d playerPos = player.getEyePosition(1F);
+                Vec3d playerPos = player.getEyePosition(event.getPartialTicks());
                 Vec3d playerLook = player.getLookVec().normalize();
                 Vec3d handOff;
-                
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder b = tessellator.getBuffer();
                 
                 for(PlayerEntity entityPlayer : world.getPlayers())
                 {
@@ -597,29 +618,24 @@ public class ProxyClient implements IProxy
                             {
                                 laser = accessory.getLaser();
                                 
-                                handOff = ProxyClient.getOffsetForHand(entityPlayer, hand);
+                                handOff = ProxyClient.getOffsetForHand(entityPlayer, hand).add(ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw));
                                 
                                 start = playerPos.add(handOff);
                                 end = start.add(playerLook.scale(laser.getMaxRange()));
                                 
                                 end = ProxyClient.findHit(world, entityPlayer, start, end);
                                 
-                                //                            start = start.subtract(view);
-                                //                            end = end.subtract(view);
-                                
-                                GlStateManager.disableTexture();
-                                
                                 if(laser.isPoint() && !ProxyClient.tmpHitNothing)
                                 {
-                                    ProxyClient.renderLaserPoint(b, tessellator, laser, start, end);
+                                    ProxyClient.renderLaserPoint(b.getBuffer(ProxyClient.LASER_POINT), matrixStack, laser, start, end);
+                                    b.finish(ProxyClient.LASER_POINT);
                                 }
                                 
                                 if(laser.isBeam())
                                 {
-                                    ProxyClient.renderLaserBeam(b, tessellator, laser, start.add(ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw)), end);
+                                    ProxyClient.renderLaserBeam(b.getBuffer(ProxyClient.LASER_BEAM), matrixStack, laser, start, end);
+                                    b.finish(ProxyClient.LASER_BEAM);
                                 }
-                                
-                                GlStateManager.enableTexture();
                             }
                         }
                     }
@@ -627,56 +643,52 @@ public class ProxyClient implements IProxy
             }
         }
         
-        GlStateManager.popMatrix();
+        matrixStack.pop();
     }
     
-    public static void renderLaserPoint(BufferBuilder b, Tessellator tessellator, Laser laser, Vec3d start, Vec3d end)
+    public static void renderLaserPoint(IVertexBuilder b, MatrixStack m, Laser laser, Vec3d start, Vec3d end)
     {
-        b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        Matrix4f matrix = m.getLast().getMatrix();
         
-        final double size = 0.05D;
+        final float size = 0.05F;
         
-        b.pos(end.x + size, end.y + size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y + size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y + size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y + size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)(float)end.y + size, (float)(float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y + size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y + size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y + size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
         
-        b.pos(end.x + size, end.y - size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y - size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y - size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y - size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y - size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
         
-        b.pos(end.x + size, end.y - size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y - size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y + size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y + size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y + size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y + size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
         
-        b.pos(end.x - size, end.y - size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y + size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y + size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y - size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y - size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y + size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y + size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
         
-        b.pos(end.x - size, end.y - size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y - size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y + size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y + size, end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y - size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y + size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y + size, (float)end.z + size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
         
-        b.pos(end.x - size, end.y - size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x - size, end.y + size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y + size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x + size, end.y - size, end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        
-        tessellator.draw();
+        b.pos(matrix, (float)end.x - size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x - size, (float)end.y + size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y + size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
     }
     
-    public static void renderLaserBeam(BufferBuilder b, Tessellator tessellator, Laser laser, Vec3d start, Vec3d end)
+    public static void renderLaserBeam(IVertexBuilder b, MatrixStack m, Laser laser, Vec3d start, Vec3d end)
     {
-        b.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        Matrix4f matrix = m.getLast().getMatrix();
         
-        b.pos(start.x, start.y, start.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        b.pos(end.x, end.y, end.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
-        
-        tessellator.draw();
+        b.pos(matrix, (float)start.x, (float)start.y, (float)start.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
+        b.pos(matrix, (float)end.x, (float)end.y, (float)end.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
     }
     
     public static Vec3d getVectorForRotation(float pitch, float yaw)

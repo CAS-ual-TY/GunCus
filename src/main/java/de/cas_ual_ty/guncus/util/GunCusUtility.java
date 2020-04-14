@@ -1,9 +1,12 @@
 package de.cas_ual_ty.guncus.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -11,8 +14,11 @@ import de.cas_ual_ty.guncus.item.ItemGun;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.merchant.villager.VillagerProfession;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.PointOfInterestType;
@@ -79,5 +85,78 @@ public class GunCusUtility
         {
             e.printStackTrace();
         }
+    }
+    
+    public static PointOfInterestType pointOfInterestType(String p1, Set<BlockState> p2, int p3, int p4)
+    {
+        try
+        {
+            //          Constructor<PointOfInterestType> c = (Constructor<PointOfInterestType>)PointOfInterestType.class.getDeclaredConstructors()[1];
+            Constructor<PointOfInterestType> c = PointOfInterestType.class.getDeclaredConstructor(String.class, Set.class, Integer.TYPE, Integer.TYPE);
+            c.setAccessible(true);
+            return c.newInstance(p1, p2, p3, p4);
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public static VillagerProfession villagerProfession(String p1, PointOfInterestType p2, ImmutableSet<Item> p3, ImmutableSet<Block> p4, @Nullable SoundEvent p5)
+    {
+        try
+        {
+            Constructor<VillagerProfession> c = VillagerProfession.class.getDeclaredConstructor(String.class, PointOfInterestType.class, ImmutableSet.class, ImmutableSet.class, SoundEvent.class);
+            c.setAccessible(true);
+            return c.newInstance(p1, p2, p3, p4, p5);
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }

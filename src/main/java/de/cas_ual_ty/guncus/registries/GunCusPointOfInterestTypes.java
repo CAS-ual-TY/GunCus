@@ -2,7 +2,6 @@ package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.util.GunCusUtility;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,6 +21,6 @@ public class GunCusPointOfInterestTypes
     {
         IForgeRegistry<PointOfInterestType> registry = event.getRegistry();
         
-        registry.register(new PointOfInterestType("arms_dealer", GunCusUtility.getAllStates(GunCusBlocks.GUN_TABLE), 1, SoundEvents.ENTITY_VILLAGER_WORK_WEAPONSMITH, 1).setRegistryName(GunCus.MOD_ID, "arms_dealer"));
+        registry.register(GunCusUtility.pointOfInterestType("arms_dealer", GunCusUtility.getAllStates(GunCusBlocks.GUN_TABLE), 1, 1).setRegistryName(GunCus.MOD_ID, "arms_dealer"));
     }
 }

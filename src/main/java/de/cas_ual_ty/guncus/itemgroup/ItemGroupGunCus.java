@@ -23,15 +23,15 @@ public class ItemGroupGunCus extends ItemGroupShuffle
         // TODO info book
         
         ListNBT list = new ListNBT();
-        list.add(new StringNBT("bla 1 2 3"));
-        list.add(new StringNBT("Absolute test blablabla"));
-        list.add(new StringNBT("blablablablablablablablabla"));
+        list.add(StringNBT.valueOf("bla 1 2 3"));
+        list.add(StringNBT.valueOf("Absolute test blablabla"));
+        list.add(StringNBT.valueOf("blablablablablablablablabla"));
         
         ItemStack stack = new ItemStack(Items.WRITTEN_BOOK);
         CompoundNBT nbt = stack.getOrCreateTag();
         nbt.put("pages", list);
-        nbt.put("title", new StringNBT("Mod Information"));
-        nbt.put("author", new StringNBT("CAS_ual_TY"));
+        nbt.put("title", StringNBT.valueOf("Mod Information"));
+        nbt.put("author", StringNBT.valueOf("CAS_ual_TY"));
         
         items.add(stack);
         

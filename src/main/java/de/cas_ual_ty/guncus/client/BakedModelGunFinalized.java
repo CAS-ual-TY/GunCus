@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 
 import de.cas_ual_ty.guncus.item.ItemAttachment;
@@ -15,7 +13,6 @@ import de.cas_ual_ty.guncus.item.attachments.Optic;
 import de.cas_ual_ty.guncus.item.attachments.Paint;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -213,19 +210,17 @@ public class BakedModelGunFinalized implements IBakedModel
                 
                 if(gun.getNBTCanAimGun(itemStack) && optic.canAim())
                 {
-                    if(optic.isDefault())
+                    if(!optic.isDefault())
                     {
-                        return this.modelMain.handlePerspective(transformType, mat);
-                    }
-                    else
-                    {
-                        mat.func_227863_a_(Quaternion.field_227060_a_);
+                        mat.push();
+                        mat.scale(0, 0, 0);
                         return this;
                     }
                 }
             }
         }
         
-        return this.modelMain.handlePerspective(transformType, mat);
+        this.modelMain.handlePerspective(transformType, mat);
+        return this;
     }
 }

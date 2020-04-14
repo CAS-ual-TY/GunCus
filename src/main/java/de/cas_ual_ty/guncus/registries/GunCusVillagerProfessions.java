@@ -3,6 +3,7 @@ package de.cas_ual_ty.guncus.registries;
 import com.google.common.collect.ImmutableSet;
 
 import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,6 +23,6 @@ public class GunCusVillagerProfessions
     {
         IForgeRegistry<VillagerProfession> registry = event.getRegistry();
         
-        registry.register(new VillagerProfession("arms_dealer", GunCusPointOfInterestTypes.ARMS_DEALER, ImmutableSet.of(), ImmutableSet.of()).setRegistryName(GunCus.MOD_ID, "arms_dealer"));
+        registry.register(GunCusUtility.villagerProfession("arms_dealer", GunCusPointOfInterestTypes.ARMS_DEALER, ImmutableSet.of(), ImmutableSet.of(), null).setRegistryName(GunCus.MOD_ID, "arms_dealer"));
     }
 }

@@ -1,6 +1,6 @@
 package de.cas_ual_ty.guncus.client.gui;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.container.ContainerGunTable;
@@ -30,7 +30,7 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
         this.font.drawString(text, (float)(this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 0x404040);
         this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 0x404040);
         
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GuiContainerGunTable.GUN_TABLE_GUI_TEXTURES);
         
         ItemStack held = this.playerInventory.getItemStack();
@@ -79,7 +79,7 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GuiContainerGunTable.GUN_TABLE_GUI_TEXTURES);
         int i = this.guiLeft;
         int j = (this.height - this.ySize) / 2;

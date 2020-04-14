@@ -66,16 +66,17 @@ public class EntityBullet extends ThrowableEntity
     
     public void spawnParticles()
     {
-        Vec3d vec3d = this.getMotion();
-        double d1 = vec3d.x;
-        double d2 = vec3d.y;
-        double d0 = vec3d.z;
+        Vec3d mot = this.getMotion();
+        Vec3d pos = this.getPositionVector();
+        double d1 = mot.x;
+        double d2 = mot.y;
+        double d0 = mot.z;
         for(int i = 0; i < 4; ++i)
         {
-            this.world.addParticle(ParticleTypes.CRIT, this.posX + d1 * (double)i / 4.0D, this.posY + d2 * (double)i / 4.0D, this.posZ + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
-            this.world.addParticle(ParticleTypes.CLOUD, this.posX + d1 * (double)i / 4.0D, this.posY + d2 * (double)i / 4.0D, this.posZ + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
-            this.world.addParticle(ParticleTypes.EXPLOSION, this.posX + d1 * (double)i / 4.0D, this.posY + d2 * (double)i / 4.0D, this.posZ + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
-            this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.posX + d1 * (double)i / 4.0D, this.posY + d2 * (double)i / 4.0D, this.posZ + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
+            this.world.addParticle(ParticleTypes.CRIT, pos.x + d1 * (double)i / 4.0D, pos.y + d2 * (double)i / 4.0D, pos.z + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
+            this.world.addParticle(ParticleTypes.CLOUD, pos.x + d1 * (double)i / 4.0D, pos.y + d2 * (double)i / 4.0D, pos.z + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
+            this.world.addParticle(ParticleTypes.EXPLOSION, pos.x + d1 * (double)i / 4.0D, pos.y + d2 * (double)i / 4.0D, pos.z + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
+            this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, pos.x + d1 * (double)i / 4.0D, pos.y + d2 * (double)i / 4.0D, pos.z + d0 * (double)i / 4.0D, -d1, -d2 + 0.2D, -d0);
         }
     }
     

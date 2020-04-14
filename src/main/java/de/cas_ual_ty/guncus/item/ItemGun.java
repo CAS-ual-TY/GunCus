@@ -446,7 +446,7 @@ public class ItemGun extends Item
         {
             inaccuracy *= inaccuracyModifierStill;
             
-            if(entityPlayer.isSneaking())
+            if(entityPlayer.isSteppingCarefully())
             {
                 inaccuracy *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getInaccuracyModifierShiftStill();
                 driftModifier *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getDriftModifierShiftStill();
@@ -470,7 +470,7 @@ public class ItemGun extends Item
                 rotationYaw = entityPlayer.rotationYaw + randomYaw;
                 
                 bulletEntity = new EntityBullet(GunCusEntityTypes.BULLET, entityPlayer, entityPlayer.world);
-                bulletEntity.setPosition(entityPlayer.posX, entityPlayer.posY + entityPlayer.getEyeHeight(), entityPlayer.posZ);
+                bulletEntity.setPosition(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
                 bulletEntity.shoot(entityPlayer, rotationPitch, rotationYaw, 0, speed, 0);
                 bulletEntity.setGravity(0);//bullet.getGravity()); // TODO temporary until there is a proper bullet renderer
                 entityPlayer.world.addEntity(bulletEntity.setDamage(damage));
