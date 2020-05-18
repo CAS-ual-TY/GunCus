@@ -26,6 +26,12 @@
     "block.guncus.gun_table": "Gun Table",
     "container.guncus.gun_table": "Gun Table",
 	
+    "block.guncus.gun_maker": "Gun Maker",
+    "container.guncus.gun_maker": "Gun Maker",
+	
+    "block.guncus.bullet_maker": "Bullet Maker",
+    "container.guncus.bullet_maker": "Bullet Maker",
+	
 	"entity.minecraft.villager.guncus.arms_dealer": "Arms Dealer",
 
     "item.guncus.gun_ak_74m": "AK-74M",

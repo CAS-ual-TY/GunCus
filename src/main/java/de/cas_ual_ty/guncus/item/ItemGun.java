@@ -55,6 +55,10 @@ public class ItemGun extends Item
     protected EnumFireMode fireMode;
     protected EnumReloadType fullReloadType;
     
+    public final int ironAmt;
+    public final int goldAmt;
+    public final int redstoneAmt;
+    
     protected Supplier<SoundEvent> soundShoot;
     protected Supplier<SoundEvent> soundShootSilenced;
     protected Supplier<SoundEvent> soundReload;
@@ -65,7 +69,7 @@ public class ItemGun extends Item
     
     public ItemGroupGun gunTab;
     
-    public ItemGun(Properties properties, int fireRate, int maxAmmo, float baseDamage, Supplier<ItemBullet> bullet)
+    public ItemGun(Properties properties, int fireRate, int maxAmmo, float baseDamage, Supplier<ItemBullet> bullet, int iron, int gold, int redstone)
     {
         super(properties);
         
@@ -77,6 +81,10 @@ public class ItemGun extends Item
         this.reloadTime = 100;
         this.fireMode = EnumFireMode.FULL_AUTO;
         this.fullReloadType = EnumReloadType.MAGAZINE;
+        
+        this.ironAmt = iron;
+        this.goldAmt = gold;
+        this.redstoneAmt = redstone;
         
         this.supplierAttachments = ItemAttachment::buildDefaultArray;
         this.attachments = null;
@@ -92,7 +100,7 @@ public class ItemGun extends Item
     
     public ItemGun setDefaultTradeable(int price, int level)
     {
-        new RandomTradeBuilder(1, 5 * level, 0.1F).setEmeraldPriceFor(price, this, 1).registerLevel(level);
+        new RandomTradeBuilder(1, 25 * level, 0.1F).setEmeraldPriceFor(price, this, 1).registerLevel(level);
         return this;
     }
     

@@ -51,7 +51,7 @@ public abstract class ItemAttachment extends Item
     
     public ItemAttachment setDefaultTradeable()
     {
-        new RandomTradeBuilder(2, 5, 0.05F).setEmeraldPriceFor(16, this).registerLevel(2);
+        new RandomTradeBuilder(2, 50, 0.05F).setEmeraldPriceFor(16, this).registerLevel(2);
         return this;
     }
     

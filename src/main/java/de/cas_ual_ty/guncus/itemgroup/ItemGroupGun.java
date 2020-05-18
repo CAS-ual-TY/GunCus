@@ -25,37 +25,35 @@ public class ItemGroupGun extends ItemGroupShuffle
     {
         super.fill(items);
         
+        items.add(new ItemStack(this.gun));
+        items.add(new ItemStack(this.gun.getBaseBullet()));
+        
+        Ammo ammo;
+        
+        for(ItemAttachment attachment : this.gun.getAttachments()[EnumAttachmentType.AMMO.getSlot()])
+        {
+            ammo = (Ammo)attachment;
+            
+            if(!ammo.isDefault() && ammo.getReplacementBullet() != null && ammo.getReplacementBullet() != this.gun.getBaseBullet())
+            {
+                items.add(new ItemStack(ammo.getReplacementBullet()));
+            }
+        }
+        
+        for(ItemAttachment[] attachments : this.gun.getAttachments())
+        {
+            for(ItemAttachment attachment : attachments)
+            {
+                if(!attachment.isDefault())
+                {
+                    items.add(new ItemStack(attachment));
+                }
+            }
+        }
+        
         if(GunCus.FULL_CREATIVE_TABS)
         {
             items.addAll(GunCusUtility.createAllVariants(this.gun));
-        }
-        else
-        {
-            items.add(new ItemStack(this.gun));
-            items.add(new ItemStack(this.gun.getBaseBullet()));
-            
-            Ammo ammo;
-            
-            for(ItemAttachment attachment : this.gun.getAttachments()[EnumAttachmentType.AMMO.getSlot()])
-            {
-                ammo = (Ammo)attachment;
-                
-                if(!ammo.isDefault() && ammo.getReplacementBullet() != null && ammo.getReplacementBullet() != this.gun.getBaseBullet())
-                {
-                    items.add(new ItemStack(ammo.getReplacementBullet()));
-                }
-            }
-            
-            for(ItemAttachment[] attachments : this.gun.getAttachments())
-            {
-                for(ItemAttachment attachment : attachments)
-                {
-                    if(!attachment.isDefault())
-                    {
-                        items.add(new ItemStack(attachment));
-                    }
-                }
-            }
         }
     }
     

@@ -17,6 +17,8 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.IProxy;
+import de.cas_ual_ty.guncus.client.gui.GuiContainerBulletMaker;
+import de.cas_ual_ty.guncus.client.gui.GuiContainerGunMaker;
 import de.cas_ual_ty.guncus.client.gui.GuiContainerGunTable;
 import de.cas_ual_ty.guncus.entity.EntityBullet;
 import de.cas_ual_ty.guncus.item.ItemAttachment;
@@ -131,6 +133,8 @@ public class ProxyClient implements IProxy
     public void init()
     {
         ScreenManager.registerFactory(GunCusContainerTypes.GUN_TABLE, GuiContainerGunTable::new);
+        ScreenManager.registerFactory(GunCusContainerTypes.GUN_MAKER, GuiContainerGunMaker::new);
+        ScreenManager.registerFactory(GunCusContainerTypes.BULLET_MAKER, GuiContainerBulletMaker::new);
     }
     
     @Override

@@ -30,6 +30,8 @@ import net.minecraftforge.registries.ObjectHolder;
 public class GunCusItems
 {
     public static final BlockItem GUN_TABLE = null;
+    public static final BlockItem GUN_MAKER = null;
+    public static final BlockItem BULLET_MAKER = null;
     
     public static final ItemBullet BULLET_5_56x45MM = null;
     public static final ItemBullet BULLET_5_45x39MM = null;
@@ -127,17 +129,19 @@ public class GunCusItems
         IForgeRegistry<Item> registry = event.getRegistry();
         
         registry.register(new BlockItem(GunCusBlocks.GUN_TABLE, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_table"));
+        registry.register(new BlockItem(GunCusBlocks.GUN_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_maker"));
+        registry.register(new BlockItem(GunCusBlocks.BULLET_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "bullet_maker"));
         
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1F).setDefaultTradeable(32).setRegistryName(GunCus.MOD_ID, "bullet_5_56x45mm"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1F).setDefaultTradeable(32).setRegistryName(GunCus.MOD_ID, "bullet_5_45x39mm"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(2F).setDefaultTradeable(16).setRegistryName(GunCus.MOD_ID, "bullet_7_62x51mm"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(2F).setDefaultTradeable(16).setRegistryName(GunCus.MOD_ID, "bullet_7_62x54mm"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1.5F).setDefaultTradeable(24).setProjectileAmount(6).setRegistryName(GunCus.MOD_ID, "bullet_12g_buckshot"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(1.5F).setDefaultTradeable(24).setProjectileAmount(6).setRegistryName(GunCus.MOD_ID, "bullet_12g_dart"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(5F).setDefaultTradeable(24).setRegistryName(GunCus.MOD_ID, "bullet_12g_frag"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(5F).setDefaultTradeable(24).setRegistryName(GunCus.MOD_ID, "bullet_12g_slug"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(8F).setDefaultTradeable(8).setRegistryName(GunCus.MOD_ID, "bullet__44_magnum"));
-        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDamage(8F).setDefaultTradeable(8).setRegistryName(GunCus.MOD_ID, "bullet__338_magnum"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 1, 1, 16).setDamage(4F).setDefaultTradeable(32).setRegistryName(GunCus.MOD_ID, "bullet_5_56x45mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 1, 1, 16).setDamage(4F).setDefaultTradeable(32).setRegistryName(GunCus.MOD_ID, "bullet_5_45x39mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 2, 2, 12).setDamage(6F).setDefaultTradeable(24).setRegistryName(GunCus.MOD_ID, "bullet_7_62x51mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 2, 2, 12).setDamage(6F).setDefaultTradeable(24).setRegistryName(GunCus.MOD_ID, "bullet_7_62x54mm"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 2, 2, 8).setDamage(2F).setDefaultTradeable(24).setProjectileAmount(6).setRegistryName(GunCus.MOD_ID, "bullet_12g_buckshot"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 2, 2, 8).setDamage(2F).setDefaultTradeable(24).setProjectileAmount(6).setRegistryName(GunCus.MOD_ID, "bullet_12g_dart"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 2, 2, 8).setDamage(2F).setDefaultTradeable(24).setRegistryName(GunCus.MOD_ID, "bullet_12g_frag"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 2, 2, 8).setDamage(9F).setDefaultTradeable(24).setRegistryName(GunCus.MOD_ID, "bullet_12g_slug"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 4, 2, 4).setDamage(9F).setDefaultTradeable(8).setRegistryName(GunCus.MOD_ID, "bullet__44_magnum"));
+        registry.register(new ItemBullet(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS), 4, 2, 4).setDamage(9F).setDefaultTradeable(8).setRegistryName(GunCus.MOD_ID, "bullet__338_magnum"));
         
         registry.register(new Optic(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDefaultTradeable().setRegistryName(GunCus.MOD_ID, "optic_reflex"));
         registry.register(new Optic(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDefaultTradeable().setRegistryName(GunCus.MOD_ID, "optic_coyote"));
@@ -211,12 +215,12 @@ public class GunCusItems
         registry.register(new Paint(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDefaultTradeable().setRegistryName(GunCus.MOD_ID, "paint_white"));
         registry.register(new Paint(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setDefaultTradeable().setRegistryName(GunCus.MOD_ID, "paint_yellow"));
         
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 3, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m16a4").setDefaultTradeable(32, 3).setRegistryName(GunCus.MOD_ID, "gun_m16a4"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_ak_74m").setDefaultTradeable(32, 3).setRegistryName(GunCus.MOD_ID, "gun_ak_74m"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_scar_l").setDefaultTradeable(32, 5).setRegistryName(GunCus.MOD_ID, "gun_scar_l"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_7_62x51MM).setAttachments(() -> GunCusItems.assaultRifleLongAttachments()).createGunTab("gun_scar_h").setDefaultTradeable(32, 5).setRegistryName(GunCus.MOD_ID, "gun_scar_h"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m27_iar").setDefaultTradeable(32, 4).setRegistryName(GunCus.MOD_ID, "gun_m27_iar"));
-        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 25, 10, 7, () -> GunCusItems.BULLET_7_62x54MM).setAttachments(() -> GunCusItems.sniperRifleAttachments()).setSoundShoot(() -> GunCusSoundEvents.SHOOT_SNIPER).setBoltAction(() -> SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON).createGunTab("gun_sv98").setDefaultTradeable(32, 4).setRegistryName(GunCus.MOD_ID, "gun_sv98"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 3, 30, 4, () -> GunCusItems.BULLET_5_56x45MM, 6, 0, 2).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m16a4").setDefaultTradeable(32, 3).setRegistryName(GunCus.MOD_ID, "gun_m16a4"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM, 6, 0, 2).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_ak_74m").setDefaultTradeable(32, 3).setRegistryName(GunCus.MOD_ID, "gun_ak_74m"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM, 6, 0, 2).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_scar_l").setDefaultTradeable(32, 5).setRegistryName(GunCus.MOD_ID, "gun_scar_l"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_7_62x51MM, 8, 2, 2).setAttachments(() -> GunCusItems.assaultRifleLongAttachments()).createGunTab("gun_scar_h").setDefaultTradeable(32, 5).setRegistryName(GunCus.MOD_ID, "gun_scar_h"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_56x45MM, 10, 0, 1).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m27_iar").setDefaultTradeable(32, 4).setRegistryName(GunCus.MOD_ID, "gun_m27_iar"));
+        registry.register(new ItemGun(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 25, 10, 7, () -> GunCusItems.BULLET_7_62x54MM, 10, 1, 2).setAttachments(() -> GunCusItems.sniperRifleAttachments()).setSoundShoot(() -> GunCusSoundEvents.SHOOT_SNIPER).setBoltAction(() -> SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON).createGunTab("gun_sv98").setDefaultTradeable(32, 4).setRegistryName(GunCus.MOD_ID, "gun_sv98"));
     }
     
     public static ItemAttachment[][] assaultRifleAttachments()

@@ -24,7 +24,11 @@ public class ItemBullet extends Item
     protected float spreadModifier;
     protected int projectileAmount;
     
-    public ItemBullet(Properties properties)
+    public final int ironAmt;
+    public final int gunpowderAmt;
+    public final int craftAmt;
+    
+    public ItemBullet(Properties properties, int iron, int gunpowder, int craftAmt)
     {
         super(properties);
         
@@ -34,12 +38,16 @@ public class ItemBullet extends Item
         this.spreadModifier = 1F;
         this.projectileAmount = 1;
         
+        this.ironAmt = iron;
+        this.gunpowderAmt = gunpowder;
+        this.craftAmt = craftAmt;
+        
         ItemBullet.BULLETS_LIST.add(this);
     }
     
     public ItemBullet setDefaultTradeable(int amt)
     {
-        new RandomTradeBuilder(3, 2, 0.05F).setEmeraldPriceFor(1, this, amt).registerLevel(1);
+        new RandomTradeBuilder(3, 25, 0.05F).setEmeraldPriceFor(1, this, amt).registerLevel(1);
         return this;
     }
     

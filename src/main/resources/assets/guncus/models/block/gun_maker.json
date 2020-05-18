@@ -3,7 +3,7 @@
     "textures": {
         "particle": "guncus:block/side",
         "down": "guncus:block/bottom",
-        "up": "guncus:block/gun_table",
+        "up": "guncus:block/gun_maker",
         "north": "guncus:block/side",
         "east": "guncus:block/side",
         "south": "guncus:block/side",

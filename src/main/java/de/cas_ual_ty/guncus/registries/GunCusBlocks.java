@@ -1,6 +1,8 @@
 package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.block.BlockBulletMaker;
+import de.cas_ual_ty.guncus.block.BlockGunMaker;
 import de.cas_ual_ty.guncus.block.BlockGunTable;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.Properties;
@@ -17,6 +19,8 @@ import net.minecraftforge.registries.ObjectHolder;
 public class GunCusBlocks
 {
     public static final Block GUN_TABLE = null;
+    public static final Block GUN_MAKER = null;
+    public static final Block BULLET_MAKER = null;
     
     @SubscribeEvent
     public static void registerBlocks(Register<Block> event)
@@ -24,5 +28,7 @@ public class GunCusBlocks
         IForgeRegistry<Block> registry = event.getRegistry();
         
         registry.register(new BlockGunTable(Properties.from(Blocks.IRON_BLOCK)).setRegistryName(GunCus.MOD_ID, "gun_table"));
+        registry.register(new BlockGunMaker(Properties.from(Blocks.IRON_BLOCK)).setRegistryName(GunCus.MOD_ID, "gun_maker"));
+        registry.register(new BlockBulletMaker(Properties.from(Blocks.IRON_BLOCK)).setRegistryName(GunCus.MOD_ID, "bullet_maker"));
     }
 }

@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "i i",
+        " C ",
+        "i i"
+    ],
+    "key": {
+        "i": {
+            "item": "minecraft:iron_ingot"
+        },
+        "C": {
+            "item": "guncus:gun_table"
+        }
+    },
+    "result": {
+        "item": "guncus:bullet_maker",
+        "count": 1
+    }
+}
