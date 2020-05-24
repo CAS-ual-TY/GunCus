@@ -26,7 +26,7 @@ public class MessageBulletMaker
     
     public static MessageBulletMaker decode(PacketBuffer buf)
     {
-        return new MessageBulletMaker(buf.readString(), buf.readString());
+        return new MessageBulletMaker(buf.readString(0x100), buf.readString(0x100));
     }
     
     public static void handle(MessageBulletMaker msg, Supplier<Context> ctx)

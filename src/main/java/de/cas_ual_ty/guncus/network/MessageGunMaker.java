@@ -26,7 +26,7 @@ public class MessageGunMaker
     
     public static MessageGunMaker decode(PacketBuffer buf)
     {
-        return new MessageGunMaker(buf.readString(), buf.readString());
+        return new MessageGunMaker(buf.readString(0x100), buf.readString(0x100));
     }
     
     public static void handle(MessageGunMaker msg, Supplier<Context> ctx)
