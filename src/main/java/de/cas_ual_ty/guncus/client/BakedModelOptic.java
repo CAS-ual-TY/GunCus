@@ -71,9 +71,9 @@ public class BakedModelOptic implements IBakedModel
     }
     
     @Override
-    public boolean func_230044_c_()
+    public boolean isSideLit()
     {
-        return this.modelMain.func_230044_c_();
+        return this.modelMain.isSideLit();
     }
     
     @Override

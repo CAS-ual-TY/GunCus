@@ -6,7 +6,10 @@
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[28,)" #mandatory (28 is current forge version)
+loaderVersion="[34,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+# The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
+# Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
+license="GNU General Public License v3.0"
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/CAS-ual-TY/GunCus/issues" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
@@ -22,12 +25,10 @@ displayName="Gun Customization" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://github.com/CAS-ual-TY/GunCus" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-#logoFile="logo_guncus.png" #optional
+#logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
 #credits="" #optional
 # A text field displayed in the mod UI
 authors="CAS_ual_TY" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''Tons of guns, attachments and combinations.'''
-# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-#REMOVED - See https://github.com/MinecraftForge/MinecraftForge/blob/1.14.x/mdk/src/main/resources/META-INF/mods.toml

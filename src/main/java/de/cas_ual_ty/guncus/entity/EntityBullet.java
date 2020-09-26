@@ -13,7 +13,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityBullet extends ThrowableEntity
@@ -66,8 +66,8 @@ public class EntityBullet extends ThrowableEntity
     
     public void spawnParticles()
     {
-        Vec3d mot = this.getMotion();
-        Vec3d pos = this.getPositionVector();
+        Vector3d mot = this.getMotion();
+        Vector3d pos = this.getPositionVec();
         double d1 = mot.x;
         double d2 = mot.y;
         double d0 = mot.z;
@@ -87,7 +87,7 @@ public class EntityBullet extends ThrowableEntity
         {
             EntityRayTraceResult hit = (EntityRayTraceResult)result;
             
-            if((hit.getEntity() == this.getThrower()) && (this.ticksExisted <= 5))
+            if((hit.getEntity() == this.func_234616_v_()) && (this.ticksExisted <= 5))
             {
                 return;
             }
@@ -95,11 +95,11 @@ public class EntityBullet extends ThrowableEntity
             if(!this.world.isRemote && hit.getEntity() instanceof LivingEntity)
             {
                 LivingEntity entity = (LivingEntity)hit.getEntity();
-                entity.attackEntityFrom(DamageSource.causeMobDamage(this.getThrower()), this.getBulletDamage());
+                entity.attackEntityFrom(DamageSource.causeMobDamage((LivingEntity)this.func_234616_v_()), this.getBulletDamage());
                 
-                if(this.getThrower() instanceof PlayerEntity)
+                if(this.func_234616_v_() instanceof PlayerEntity)
                 {
-                    GunCus.proxy.addHitmarker((PlayerEntity)this.getThrower());
+                    GunCus.proxy.addHitmarker((PlayerEntity)this.func_234616_v_());
                 }
             }
         }

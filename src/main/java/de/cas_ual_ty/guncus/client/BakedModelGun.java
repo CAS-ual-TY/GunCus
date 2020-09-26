@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.world.World;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.client.model.data.IModelData;
 
 public class BakedModelGun implements IBakedModel
@@ -84,9 +84,9 @@ public class BakedModelGun implements IBakedModel
     }
     
     @Override
-    public boolean func_230044_c_()
+    public boolean isSideLit()
     {
-        return this.modelMain.func_230044_c_();
+        return this.modelMain.isSideLit();
     }
     
     @Override
@@ -106,7 +106,7 @@ public class BakedModelGun implements IBakedModel
         }
         
         @Override
-        public IBakedModel getModelWithOverrides(IBakedModel model, ItemStack stack, World worldIn, LivingEntity entityIn)
+        public IBakedModel getOverrideModel(IBakedModel model, ItemStack stack, ClientWorld worldIn, LivingEntity entityIn)
         {
             return this.modelGun.getModelFinal().setCurrentItemStack(stack);
         }

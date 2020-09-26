@@ -12,7 +12,6 @@ import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import de.cas_ual_ty.guncus.item.attachments.Paint;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -21,6 +20,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.client.model.data.IModelData;
 
 public class BakedModelGunFinalized implements IBakedModel
@@ -183,9 +183,9 @@ public class BakedModelGunFinalized implements IBakedModel
     }
     
     @Override
-    public boolean func_230044_c_()
+    public boolean isSideLit()
     {
-        return this.modelMain.func_230044_c_();
+        return this.modelMain.isSideLit();
     }
     
     @Override

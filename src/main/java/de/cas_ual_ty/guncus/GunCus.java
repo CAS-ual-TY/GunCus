@@ -19,13 +19,13 @@ import net.minecraft.item.Items;
 import net.minecraft.item.MerchantOffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -54,7 +54,7 @@ public class GunCus
         GunCus.proxy.registerModEventListeners(bus);
         
         bus = MinecraftForge.EVENT_BUS;
-        bus.addListener(this::serverStarting);
+        bus.addListener(this::registerCommands);
         bus.addListener(this::villagerTrades);
         bus.addListener(this::wandererTrades);
         GunCus.proxy.registerForgeEventListeners(bus);
@@ -76,9 +76,9 @@ public class GunCus
         GunCus.proxy.init();
     }
     
-    public void serverStarting(FMLServerStartingEvent event)
+    public void registerCommands(RegisterCommandsEvent event)
     {
-        CommandGunCus.register(event.getCommandDispatcher());
+        CommandGunCus.register(event.getDispatcher());
     }
     
     public void villagerTrades(VillagerTradesEvent event)

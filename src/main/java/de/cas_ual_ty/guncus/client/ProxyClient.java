@@ -39,7 +39,6 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
@@ -60,7 +59,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceContext.BlockMode;
 import net.minecraft.util.math.RayTraceContext.FluidMode;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -446,7 +446,7 @@ public class ProxyClient implements IProxy
             
             if(optic != null && optic.canAim() && !entityPlayer.isSprinting() && ProxyClient.BUTTON_AIM_DOWN.get())
             {
-                ProxyClient.drawSight(optic, event.getWindow());
+                ProxyClient.drawSight(event.getMatrixStack(), optic, event.getWindow());
                 
                 if(!event.isCanceled())
                 {
@@ -457,9 +457,9 @@ public class ProxyClient implements IProxy
             // ---
             
             Accessory accessory;
-            Vec3d start = new Vec3d(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
-            Vec3d end;
-            Vec3d hit;
+            Vector3d start = new Vector3d(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
+            Vector3d end;
+            Vector3d hit;
             
             for(Hand hand : GunCusUtility.HANDS)
             {
@@ -486,7 +486,7 @@ public class ProxyClient implements IProxy
                     
                     hit = hit.subtract(start);
                     
-                    ProxyClient.drawRangeFinder(event.getWindow(), hand, hit.length());
+                    ProxyClient.drawRangeFinder(event.getMatrixStack(), event.getWindow(), hand, hit.length());
                 }
             }
             
@@ -499,17 +499,17 @@ public class ProxyClient implements IProxy
         }
     }
     
-    public static void drawSight(Optic optic, MainWindow sr)
+    public static void drawSight(MatrixStack ms, Optic optic, MainWindow sr)
     {
         ProxyClient.drawDrawFullscreenImage(optic.getOverlay(), 1024, 256, sr);
     }
     
-    public static void drawRangeFinder(MainWindow sr, Hand hand, double range)
+    public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, double range)
     {
-        ProxyClient.drawRangeFinder(sr, hand, (int)range + "");
+        ProxyClient.drawRangeFinder(ms, sr, hand, (int)range + "");
     }
     
-    public static void drawRangeFinder(MainWindow sr, Hand hand, String text)
+    public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, String text)
     {
         RenderSystem.pushMatrix();
         RenderSystem.enableBlend();
@@ -519,7 +519,7 @@ public class ProxyClient implements IProxy
         FontRenderer font = ProxyClient.getMC().fontRenderer;
         off = hand == Hand.OFF_HAND ? -(font.getStringWidth(text) + 1 + off) : off;
         
-        font.drawStringWithShadow(text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
+        font.drawStringWithShadow(ms, text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
         
         RenderSystem.disableBlend();
         RenderSystem.popMatrix();
@@ -573,7 +573,7 @@ public class ProxyClient implements IProxy
         matrixStack.push();
         
         ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
-        Vec3d v = renderInfo.getProjectedView();
+        Vector3d v = renderInfo.getProjectedView();
         v = v.inverse();
         matrixStack.translate(v.x, v.y, v.z);
         
@@ -588,12 +588,12 @@ public class ProxyClient implements IProxy
                 Accessory accessory;
                 Laser laser;
                 
-                Vec3d start;
-                Vec3d end;
+                Vector3d start;
+                Vector3d end;
                 
-                Vec3d playerPos = player.getEyePosition(event.getPartialTicks());
-                Vec3d playerLook = player.getLookVec().normalize();
-                Vec3d handOff;
+                Vector3d playerPos = player.getEyePosition(event.getPartialTicks());
+                Vector3d playerLook = player.getLookVec().normalize();
+                Vector3d handOff;
                 
                 for(PlayerEntity entityPlayer : world.getPlayers())
                 {
@@ -650,7 +650,7 @@ public class ProxyClient implements IProxy
         matrixStack.pop();
     }
     
-    public static void renderLaserPoint(IVertexBuilder b, MatrixStack m, Laser laser, Vec3d start, Vec3d end)
+    public static void renderLaserPoint(IVertexBuilder b, MatrixStack m, Laser laser, Vector3d start, Vector3d end)
     {
         Matrix4f matrix = m.getLast().getMatrix();
         
@@ -687,7 +687,7 @@ public class ProxyClient implements IProxy
         b.pos(matrix, (float)end.x + size, (float)end.y - size, (float)end.z - size).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
     }
     
-    public static void renderLaserBeam(IVertexBuilder b, MatrixStack m, Laser laser, Vec3d start, Vec3d end)
+    public static void renderLaserBeam(IVertexBuilder b, MatrixStack m, Laser laser, Vector3d start, Vector3d end)
     {
         Matrix4f matrix = m.getLast().getMatrix();
         
@@ -695,18 +695,18 @@ public class ProxyClient implements IProxy
         b.pos(matrix, (float)end.x, (float)end.y, (float)end.z).color(laser.getR(), laser.getG(), laser.getB(), 1F).endVertex();
     }
     
-    public static Vec3d getVectorForRotation(float pitch, float yaw)
+    public static Vector3d getVectorForRotation(float pitch, float yaw)
     {
         float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
         float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
         float f2 = -MathHelper.cos(-pitch * 0.017453292F);
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
-        return new Vec3d(f1 * f2, f3, f * f2);
+        return new Vector3d(f1 * f2, f3, f * f2);
     }
     
-    public static Vec3d getOffsetForHandRaw(PlayerEntity entityPlayer, Hand hand)
+    public static Vector3d getOffsetForHandRaw(PlayerEntity entityPlayer, Hand hand)
     {
-        Vec3d vec = ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + 1, entityPlayer.rotationYaw + 90F);
+        Vector3d vec = ProxyClient.getVectorForRotation(entityPlayer.rotationPitch + 1, entityPlayer.rotationYaw + 90F);
         
         if(hand == Hand.OFF_HAND)
         {
@@ -718,19 +718,19 @@ public class ProxyClient implements IProxy
             vec = vec.scale(-1);
         }
         
-        return new Vec3d(vec.x, 0, vec.z).normalize().scale(0.4D);
+        return new Vector3d(vec.x, 0, vec.z).normalize().scale(0.4D);
     }
     
-    public static Vec3d getOffsetForHand(PlayerEntity entityPlayer, Hand hand)
+    public static Vector3d getOffsetForHand(PlayerEntity entityPlayer, Hand hand)
     {
-        Vec3d vec = ProxyClient.getOffsetForHandRaw(entityPlayer, hand);
+        Vector3d vec = ProxyClient.getOffsetForHandRaw(entityPlayer, hand);
         
         return vec.add(ProxyClient.getVectorForRotation(entityPlayer.rotationPitch, entityPlayer.rotationYaw).scale(0.4D));
     }
     
     private static boolean tmpHitNothing = false;
     
-    public static Vec3d findHit(World world, Entity entity, Vec3d start, Vec3d end)
+    public static Vector3d findHit(World world, Entity entity, Vector3d start, Vector3d end)
     {
         ProxyClient.tmpHitNothing = false;
         
@@ -759,15 +759,15 @@ public class ProxyClient implements IProxy
         }
     }
     
-    public static BlockRayTraceResult findBlockOnPath(World world, Entity entity, Vec3d start, Vec3d end)
+    public static BlockRayTraceResult findBlockOnPath(World world, Entity entity, Vector3d start, Vector3d end)
     {
         return world.rayTraceBlocks(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, entity));
     }
     
-    public static EntityRayTraceResult findEntityOnPath(World world, Entity entity0, Vec3d start, Vec3d end)
+    public static EntityRayTraceResult findEntityOnPath(World world, Entity entity0, Vector3d start, Vector3d end)
     {
         EntityRayTraceResult result = null;
-        Optional<Vec3d> opt;
+        Optional<Vector3d> opt;
         
         double rangeSq = 0;
         double currentRangeSq;

@@ -1,5 +1,6 @@
 package de.cas_ual_ty.guncus.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import de.cas_ual_ty.guncus.GunCus;
@@ -24,11 +25,11 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
     }
     
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    protected void drawGuiContainerForegroundLayer(MatrixStack ms, int mouseX, int mouseY)
     {
-        String text = this.title.getFormattedText();
-        this.font.drawString(text, (float)(this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 0x404040);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 0x404040);
+        String text = this.title.getString();
+        this.font.drawString(ms, text, (float)(this.xSize - this.font.getStringWidth(text)) * 0.5F, 6.0F, 0x404040);
+        this.font.drawString(ms, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 96 + 2), 0x404040);
         
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GuiContainerGunTable.GUN_TABLE_GUI_TEXTURES);
@@ -46,7 +47,7 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
                 
                 if(!gun.isSlotAvailable(type))
                 {
-                    this.drawStrike(slot);
+                    this.drawStrike(ms, slot);
                 }
             }
             
@@ -57,7 +58,7 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
                 
                 if(!slot.getHasStack() && gun.canSetAttachment(attachment))
                 {
-                    this.drawFocus(slot);
+                    this.drawFocus(ms, slot);
                 }
             }
         }
@@ -65,51 +66,51 @@ public class GuiContainerGunTable extends ContainerScreen<ContainerGunTable>
         {
             if(held.getItem() instanceof ItemGun)
             {
-                this.drawFocus(slot);
+                this.drawFocus(ms, slot);
             }
             
             for(EnumAttachmentType type : EnumAttachmentType.VALUES)
             {
                 slot = this.getContainer().attachmentSlots[type.getSlot()];
-                this.drawStrike(slot);
+                this.drawStrike(ms, slot);
             }
         }
     }
     
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    protected void drawGuiContainerBackgroundLayer(MatrixStack ms, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(GuiContainerGunTable.GUN_TABLE_GUI_TEXTURES);
         int i = this.guiLeft;
         int j = (this.height - this.ySize) / 2;
-        this.blit(i, j, 0, 0, this.xSize, this.ySize);
+        this.blit(ms, i, j, 0, 0, this.xSize, this.ySize);
     }
     
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks)
+    public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks)
     {
-        super.render(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
+        super.render(ms, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(ms, mouseX, mouseY);
     }
     
-    public void drawFocus(Slot slot)
+    public void drawFocus(MatrixStack ms, Slot slot)
     {
-        this.drawFocus(slot.xPos - 1, slot.yPos - 1);
+        this.drawFocus(ms, slot.xPos - 1, slot.yPos - 1);
     }
     
-    public void drawFocus(int x, int y)
+    public void drawFocus(MatrixStack ms, int x, int y)
     {
-        this.blit(x, y, this.xSize, 0, 18, 18);
+        this.blit(ms, x, y, this.xSize, 0, 18, 18);
     }
     
-    public void drawStrike(Slot slot)
+    public void drawStrike(MatrixStack ms, Slot slot)
     {
-        this.drawStrike(slot.xPos - 1, slot.yPos - 1);
+        this.drawStrike(ms, slot.xPos - 1, slot.yPos - 1);
     }
     
-    public void drawStrike(int x, int y)
+    public void drawStrike(MatrixStack ms, int x, int y)
     {
-        this.blit(x, y, this.xSize + 18, 0, 18, 18);
+        this.blit(ms, x, y, this.xSize + 18, 0, 18, 18);
     }
 }

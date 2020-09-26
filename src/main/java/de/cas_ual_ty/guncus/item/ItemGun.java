@@ -32,7 +32,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -479,7 +478,7 @@ public class ItemGun extends Item
                 
                 bulletEntity = new EntityBullet(GunCusEntityTypes.BULLET, entityPlayer, entityPlayer.world);
                 bulletEntity.setPosition(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
-                bulletEntity.shoot(entityPlayer, rotationPitch, rotationYaw, 0, speed, 0);
+                bulletEntity.func_234612_a_(entityPlayer, rotationPitch, rotationYaw, 0, speed, 0);
                 bulletEntity.setGravity(0);//bullet.getGravity()); // TODO temporary until there is a proper bullet renderer
                 entityPlayer.world.addEntity(bulletEntity.setDamage(damage));
             }
@@ -690,11 +689,13 @@ public class ItemGun extends Item
         int maxAmmo = this.calcCurrentMaxAmmo(attachments);
         ItemBullet bullet = this.calcCurrentBullet(attachments);
         
-        ITextComponent tAmmo = new StringTextComponent(this.getNBTCurrentAmmo(itemStack) + "").setStyle(new Style().setColor(TextFormatting.YELLOW));
+        ITextComponent tAmmo = new StringTextComponent(this.getNBTCurrentAmmo(itemStack) + "");
+        tAmmo.getStyle().applyFormatting(TextFormatting.YELLOW);
         ITextComponent tMaxAmmo = new StringTextComponent("/" + maxAmmo);
-        ITextComponent tBullet = new TranslationTextComponent(bullet.getTranslationKey()).setStyle(new Style().setColor(TextFormatting.YELLOW));
+        ITextComponent tBullet = new TranslationTextComponent(bullet.getTranslationKey());
+        tBullet.getStyle().applyFormatting(TextFormatting.YELLOW);
         
-        list.add(new StringTextComponent(tAmmo.getFormattedText() + tMaxAmmo.getFormattedText() + " " + tBullet.getFormattedText()));
+        list.add(new StringTextComponent(tAmmo.getString() + tMaxAmmo.getString() + " " + tBullet.getString()));
         
         ItemAttachment attachment;
         int ammount = 0;
@@ -710,7 +711,11 @@ public class ItemGun extends Item
         
         if(ammount > 0)
         {
-            list.add(ItemAttachment.getAttachmentTranslated(ammount > 1).setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).appendText(":"));
+            ITextComponent t = ItemAttachment.getAttachmentTranslated(ammount > 1);
+            t.getStyle().applyFormatting(TextFormatting.DARK_GRAY);
+            ITextComponent t2 = new StringTextComponent(":");
+            t2.getStyle().applyFormatting(TextFormatting.WHITE);
+            list.add(new StringTextComponent(t.getString() + t2.getString()));
             for(EnumAttachmentType type : EnumAttachmentType.VALUES)
             {
                 if(this.isSlotAvailable(type))
@@ -719,7 +724,7 @@ public class ItemGun extends Item
                     
                     if(attachment != null)
                     {
-                        list.add(new StringTextComponent(attachment.getInformationString().getFormattedText() + ItemGun.getSlotDisplaySuffix(type)));
+                        list.add(new StringTextComponent(attachment.getInformationString().getString() + ItemGun.getSlotDisplaySuffix(type)));
                     }
                     else
                     {
@@ -779,7 +784,9 @@ public class ItemGun extends Item
     
     public static String getSlotDisplaySuffix(EnumAttachmentType type)
     {
-        return new StringTextComponent(" (" + type.getDisplayName().getFormattedText() + ")").setStyle(new Style().setColor(TextFormatting.DARK_GRAY)).getFormattedText();
+        ITextComponent t = new StringTextComponent(" (" + type.getDisplayName().getString() + ")");
+        t.getStyle().applyFormatting(TextFormatting.DARK_GRAY);
+        return t.getString();
     }
     
     public static enum EnumFireMode

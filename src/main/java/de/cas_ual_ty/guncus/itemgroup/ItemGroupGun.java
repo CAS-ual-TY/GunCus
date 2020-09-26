@@ -8,6 +8,7 @@ import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 
 public class ItemGroupGun extends ItemGroupShuffle
 {
@@ -58,9 +59,9 @@ public class ItemGroupGun extends ItemGroupShuffle
     }
     
     @Override
-    public String getTranslationKey()
+    public ITextComponent getGroupName()
     {
-        return this.gun.getTranslationKey();
+        return this.gun.getName();
     }
     
     @Override
