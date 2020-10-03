@@ -30,8 +30,10 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -689,13 +691,11 @@ public class ItemGun extends Item
         int maxAmmo = this.calcCurrentMaxAmmo(attachments);
         ItemBullet bullet = this.calcCurrentBullet(attachments);
         
-        ITextComponent tAmmo = new StringTextComponent(this.getNBTCurrentAmmo(itemStack) + "");
-        tAmmo.getStyle().applyFormatting(TextFormatting.YELLOW);
-        ITextComponent tMaxAmmo = new StringTextComponent("/" + maxAmmo);
-        ITextComponent tBullet = new TranslationTextComponent(bullet.getTranslationKey());
-        tBullet.getStyle().applyFormatting(TextFormatting.YELLOW);
-        
-        list.add(new StringTextComponent(tAmmo.getString() + tMaxAmmo.getString() + " " + tBullet.getString()));
+        list.add(
+            new StringTextComponent(this.getNBTCurrentAmmo(itemStack) + "").setStyle(Style.EMPTY.applyFormatting(TextFormatting.YELLOW))
+                .append(new StringTextComponent("/" + maxAmmo).setStyle(Style.EMPTY.applyFormatting(TextFormatting.WHITE)))
+                .appendString(" ")
+                .append(new TranslationTextComponent(bullet.getTranslationKey()).setStyle(Style.EMPTY.applyFormatting(TextFormatting.YELLOW))));
         
         ItemAttachment attachment;
         int ammount = 0;
@@ -711,11 +711,8 @@ public class ItemGun extends Item
         
         if(ammount > 0)
         {
-            ITextComponent t = ItemAttachment.getAttachmentTranslated(ammount > 1);
-            t.getStyle().applyFormatting(TextFormatting.DARK_GRAY);
-            ITextComponent t2 = new StringTextComponent(":");
-            t2.getStyle().applyFormatting(TextFormatting.WHITE);
-            list.add(new StringTextComponent(t.getString() + t2.getString()));
+            list.add(ItemAttachment.getAttachmentTranslated(ammount != 1).appendString(":").setStyle(Style.EMPTY.applyFormatting(TextFormatting.DARK_GRAY)));
+            
             for(EnumAttachmentType type : EnumAttachmentType.VALUES)
             {
                 if(this.isSlotAvailable(type))
@@ -724,11 +721,11 @@ public class ItemGun extends Item
                     
                     if(attachment != null)
                     {
-                        list.add(new StringTextComponent(attachment.getInformationString().getString() + ItemGun.getSlotDisplaySuffix(type)));
+                        list.add(attachment.getInformationString().append(ItemGun.getSlotDisplaySuffix(type)));
                     }
                     else
                     {
-                        list.add(new StringTextComponent("--" + ItemGun.getSlotDisplaySuffix(type)));
+                        list.add(new StringTextComponent("--").setStyle(Style.EMPTY.applyFormatting(TextFormatting.YELLOW)).append(ItemGun.getSlotDisplaySuffix(type)));
                     }
                 }
             }
@@ -782,11 +779,9 @@ public class ItemGun extends Item
         }
     }
     
-    public static String getSlotDisplaySuffix(EnumAttachmentType type)
+    public static IFormattableTextComponent getSlotDisplaySuffix(EnumAttachmentType type)
     {
-        ITextComponent t = new StringTextComponent(" (" + type.getDisplayName().getString() + ")");
-        t.getStyle().applyFormatting(TextFormatting.DARK_GRAY);
-        return t.getString();
+        return new StringTextComponent(" (" + type.getDisplayName().getUnformattedComponentText() + ")").setStyle(Style.EMPTY.applyFormatting(TextFormatting.DARK_GRAY));
     }
     
     public static enum EnumFireMode

@@ -7,8 +7,10 @@ import de.cas_ual_ty.guncus.item.ItemAttachment;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -94,9 +96,14 @@ public class Optic extends ItemAttachment
     }
     
     @Override
-    public ITextComponent getInformationString()
+    public IFormattableTextComponent getInformationString()
     {
-        return new StringTextComponent(super.getInformationString().getString() + (this.isDefault() ? "" : (" (" + this.getZoom() + ")")));
+        return super.getInformationString().append(this.getInformationStringSuffix());
+    }
+    
+    public IFormattableTextComponent getInformationStringSuffix()
+    {
+        return new StringTextComponent((this.isDefault() ? "" : (" (" + this.getZoom() + ")"))).setStyle(Style.EMPTY.applyFormatting(TextFormatting.WHITE));
     }
     
     @Override
@@ -104,10 +111,10 @@ public class Optic extends ItemAttachment
     {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         
-        ITextComponent value = new StringTextComponent("" + this.getZoom());
-        ITextComponent zoom = new TranslationTextComponent("local.guncus.zoom");
-        zoom.getStyle().applyFormatting(TextFormatting.DARK_GRAY);
-        tooltip.add(new StringTextComponent(value.getString() + " " + zoom.getString()));
+        tooltip.add(
+            new StringTextComponent("" + this.getZoom())
+                .appendString(" ")
+                .append(new TranslationTextComponent("local.guncus.zoom")).setStyle(Style.EMPTY.applyFormatting(TextFormatting.WHITE)));
     }
     
     public static enum EnumOpticType

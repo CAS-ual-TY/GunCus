@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.item.ItemAttachment;
 import de.cas_ual_ty.guncus.item.ItemGun;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public enum EnumAttachmentType
@@ -66,7 +66,7 @@ public enum EnumAttachmentType
         return "local." + GunCus.MOD_ID + "." + this.getKey();
     }
     
-    public ITextComponent getDisplayName()
+    public IFormattableTextComponent getDisplayName()
     {
         return new TranslationTextComponent(this.getTranslationKey());
     }
@@ -76,7 +76,7 @@ public enum EnumAttachmentType
         return EnumAttachmentType.VALUES[slot];
     }
     
-    public static ITextComponent getDisplayName(int slot)
+    public static IFormattableTextComponent getDisplayName(int slot)
     {
         return EnumAttachmentType.getSlot(slot).getDisplayName();
     }

@@ -9,8 +9,9 @@ import de.cas_ual_ty.guncus.util.RandomTradeBuilder;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -212,21 +213,18 @@ public abstract class ItemAttachment extends Item
     {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         
-        ITextComponent type = this.getType().getDisplayName();
-        type.getStyle().applyFormatting(TextFormatting.YELLOW);
-        ITextComponent attachment = ItemAttachment.getAttachmentTranslated(false);
-        attachment.getStyle().applyFormatting(TextFormatting.DARK_GRAY);
-        tooltip.add(new StringTextComponent(type.getString() + " " + attachment.getString()));
+        tooltip.add(
+            this.getType().getDisplayName().setStyle(Style.EMPTY.applyFormatting(TextFormatting.YELLOW))
+                .appendString(" ")
+                .append(ItemAttachment.getAttachmentTranslated(false).setStyle(Style.EMPTY.applyFormatting(TextFormatting.DARK_GRAY))));
     }
     
-    public ITextComponent getInformationString()
+    public IFormattableTextComponent getInformationString()
     {
-        ITextComponent t = new TranslationTextComponent(this.getTranslationKey());
-        t.getStyle().applyFormatting(TextFormatting.YELLOW);
-        return t;
+        return new TranslationTextComponent(this.getTranslationKey()).setStyle(Style.EMPTY.applyFormatting(TextFormatting.YELLOW));
     }
     
-    public static ITextComponent getAttachmentTranslated(boolean plural)
+    public static IFormattableTextComponent getAttachmentTranslated(boolean plural)
     {
         return new TranslationTextComponent("local." + GunCus.MOD_ID + ".attachment" + (plural ? "s" : ""));
     }
