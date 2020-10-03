@@ -47,7 +47,7 @@ public class GunCus
     public GunCus()
     {
         GunCus.instance = this;
-        GunCus.proxy = (IProxy)DistExecutor.runForDist(() -> de.cas_ual_ty.guncus.client.ProxyClient::new, () -> de.cas_ual_ty.guncus.server.ProxyServer::new);
+        GunCus.proxy = (IProxy)DistExecutor.safeRunForDist(() -> de.cas_ual_ty.guncus.client.ProxyClient::new, () -> de.cas_ual_ty.guncus.server.ProxyServer::new);
         
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::init);

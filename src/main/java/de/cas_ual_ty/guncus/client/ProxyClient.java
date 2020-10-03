@@ -34,14 +34,13 @@ import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -494,14 +493,14 @@ public class ProxyClient implements IProxy
             
             if(ProxyClient.hitmarkerTick > 0)
             {
-                ProxyClient.drawHitmarker(event.getWindow());
+                ProxyClient.drawHitmarker(event.getMatrixStack(), event.getWindow());
             }
         }
     }
     
     public static void drawSight(MatrixStack ms, Optic optic, MainWindow sr)
     {
-        ProxyClient.drawDrawFullscreenImage(optic.getOverlay(), 1024, 256, sr);
+        ProxyClient.drawDrawFullscreenImage(ms, optic.getOverlay(), 1024, 256, sr);
     }
     
     public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, double range)
@@ -511,28 +510,28 @@ public class ProxyClient implements IProxy
     
     public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, String text)
     {
-        RenderSystem.pushMatrix();
+        ms.push();
         RenderSystem.enableBlend();
         RenderSystem.color4f(1F, 1F, 1F, 1F);
         
         int off = 8;
-        FontRenderer font = ProxyClient.getMC().fontRenderer;
+        FontRenderer font = ProxyClient.getFontRenderer();
         off = hand == Hand.OFF_HAND ? -(font.getStringWidth(text) + 1 + off) : off;
         
         font.drawStringWithShadow(ms, text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
         
         RenderSystem.disableBlend();
-        RenderSystem.popMatrix();
+        ms.pop();
     }
     
-    public static void drawHitmarker(MainWindow sr)
+    public static void drawHitmarker(MatrixStack ms, MainWindow sr)
     {
-        ProxyClient.drawDrawFullscreenImage(ProxyClient.HITMARKER_TEXTURE, 1024, 256, sr);
+        ProxyClient.drawDrawFullscreenImage(ms, ProxyClient.HITMARKER_TEXTURE, 1024, 256, sr);
     }
     
-    public static void drawDrawFullscreenImage(ResourceLocation rl, int texWidth, int texHeight, MainWindow sr)
+    public static void drawDrawFullscreenImage(MatrixStack ms, ResourceLocation rl, int texWidth, int texHeight, MainWindow sr)
     {
-        RenderSystem.pushMatrix();
+        ms.push();
         
         RenderSystem.enableBlend();
         RenderSystem.disableDepthTest();
@@ -543,28 +542,18 @@ public class ProxyClient implements IProxy
         
         ProxyClient.getMC().getTextureManager().bindTexture(rl);
         
-        double x = sr.getScaledWidth();
-        double y = sr.getScaledHeight();
-        
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder b = tessellator.getBuffer();
-        
-        b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        
-        b.pos(x * 0.5D - 2 * y, y, -90D).tex(0F, 1F).endVertex();
-        b.pos(x * 0.5D + 2 * y, y, -90D).tex(1F, 1F).endVertex();
-        b.pos(x * 0.5D + 2 * y, 0D, -90D).tex(1F, 0F).endVertex();
-        b.pos(x * 0.5D - 2 * y, 0D, -90D).tex(0F, 0F).endVertex();
-        
-        tessellator.draw();
+        int x = sr.getScaledWidth();
+        int y = sr.getScaledHeight();
+        AbstractGui.blit(ms, (x - texWidth) / 2, (y - texHeight) / 2, texWidth, texHeight, 0, 0, texWidth, texHeight, texWidth, texHeight);
         
         RenderSystem.depthMask(true);
         RenderSystem.enableDepthTest();
         RenderSystem.enableAlphaTest();
         
-        RenderSystem.popMatrix();
+        ms.pop();
     }
     
+    @SuppressWarnings("resource")
     public void renderWorldLast(RenderWorldLastEvent event)
     {
         IRenderTypeBuffer.Impl b = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
@@ -800,9 +789,16 @@ public class ProxyClient implements IProxy
         return Minecraft.getInstance();
     }
     
+    @SuppressWarnings("resource")
     @Nullable
     public static PlayerEntity getClientPlayer()
     {
         return ProxyClient.getMC().player;
+    }
+    
+    @SuppressWarnings("resource")
+    public static FontRenderer getFontRenderer()
+    {
+        return ProxyClient.getMC().fontRenderer;
     }
 }
