@@ -272,7 +272,7 @@ public class LaserRenderer
         {
             if(entity != null && (entity.getEntityId() != entity0.getEntityId()) && !(entity instanceof EntityBullet))
             {
-                AxisAlignedBB axisalignedbb = entity.getBoundingBox().offset(entity.getPositionVec().scale(partialTicks)).grow(0.30000001192092896D);
+                AxisAlignedBB axisalignedbb = entity.getBoundingBox().offset(entity.getMotion().scale(partialTicks)).grow(0.30000001192092896D);
                 
                 opt = axisalignedbb.rayTrace(start, end);
                 
