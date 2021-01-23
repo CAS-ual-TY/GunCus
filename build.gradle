@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.15.2-1.3'
+version = '1.15.2-1.4'
 group = 'de.cas_ual_ty.guncus' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'guncus'
 
@@ -47,6 +47,18 @@ minecraft {
                     source sourceSets.main
                 }
             }
+        }
+
+        client2 {
+            parent runs.client
+
+            args '--username', 'Dev2'
+        }
+
+        client3 {
+            parent runs.client
+
+            args '--username', 'Dev3'
         }
 
         server {
