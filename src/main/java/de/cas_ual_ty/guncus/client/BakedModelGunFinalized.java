@@ -201,7 +201,7 @@ public class BakedModelGunFinalized implements IBakedModel
         {
             PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
             
-            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty() && ProxyClient.BUTTON_AIM_DOWN.get())
+            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty() && ProxyClient.isAiming())
             {
                 ItemStack itemStack = entityPlayer.getHeldItemMainhand();
                 ItemGun gun = (ItemGun)itemStack.getItem();

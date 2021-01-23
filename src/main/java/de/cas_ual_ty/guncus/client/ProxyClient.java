@@ -1,7 +1,5 @@
 package de.cas_ual_ty.guncus.client;
 
-import java.util.function.Supplier;
-
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -16,7 +14,6 @@ import de.cas_ual_ty.guncus.client.gui.GuiContainerGunMaker;
 import de.cas_ual_ty.guncus.client.gui.GuiContainerGunTable;
 import de.cas_ual_ty.guncus.item.ItemAttachment;
 import de.cas_ual_ty.guncus.item.ItemGun;
-import de.cas_ual_ty.guncus.item.attachments.Accessory;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import de.cas_ual_ty.guncus.itemgroup.ItemGroupShuffle;
@@ -31,37 +28,21 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class ProxyClient implements IProxy
 {
-    public static final Supplier<KeyBinding> BUTTON_AIM = () -> ProxyClient.getMC().gameSettings.keyBindUseItem;
-    public static final Supplier<KeyBinding> BUTTON_SHOOT = () -> ProxyClient.getMC().gameSettings.keyBindAttack;
-    public static final Supplier<Boolean> BUTTON_AIM_DOWN = () -> ProxyClient.BUTTON_AIM.get().isKeyDown();
-    public static final Supplier<Boolean> BUTTON_SHOOT_DOWN = () -> ProxyClient.BUTTON_SHOOT.get().isKeyDown();
-    
-    public static final ResourceLocation HITMARKER_TEXTURE = new ResourceLocation(GunCus.MOD_ID, "textures/gui/hitmarker.png");
-    
-    public static final int HITMARKER_RESET = 4;
-    
-    private static int hitmarkerTick = 0;
     private static int shootTime[] = new int[GunCusUtility.HANDS.length];
     private static int inaccuracyTime = 0;
     private static int prevSelectedMain = -1;
@@ -69,7 +50,6 @@ public class ProxyClient implements IProxy
     @Override
     public void registerModEventListeners(IEventBus bus)
     {
-        bus.addListener(this::clientSetup);
         bus.addListener(this::modelBake);
         bus.addListener(this::modelRegistry);
     }
@@ -78,9 +58,9 @@ public class ProxyClient implements IProxy
     public void registerForgeEventListeners(IEventBus bus)
     {
         bus.addListener(this::clientTick);
-        bus.addListener(this::fovUpdate);
-        bus.addListener(this::renderGameOverlayPre);
+        bus.register(new HitmarkerRenderer());
         bus.register(new LaserRenderer());
+        bus.register(new SightRenderer());
     }
     
     @Override
@@ -94,7 +74,7 @@ public class ProxyClient implements IProxy
     @Override
     public void addHitmarker(PlayerEntity player)
     {
-        ProxyClient.hitmarkerTick = ProxyClient.HITMARKER_RESET;
+        HitmarkerRenderer.addHitmarker();
     }
     
     @Override
@@ -109,11 +89,6 @@ public class ProxyClient implements IProxy
         int fireRate = gun.calcCurrentFireRate(gun.getCurrentAttachments(itemStack));
         ProxyClient.shootTime[hand == Hand.MAIN_HAND ? 0 : 1] = fireRate;
         ProxyClient.inaccuracyTime = Math.min(15, ProxyClient.inaccuracyTime + 2 + fireRate);
-    }
-    
-    public void clientSetup(FMLClientSetupEvent event)
-    {
-        // TODO
     }
     
     public void modelBake(ModelBakeEvent event)
@@ -256,11 +231,11 @@ public class ProxyClient implements IProxy
             
             // ---
             
-            if(ProxyClient.BUTTON_SHOOT_DOWN.get() && (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun))
+            if(ProxyClient.isShooting() && (entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun))
             {
                 boolean aiming = false;
                 
-                if(ProxyClient.BUTTON_AIM_DOWN.get() && !entityPlayer.isSprinting())
+                if(ProxyClient.isAiming() && !entityPlayer.isSprinting())
                 {
                     if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty())
                     {
@@ -300,188 +275,6 @@ public class ProxyClient implements IProxy
                 group.tick();
             }
         }
-        else if(event.phase == Phase.END)
-        {
-            if(ProxyClient.hitmarkerTick > 0)
-            {
-                --ProxyClient.hitmarkerTick;
-            }
-        }
-    }
-    
-    public void fovUpdate(FOVUpdateEvent event)
-    {
-        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
-        
-        if(entityPlayer != null && ProxyClient.BUTTON_AIM_DOWN.get())
-        {
-            if(!entityPlayer.isSprinting())
-            {
-                Optic optic = null;
-                float modifier = 1F;
-                float extra = 0F;
-                
-                if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
-                {
-                    if(entityPlayer.getHeldItemOffhand().isEmpty())
-                    {
-                        ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                        ItemGun gun = (ItemGun)itemStack.getItem();
-                        
-                        if(gun.getNBTCanAimGun(itemStack))
-                        {
-                            optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
-                        }
-                        
-                        if(optic != null && gun.isNBTAccessoryTurnedOn(itemStack) && !gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY).isDefault())
-                        {
-                            Accessory accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
-                            
-                            if(optic.isCompatibleWithMagnifiers())
-                            {
-                                modifier = accessory.getZoomModifier();
-                            }
-                            
-                            if(optic.isCompatibleWithExtraZoom())
-                            {
-                                extra = accessory.getExtraZoom();
-                            }
-                        }
-                    }
-                }
-                else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
-                {
-                    ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                    optic = (Optic)itemStack.getItem();
-                }
-                
-                if(optic != null && optic.canAim())
-                {
-                    event.setNewfov(ProxyClient.calculateFov(optic.getZoom() * modifier + 0.1F + extra, event.getFov()));
-                }
-            }
-        }
-    }
-    
-    public static float calculateFov(float zoom, float fov)
-    {
-        return (float)Math.atan(Math.tan(fov) / zoom);
-    }
-    
-    public void renderGameOverlayPre(RenderGameOverlayEvent.Pre event)
-    {
-        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
-        ItemStack itemStack;
-        ItemGun gun;
-        
-        if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
-        {
-            Optic optic = null;
-            
-            if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
-            {
-                if(entityPlayer.getHeldItemOffhand().isEmpty())
-                {
-                    itemStack = entityPlayer.getHeldItemMainhand();
-                    gun = (ItemGun)itemStack.getItem();
-                    
-                    if(gun.getNBTCanAimGun(itemStack))
-                    {
-                        optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
-                    }
-                }
-                
-                event.setCanceled(true);
-            }
-            else if(entityPlayer.getHeldItemMainhand().getItem() instanceof Optic)
-            {
-                optic = (Optic)entityPlayer.getHeldItemMainhand().getItem();
-            }
-            
-            if(optic != null && optic.canAim() && !entityPlayer.isSprinting() && ProxyClient.BUTTON_AIM_DOWN.get())
-            {
-                ProxyClient.drawSight(event.getMatrixStack(), optic, event.getWindow());
-                
-                if(!event.isCanceled())
-                {
-                    event.setCanceled(true);
-                }
-            }
-            
-            // ---
-            
-            Accessory accessory;
-            Vector3d start = new Vector3d(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
-            Vector3d end;
-            Vector3d hit;
-            
-            for(Hand hand : GunCusUtility.HANDS)
-            {
-                itemStack = entityPlayer.getHeldItem(hand);
-                
-                if(itemStack.getItem() instanceof ItemGun)
-                {
-                    gun = (ItemGun)itemStack.getItem();
-                    accessory = gun.getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
-                }
-                else if(itemStack.getItem() instanceof Accessory)
-                {
-                    accessory = (Accessory)itemStack.getItem();
-                }
-                else
-                {
-                    accessory = (Accessory)EnumAttachmentType.ACCESSORY.getDefault();
-                }
-                
-                if(accessory.getLaser() != null && accessory.getLaser().isRangeFinder())
-                {
-                    end = start.add(entityPlayer.getLookVec().normalize().scale(accessory.getLaser().getMaxRange()));
-                    hit = LaserRenderer.findHit(entityPlayer.world, entityPlayer, start, end);
-                    
-                    hit = hit.subtract(start);
-                    
-                    ProxyClient.drawRangeFinder(event.getMatrixStack(), event.getWindow(), hand, hit.length());
-                }
-            }
-            
-            // ---
-            
-            if(ProxyClient.hitmarkerTick > 0)
-            {
-                ProxyClient.drawHitmarker(event.getMatrixStack(), event.getWindow());
-            }
-        }
-    }
-    
-    public static void drawSight(MatrixStack ms, Optic optic, MainWindow sr)
-    {
-        ProxyClient.drawDrawFullscreenImage(ms, optic.getOverlay(), 1024, 256, sr);
-    }
-    
-    public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, double range)
-    {
-        ProxyClient.drawRangeFinder(ms, sr, hand, (int)range + "");
-    }
-    
-    public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, String text)
-    {
-        ms.push();
-        RenderSystem.enableBlend();
-        RenderSystem.color4f(1F, 1F, 1F, 1F);
-        
-        int off = 8;
-        FontRenderer font = ProxyClient.getFontRenderer();
-        off = hand == Hand.OFF_HAND ? -(font.getStringWidth(text) + 1 + off) : off;
-        
-        font.drawStringWithShadow(ms, text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
-        
-        RenderSystem.disableBlend();
-        ms.pop();
-    }
-    
-    public static void drawHitmarker(MatrixStack ms, MainWindow sr)
-    {
-        ProxyClient.drawDrawFullscreenImage(ms, ProxyClient.HITMARKER_TEXTURE, 1024, 256, sr);
     }
     
     public static void drawDrawFullscreenImage(MatrixStack ms, ResourceLocation rl, int texWidth, int texHeight, MainWindow sr)
@@ -524,5 +317,17 @@ public class ProxyClient implements IProxy
     public static FontRenderer getFontRenderer()
     {
         return ProxyClient.getMC().fontRenderer;
+    }
+    
+    @SuppressWarnings("resource")
+    public static boolean isAiming()
+    {
+        return ProxyClient.getMC().gameSettings.keyBindUseItem.isKeyDown();
+    }
+    
+    @SuppressWarnings("resource")
+    public static boolean isShooting()
+    {
+        return ProxyClient.getMC().gameSettings.keyBindAttack.isKeyDown();
     }
 }

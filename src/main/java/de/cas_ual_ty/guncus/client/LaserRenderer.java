@@ -17,7 +17,9 @@ import de.cas_ual_ty.guncus.item.attachments.Accessory.Laser;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderState;
@@ -37,6 +39,8 @@ import net.minecraft.util.math.RayTraceContext.FluidMode;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -69,23 +73,24 @@ public class LaserRenderer
     @SubscribeEvent
     public void renderWorldLast(RenderWorldLastEvent event)
     {
-        IRenderTypeBuffer.Impl b = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        MatrixStack matrixStack = event.getMatrixStack();
-        
-        matrixStack.push();
-        
-        // Setting pos back to 0 0 0
-        ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
-        Vector3d v = renderInfo.getProjectedView();
-        matrixStack.translate(-v.x, -v.y, -v.z);
-        
         if(ProxyClient.getMC().getRenderViewEntity() != null)
         {
+            MatrixStack matrixStack = event.getMatrixStack();
+            
+            matrixStack.push();
+            
+            // Setting pos back to 0 0 0
+            ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
+            Vector3d v = renderInfo.getProjectedView();
+            matrixStack.translate(-v.x, -v.y, -v.z);
+            
+            IRenderTypeBuffer.Impl b = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
             World world = ProxyClient.getMC().getRenderViewEntity().world;
+            final float partialTicks = event.getPartialTicks();
             
             for(PlayerEntity entityPlayer : world.getPlayers())
             {
-                Vector3d playerPos = entityPlayer.getEyePosition(event.getPartialTicks());
+                Vector3d playerPos = entityPlayer.getEyePosition(partialTicks);
                 Vector3d playerLook = entityPlayer.getLookVec().normalize();
                 
                 if(entityPlayer.isAlive())
@@ -113,31 +118,34 @@ public class LaserRenderer
                         {
                             Laser laser = accessory.getLaser();
                             
-                            Vector3d handOff = LaserRenderer.getOffsetForHand(entityPlayer, hand).add(LaserRenderer.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw));
+                            Vector3d handOff = LaserRenderer.getOffsetForHand(entityPlayer, hand)
+                                .add(LaserRenderer.getVectorForRotation(entityPlayer.rotationPitch + -345F, entityPlayer.rotationYaw));
                             
                             Vector3d start = playerPos.add(handOff);
                             Vector3d end = start.add(playerLook.scale(laser.getMaxRange()));
                             
-                            end = LaserRenderer.findHit(world, entityPlayer, start, end);
+                            end = LaserRenderer.findHit(world, entityPlayer, start, end, partialTicks);
                             
                             if(laser.isPoint() && !LaserRenderer.tmpHitNothing)
                             {
-                                LaserRenderer.renderLaserPoint(b.getBuffer(LaserRenderer.LASER_POINT), matrixStack, laser, start, end);
+                                IVertexBuilder vb = b.getBuffer(LaserRenderer.LASER_POINT);
+                                LaserRenderer.renderLaserPoint(vb, matrixStack, laser, start, end);
                                 b.finish(LaserRenderer.LASER_POINT);
                             }
                             
                             if(laser.isBeam())
                             {
-                                LaserRenderer.renderLaserBeam(b.getBuffer(LaserRenderer.LASER_BEAM), matrixStack, laser, start, end);
+                                IVertexBuilder vb = b.getBuffer(LaserRenderer.LASER_BEAM);
+                                LaserRenderer.renderLaserBeam(vb, matrixStack, laser, start, end);
                                 b.finish(LaserRenderer.LASER_BEAM);
                             }
                         }
                     }
                 }
             }
+            
+            matrixStack.pop();
         }
-        
-        matrixStack.pop();
     }
     
     public static void renderLaserPoint(IVertexBuilder b, MatrixStack m, Laser laser, Vector3d start, Vector3d end)
@@ -218,12 +226,12 @@ public class LaserRenderer
         return vec.add(LaserRenderer.getVectorForRotation(entityPlayer.rotationPitch, entityPlayer.rotationYaw).scale(0.4D));
     }
     
-    public static Vector3d findHit(World world, Entity entity, Vector3d start, Vector3d end)
+    public static Vector3d findHit(World world, Entity entity, Vector3d start, Vector3d end, float partialTicks)
     {
         LaserRenderer.tmpHitNothing = false;
         
         BlockRayTraceResult resultBlock = LaserRenderer.findBlockOnPath(world, entity, start, end);
-        EntityRayTraceResult resultEntity = LaserRenderer.findEntityOnPath(world, entity, start, end);
+        EntityRayTraceResult resultEntity = LaserRenderer.findEntityOnPath(world, entity, start, end, partialTicks);
         
         if(resultEntity != null)
         {
@@ -252,7 +260,7 @@ public class LaserRenderer
         return world.rayTraceBlocks(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, entity));
     }
     
-    public static EntityRayTraceResult findEntityOnPath(World world, Entity entity0, Vector3d start, Vector3d end)
+    public static EntityRayTraceResult findEntityOnPath(World world, Entity entity0, Vector3d start, Vector3d end, float partialTicks)
     {
         EntityRayTraceResult result = null;
         Optional<Vector3d> opt;
@@ -264,7 +272,7 @@ public class LaserRenderer
         {
             if(entity != null && (entity.getEntityId() != entity0.getEntityId()) && !(entity instanceof EntityBullet))
             {
-                AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(0.30000001192092896D);
+                AxisAlignedBB axisalignedbb = entity.getBoundingBox().offset(entity.getPositionVec().scale(partialTicks)).grow(0.30000001192092896D);
                 
                 opt = axisalignedbb.rayTrace(start, end);
                 
@@ -283,4 +291,69 @@ public class LaserRenderer
         return result;
     }
     
+    @SubscribeEvent
+    public void renderGameOverlayPre(RenderGameOverlayEvent.Pre event)
+    {
+        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+        
+        if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
+        {
+            ItemGun gun;
+            Accessory accessory;
+            
+            Vector3d start = new Vector3d(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
+            Vector3d end;
+            Vector3d hit;
+            
+            for(Hand hand : GunCusUtility.HANDS)
+            {
+                ItemStack itemStack = entityPlayer.getHeldItem(hand);
+                
+                if(itemStack.getItem() instanceof ItemGun)
+                {
+                    gun = (ItemGun)itemStack.getItem();
+                    accessory = gun.getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
+                }
+                else if(itemStack.getItem() instanceof Accessory)
+                {
+                    accessory = (Accessory)itemStack.getItem();
+                }
+                else
+                {
+                    accessory = (Accessory)EnumAttachmentType.ACCESSORY.getDefault();
+                }
+                
+                if(accessory.getLaser() != null && accessory.getLaser().isRangeFinder())
+                {
+                    end = start.add(entityPlayer.getLookVec().normalize().scale(accessory.getLaser().getMaxRange()));
+                    hit = LaserRenderer.findHit(entityPlayer.world, entityPlayer, start, end, event.getPartialTicks());
+                    
+                    hit = hit.subtract(start);
+                    
+                    LaserRenderer.drawRangeFinder(event.getMatrixStack(), event.getWindow(), hand, hit.length());
+                }
+            }
+        }
+    }
+    
+    public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, double range)
+    {
+        LaserRenderer.drawRangeFinder(ms, sr, hand, (int)range + "");
+    }
+    
+    public static void drawRangeFinder(MatrixStack ms, MainWindow sr, Hand hand, String text)
+    {
+        ms.push();
+        RenderSystem.enableBlend();
+        RenderSystem.color4f(1F, 1F, 1F, 1F);
+        
+        int off = 8;
+        FontRenderer font = ProxyClient.getFontRenderer();
+        off = hand == Hand.OFF_HAND ? -(font.getStringWidth(text) + 1 + off) : off;
+        
+        font.drawStringWithShadow(ms, text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);
+        
+        RenderSystem.disableBlend();
+        ms.pop();
+    }
 }

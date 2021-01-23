@@ -89,7 +89,7 @@ public class BakedModelOptic implements IBakedModel
         {
             PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
             
-            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof Optic && ProxyClient.BUTTON_AIM_DOWN.get())
+            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof Optic && ProxyClient.isAiming())
             {
                 ItemStack itemStack = entityPlayer.getHeldItemMainhand();
                 Optic optic = (Optic)itemStack.getItem();
