@@ -27,7 +27,7 @@ public class PaintMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return Paint.PAINTS_LIST;
+        return Paint.MAKER_PAINTS_LIST;
     }
     
     @Override

@@ -27,7 +27,7 @@ public class UnderbarrelMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return Underbarrel.UNDERBARRELS_LIST;
+        return Underbarrel.MAKER_UNDERBARRELS_LIST;
     }
     
     @Override

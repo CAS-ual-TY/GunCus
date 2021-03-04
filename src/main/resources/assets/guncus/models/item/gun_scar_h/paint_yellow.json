@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "guncus:item/gun_scar_h/paint_default",
   "textures": {
     "layer0": "guncus:item/gun_scar_h/paint_yellow"
   }

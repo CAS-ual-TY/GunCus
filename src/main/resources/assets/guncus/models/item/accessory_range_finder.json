@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/accessory_range_finder"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/accessory_range_finder"
+  }
 }

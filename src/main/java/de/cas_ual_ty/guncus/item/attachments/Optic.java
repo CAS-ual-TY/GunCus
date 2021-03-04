@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class Optic extends AttachmentItem
 {
-    public static final List<MakerItem> OPTICS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_OPTICS_LIST = new ArrayList<>();
     
     public static final Optic DEFAULT = (Optic)new Optic().setNoOverlay().setRegistryName(GunCus.MOD_ID, "optic_default");
     
@@ -37,7 +37,7 @@ public class Optic extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            OPTICS_LIST.add(this);
+            MAKER_OPTICS_LIST.add(this);
         }
     }
     

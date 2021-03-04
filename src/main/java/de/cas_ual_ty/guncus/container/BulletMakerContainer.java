@@ -27,7 +27,7 @@ public class BulletMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return BulletItem.BULLETS_LIST;
+        return BulletItem.MAKER_BULLETS_LIST;
     }
     
     @Override

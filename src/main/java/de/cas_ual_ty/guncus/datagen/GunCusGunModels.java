@@ -1,54 +1,31 @@
 package de.cas_ual_ty.guncus.datagen;
 
-import javax.annotation.Nonnull;
-
-import com.google.common.base.Preconditions;
-
 import de.cas_ual_ty.guncus.item.AttachmentItem;
 import de.cas_ual_ty.guncus.item.GunItem;
+import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
-import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class GunCusGunModels extends ModelProvider<ItemModelBuilder>
+public class GunCusGunModels extends ItemModelProvider
 {
     public GunCusGunModels(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
     {
-        super(generator, modid, ITEM_FOLDER, GunCusItemModelBuilder::new, existingFileHelper);
+        super(generator, modid, existingFileHelper);
     }
     
-    @Nonnull
     @Override
     public String getName()
     {
-        return "Item Models: " + this.modid;
-    }
-    
-    public static class GunCusItemModelBuilder extends ItemModelBuilder
-    {
-        public GunCusItemModelBuilder(ResourceLocation outputLocation, ExistingFileHelper existingFileHelper)
-        {
-            super(outputLocation, existingFileHelper);
-        }
-        
-        @Override
-        public GunCusItemModelBuilder texture(String key, ResourceLocation texture)
-        {
-            // Overriding this because apparently gun attachment textures cant be found
-            // so this method would throw an Exception if not overridden
-            Preconditions.checkNotNull(key, "Key must not be null");
-            Preconditions.checkNotNull(texture, "Texture must not be null");
-            this.textures.put(key, texture.toString());
-            return this;
-        }
+        return super.getName() + " (guns)";
     }
     
     @Override
     protected void registerModels()
     {
+        // --- GUNS + THEIR ATTACHMENTS ---
+        
         String path;
         
         for(GunItem gun : GunItem.ALL_GUNS_LIST)
@@ -63,9 +40,18 @@ public class GunCusGunModels extends ModelProvider<ItemModelBuilder>
                 {
                     path = gun.getRegistryName().getPath() + "/" + attachment.getRegistryName().getPath();
                     
-                    this.getBuilder(this.modid + ":item/" + path)
-                        .parent(new UncheckedModelFile("item/generated"))
-                        .texture("layer0", this.modLoc("item/" + path));
+                    if(!attachment.isDefault() && attachment.getType() == EnumAttachmentType.PAINT)
+                    {
+                        this.getBuilder(this.modid + ":item/" + path)
+                            .parent(new UncheckedModelFile(this.modid + ":item/" + gun.getRegistryName().getPath() + "/paint_default"))
+                            .texture("layer0", this.modLoc("item/" + path));
+                    }
+                    else
+                    {
+                        this.getBuilder(this.modid + ":item/" + path)
+                            .parent(new UncheckedModelFile("item/generated"))
+                            .texture("layer0", this.modLoc("item/" + path));
+                    }
                 }
             }
         }

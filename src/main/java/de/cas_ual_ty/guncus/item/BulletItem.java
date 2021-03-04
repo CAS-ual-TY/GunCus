@@ -16,7 +16,8 @@ import net.minecraft.world.World;
 
 public class BulletItem extends MakerItem
 {
-    public static final List<MakerItem> BULLETS_LIST = new ArrayList<>();
+    public static final List<BulletItem> ALL_BULLETS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_BULLETS_LIST = new ArrayList<>();
     
     protected float extraDamage;
     protected float gravity;
@@ -36,8 +37,10 @@ public class BulletItem extends MakerItem
         
         if(craftAmount > 0 && materials.length > 0)
         {
-            BulletItem.BULLETS_LIST.add(this);
+            BulletItem.MAKER_BULLETS_LIST.add(this);
         }
+        
+        ALL_BULLETS_LIST.add(this);
     }
     
     public BulletItem(Properties properties, int iron, int gunpowder, int craftAmt)

@@ -110,7 +110,7 @@ public class ClientProxy implements IProxy
         
         Optic optic;
         
-        for(AttachmentItem attachment : AttachmentItem.ATTACHMENTS_LIST)
+        for(AttachmentItem attachment : AttachmentItem.ALL_ATTACHMENTS_LIST)
         {
             if(attachment.getType() == EnumAttachmentType.OPTIC)
             {

@@ -27,7 +27,7 @@ public class OpticMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return Optic.OPTICS_LIST;
+        return Optic.MAKER_OPTICS_LIST;
     }
     
     @Override

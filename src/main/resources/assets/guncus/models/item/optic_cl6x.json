@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/optic_cl6x"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/optic_cl6x"
+  }
 }

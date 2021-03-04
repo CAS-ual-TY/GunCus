@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "guncus:block/gun_table" }
+  "variants": {
+    "": {
+      "model": "guncus:block/gun_table"
     }
+  }
 }

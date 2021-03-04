@@ -27,7 +27,7 @@ public class MagazineMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return Magazine.MAGAZINES_LIST;
+        return Magazine.MAKER_MAGAZINES_LIST;
     }
     
     @Override

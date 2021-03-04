@@ -27,7 +27,7 @@ public class AmmoMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return Ammo.AMMOS_LIST;
+        return Ammo.MAKER_AMMOS_LIST;
     }
     
     @Override

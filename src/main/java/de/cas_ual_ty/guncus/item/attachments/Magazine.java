@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class Magazine extends AttachmentItem
 {
-    public static final List<MakerItem> MAGAZINES_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_MAGAZINES_LIST = new ArrayList<>();
     
     public static final Magazine DEFAULT = (Magazine)new Magazine().setRegistryName(GunCus.MOD_ID, "magazine_default");
     
@@ -26,7 +26,7 @@ public class Magazine extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAGAZINES_LIST.add(this);
+            MAKER_MAGAZINES_LIST.add(this);
         }
     }
     

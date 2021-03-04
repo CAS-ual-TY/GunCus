@@ -1,8 +1,19 @@
 {
-    "variants": {
-        "facing=north": { "model": "guncus:block/magazine_maker" },
-        "facing=south": { "model": "guncus:block/magazine_maker", "y": 180 },
-        "facing=west":  { "model": "guncus:block/magazine_maker", "y": 270 },
-        "facing=east":  { "model": "guncus:block/magazine_maker", "y": 90 }
+  "variants": {
+    "facing=north": {
+      "model": "guncus:block/magazine_maker"
+    },
+    "facing=south": {
+      "model": "guncus:block/magazine_maker",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guncus:block/magazine_maker",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "guncus:block/magazine_maker",
+      "y": 90
     }
+  }
 }

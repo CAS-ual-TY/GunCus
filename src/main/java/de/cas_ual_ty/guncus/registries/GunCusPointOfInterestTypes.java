@@ -1,7 +1,6 @@
 package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
-import de.cas_ual_ty.guncus.util.GunCusUtility;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,6 +20,14 @@ public class GunCusPointOfInterestTypes
     {
         IForgeRegistry<PointOfInterestType> registry = event.getRegistry();
         
-        registry.register(GunCusUtility.pointOfInterestType("arms_dealer", GunCusUtility.getAllStates(GunCusBlocks.GUN_TABLE), 1, 1).setRegistryName(GunCus.MOD_ID, "arms_dealer"));
+        try
+        {
+            registry.register(new PointOfInterestType("arms_dealer", PointOfInterestType.getAllStates(GunCusBlocks.GUN_TABLE), 1, 1).setRegistryName(GunCus.MOD_ID, "arms_dealer"));
+        }
+        catch (NullPointerException e)
+        {
+            //NPE thrown during DataGen. no idea why
+            new Exception("DataGen? Arms Dealer Villagers wont work.", e).printStackTrace();
+        }
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 
 public class Ammo extends AttachmentItem
 {
-    public static final List<MakerItem> AMMOS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_AMMOS_LIST = new ArrayList<>();
     
     public static final Ammo DEFAULT = (Ammo)new Ammo().setRegistryName(GunCus.MOD_ID, "ammo_default");
     
@@ -27,7 +27,7 @@ public class Ammo extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            AMMOS_LIST.add(this);
+            MAKER_AMMOS_LIST.add(this);
         }
     }
     

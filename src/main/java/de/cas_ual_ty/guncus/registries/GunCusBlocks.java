@@ -9,6 +9,7 @@ import de.cas_ual_ty.guncus.block.BulletMakerBlock;
 import de.cas_ual_ty.guncus.block.GunMakerBlock;
 import de.cas_ual_ty.guncus.block.GunTableBlock;
 import de.cas_ual_ty.guncus.block.MagazineMakerBlock;
+import de.cas_ual_ty.guncus.block.MakerBlock;
 import de.cas_ual_ty.guncus.block.OpticMakerBlock;
 import de.cas_ual_ty.guncus.block.PaintMakerBlock;
 import de.cas_ual_ty.guncus.block.UnderbarrelMakerBlock;
@@ -27,16 +28,16 @@ import net.minecraftforge.registries.ObjectHolder;
 public class GunCusBlocks
 {
     public static final Block GUN_TABLE = null;
-    public static final Block GUN_MAKER = null;
-    public static final Block BULLET_MAKER = null;
-    public static final Block OPTIC_MAKER = null;
-    public static final Block ACCESSORY_MAKER = null;
-    public static final Block BARREL_MAKER = null;
-    public static final Block UNDERBARREL_MAKER = null;
-    public static final Block AUXILIARY_MAKER = null;
-    public static final Block AMMO_MAKER = null;
-    public static final Block MAGAZINE_MAKER = null;
-    public static final Block PAINT_MAKER = null;
+    public static final MakerBlock GUN_MAKER = null;
+    public static final MakerBlock BULLET_MAKER = null;
+    public static final MakerBlock OPTIC_MAKER = null;
+    public static final MakerBlock ACCESSORY_MAKER = null;
+    public static final MakerBlock BARREL_MAKER = null;
+    public static final MakerBlock UNDERBARREL_MAKER = null;
+    public static final MakerBlock AUXILIARY_MAKER = null;
+    public static final MakerBlock AMMO_MAKER = null;
+    public static final MakerBlock MAGAZINE_MAKER = null;
+    public static final MakerBlock PAINT_MAKER = null;
     
     @SubscribeEvent
     public static void registerBlocks(Register<Block> event)

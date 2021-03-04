@@ -1,8 +1,19 @@
 {
-    "variants": {
-        "facing=north": { "model": "guncus:block/accessory_maker" },
-        "facing=south": { "model": "guncus:block/accessory_maker", "y": 180 },
-        "facing=west":  { "model": "guncus:block/accessory_maker", "y": 270 },
-        "facing=east":  { "model": "guncus:block/accessory_maker", "y": 90 }
+  "variants": {
+    "facing=north": {
+      "model": "guncus:block/accessory_maker"
+    },
+    "facing=south": {
+      "model": "guncus:block/accessory_maker",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guncus:block/accessory_maker",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "guncus:block/accessory_maker",
+      "y": 90
     }
+  }
 }

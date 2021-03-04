@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class Underbarrel extends AttachmentItem
 {
-    public static final List<MakerItem> UNDERBARRELS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_UNDERBARRELS_LIST = new ArrayList<>();
     
     public static final Underbarrel DEFAULT = (Underbarrel)new Underbarrel().setRegistryName(GunCus.MOD_ID, "underbarrel_default");
     
@@ -26,7 +26,7 @@ public class Underbarrel extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            UNDERBARRELS_LIST.add(this);
+            MAKER_UNDERBARRELS_LIST.add(this);
         }
     }
     

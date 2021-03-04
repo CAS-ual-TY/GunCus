@@ -14,5 +14,8 @@ public class GunCusDataGen
     {
         DataGenerator generator = event.getGenerator();
         generator.addProvider(new GunCusGunModels(generator, GunCus.MOD_ID, event.getExistingFileHelper()));
+        generator.addProvider(new GunCusItemModels(generator, GunCus.MOD_ID, event.getExistingFileHelper()));
+        generator.addProvider(new GunCusBlockModels(generator, GunCus.MOD_ID, event.getExistingFileHelper()));
+        generator.addProvider(new GunCusBlockStates(generator, GunCus.MOD_ID, event.getExistingFileHelper()));
     }
 }

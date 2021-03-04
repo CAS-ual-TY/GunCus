@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class Auxiliary extends AttachmentItem
 {
-    public static final List<MakerItem> AUXILIARIES_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_AUXILIARIES_LIST = new ArrayList<>();
     
     public static final Auxiliary DEFAULT = (Auxiliary)new Auxiliary().setRegistryName(GunCus.MOD_ID, "auxiliary_default");
     
@@ -26,7 +26,7 @@ public class Auxiliary extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            AUXILIARIES_LIST.add(this);
+            MAKER_AUXILIARIES_LIST.add(this);
         }
     }
     

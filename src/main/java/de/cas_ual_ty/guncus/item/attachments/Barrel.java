@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class Barrel extends AttachmentItem
 {
-    public static final List<MakerItem> BARRELS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_BARRELS_LIST = new ArrayList<>();
     
     public static final Barrel DEFAULT = (Barrel)new Barrel().setRegistryName(GunCus.MOD_ID, "barrel_default");
     
@@ -26,7 +26,7 @@ public class Barrel extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            BARRELS_LIST.add(this);
+            MAKER_BARRELS_LIST.add(this);
         }
     }
     

@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/bullet_12g_buckshot"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/bullet_12g_buckshot"
+  }
 }

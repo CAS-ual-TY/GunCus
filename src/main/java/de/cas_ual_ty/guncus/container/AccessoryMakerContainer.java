@@ -27,7 +27,7 @@ public class AccessoryMakerContainer extends MakerContainer
     @Override
     public List<MakerItem> getItemsList()
     {
-        return Accessory.ACCESSORIES_LIST;
+        return Accessory.MAKER_ACCESSORIES_LIST;
     }
     
     @Override

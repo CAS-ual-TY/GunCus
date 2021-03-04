@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public abstract class AttachmentItem extends MakerItem
 {
-    public static final ArrayList<AttachmentItem> ATTACHMENTS_LIST = new ArrayList<>();
+    public static final List<AttachmentItem> ALL_ATTACHMENTS_LIST = new ArrayList<>();
     
     protected float zoomModifier;
     protected float extraZoom;
@@ -45,7 +45,7 @@ public abstract class AttachmentItem extends MakerItem
         this.inaccuracyModifierMoving = 1F;
         this.inaccuracyModifierStill = 1F;
         
-        AttachmentItem.ATTACHMENTS_LIST.add(this);
+        AttachmentItem.ALL_ATTACHMENTS_LIST.add(this);
     }
     
     public AttachmentItem(Properties properties, ItemStack... materials)

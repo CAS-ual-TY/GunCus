@@ -41,8 +41,8 @@ import net.minecraft.world.World;
 
 public class GunItem extends MakerItem
 {
-    public static final ArrayList<GunItem> ALL_GUNS_LIST = new ArrayList<>();
-    public static final ArrayList<MakerItem> GUNS_LIST = new ArrayList<>();
+    public static final List<GunItem> ALL_GUNS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_GUNS_LIST = new ArrayList<>();
     
     public static final String NBT_RELOAD_TIME = "ReloadTime";
     public static final String NBT_RELOAD_TYPE = "ReloadType";
@@ -94,7 +94,7 @@ public class GunItem extends MakerItem
         
         if(craftAmount > 0 && materials.length > 0)
         {
-            GunItem.GUNS_LIST.add(this);
+            GunItem.MAKER_GUNS_LIST.add(this);
         }
         
         ALL_GUNS_LIST.add(this);

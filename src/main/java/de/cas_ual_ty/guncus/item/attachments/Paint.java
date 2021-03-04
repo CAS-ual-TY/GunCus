@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class Paint extends AttachmentItem
 {
-    public static final List<MakerItem> PAINTS_LIST = new ArrayList<>();
+    public static final List<MakerItem> MAKER_PAINTS_LIST = new ArrayList<>();
     
     public static final Paint DEFAULT = (Paint)new Paint().setRegistryName(GunCus.MOD_ID, "paint_default");
     
@@ -20,7 +20,7 @@ public class Paint extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            PAINTS_LIST.add(this);
+            MAKER_PAINTS_LIST.add(this);
         }
     }
     
