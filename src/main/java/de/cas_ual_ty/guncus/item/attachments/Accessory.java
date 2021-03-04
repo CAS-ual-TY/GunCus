@@ -1,18 +1,31 @@
 package de.cas_ual_ty.guncus.item.attachments;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Accessory extends ItemAttachment
+import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.MakerItem;
+import net.minecraft.item.ItemStack;
+
+public class Accessory extends AttachmentItem
 {
-    public static final Accessory DEFAULT = new Accessory();
+    public static final List<MakerItem> ACCESSORIES_LIST = new ArrayList<>();
+    
+    public static final Accessory DEFAULT = (Accessory)new Accessory().setRegistryName(GunCus.MOD_ID, "accessory_default");
     
     protected Laser laser;
     
-    public Accessory(Properties properties)
+    public Accessory(Properties properties, ItemStack... materials)
     {
-        super(properties);
+        super(properties, materials);
         
         this.laser = null;
+        
+        if(this.craftAmount > 0 && materials.length > 0)
+        {
+            ACCESSORIES_LIST.add(this);
+        }
     }
     
     protected Accessory()

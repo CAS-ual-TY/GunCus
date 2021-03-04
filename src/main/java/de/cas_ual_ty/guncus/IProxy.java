@@ -1,6 +1,6 @@
 package de.cas_ual_ty.guncus;
 
-import de.cas_ual_ty.guncus.item.ItemGun;
+import de.cas_ual_ty.guncus.item.GunItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -19,5 +19,5 @@ public interface IProxy
     
     public PlayerEntity getPlayerFromContext(Context context);
     
-    public void shot(ItemStack itemStack, ItemGun gun, PlayerEntity player, Hand hand);
+    public void shot(ItemStack itemStack, GunItem gun, PlayerEntity player, Hand hand);
 }

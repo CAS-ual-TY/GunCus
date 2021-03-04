@@ -1,20 +1,33 @@
 package de.cas_ual_ty.guncus.item.attachments;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Magazine extends ItemAttachment
+import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.MakerItem;
+import net.minecraft.item.ItemStack;
+
+public class Magazine extends AttachmentItem
 {
-    public static final Magazine DEFAULT = new Magazine();
+    public static final List<MakerItem> MAGAZINES_LIST = new ArrayList<>();
+    
+    public static final Magazine DEFAULT = (Magazine)new Magazine().setRegistryName(GunCus.MOD_ID, "magazine_default");
     
     protected int extraCapacity;
     protected float reloadTimeModifier;
     
-    public Magazine(Properties properties)
+    public Magazine(Properties properties, ItemStack... materials)
     {
-        super(properties);
+        super(properties, materials);
         
         this.extraCapacity = 0;
         this.reloadTimeModifier = 1F;
+        
+        if(this.craftAmount > 0 && materials.length > 0)
+        {
+            MAGAZINES_LIST.add(this);
+        }
     }
     
     protected Magazine()

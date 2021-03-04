@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "guncus:block/ammo_maker" },
+        "facing=south": { "model": "guncus:block/ammo_maker", "y": 180 },
+        "facing=west":  { "model": "guncus:block/ammo_maker", "y": 270 },
+        "facing=east":  { "model": "guncus:block/ammo_maker", "y": 90 }
+    }
+}

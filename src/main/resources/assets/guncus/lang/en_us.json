@@ -23,14 +23,38 @@
     "item.guncus.magazine_default": "--",
     "item.guncus.paint_default": "--",
 
-    "block.guncus.gun_table": "Gun Table",
-    "container.guncus.gun_table": "Gun Table",
-	
-    "block.guncus.gun_maker": "Gun Maker",
-    "container.guncus.gun_maker": "Gun Maker",
-	
-    "block.guncus.bullet_maker": "Bullet Maker",
-    "container.guncus.bullet_maker": "Bullet Maker",
+    "block.guncus.gun_table": "Gun Modifications Table",
+    "container.guncus.gun_table": "Gun Modifications Table",
+
+    "block.guncus.gun_maker": "Gun Bench",
+    "container.guncus.gun_maker": "Gun Bench",
+
+    "block.guncus.bullet_maker": "Bullet Bench",
+    "container.guncus.bullet_maker": "Bullet Bench",
+
+    "block.guncus.optic_maker": "Optic Bench",
+    "container.guncus.optic_maker": "Optic Bench",
+
+    "block.guncus.accessory_maker": "Accessory Bench",
+    "container.guncus.accessory_maker": "Accessory Bench",
+
+    "block.guncus.barrel_maker": "Barrel Bench",
+    "container.guncus.barrel_maker": "Barrel Bench",
+
+    "block.guncus.underbarrel_maker": "Underbarrel Bench",
+    "container.guncus.underbarrel_maker": "Underbarrel Bench",
+
+    "block.guncus.auxiliary_maker": "Auxiliary Bench",
+    "container.guncus.auxiliary_maker": "Auxiliary Bench",
+
+    "block.guncus.ammo_maker": "Ammo Bench",
+    "container.guncus.ammo_maker": "Ammo Bench",
+
+    "block.guncus.magazine_maker": "Magazine Bench",
+    "container.guncus.magazine_maker": "Magazine Bench",
+
+    "block.guncus.paint_maker": "Paint Bench",
+    "container.guncus.paint_maker": "Paint Bench",
 	
 	"entity.minecraft.villager.guncus.arms_dealer": "Arms Dealer",
 

@@ -27,7 +27,7 @@ public class HitmarkerRenderer
     @SubscribeEvent
     public void renderGameOverlayPre(RenderGameOverlayEvent.Pre event)
     {
-        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+        PlayerEntity entityPlayer = ClientProxy.getClientPlayer();
         
         if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
         {
@@ -40,7 +40,7 @@ public class HitmarkerRenderer
     
     private static void drawHitmarker(MatrixStack ms, MainWindow sr)
     {
-        ProxyClient.drawDrawFullscreenImage(ms, HitmarkerRenderer.HITMARKER_TEXTURE, 1024, 256, sr);
+        ClientProxy.drawDrawFullscreenImage(ms, HitmarkerRenderer.HITMARKER_TEXTURE, 1024, 256, sr);
     }
     
     @SubscribeEvent

@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "guncus:item/gun_scar_h/gun"
+        "layer0": "guncus:item/dummy"
     },
     "display": {
         "thirdperson_righthand": {

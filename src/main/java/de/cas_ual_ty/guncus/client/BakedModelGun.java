@@ -3,6 +3,7 @@ package de.cas_ual_ty.guncus.client;
 import java.util.List;
 import java.util.Random;
 
+import de.cas_ual_ty.guncus.item.GunItem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -12,12 +13,10 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.client.model.data.IModelData;
 
 public class BakedModelGun implements IBakedModel
 {
-    
     /*
      * The only usage of this class is the item overrides list:
      * Basically get the itemstack, pass it onto the modelFinal, then return modelFinal for rendering,
@@ -27,10 +26,10 @@ public class BakedModelGun implements IBakedModel
     private final BakedModelGunFinalized modelFinal;
     private final ItemOverrideListGCI overridesList;
     
-    public BakedModelGun(IBakedModel modelMain, IBakedModel[][] attachmentModels, Matrix4f aimMatrix)
+    public BakedModelGun(GunItem gun, IBakedModel modelMain, IBakedModel[][] attachmentModels)
     {
         this.modelMain = modelMain;
-        this.modelFinal = new BakedModelGunFinalized(this.modelMain, attachmentModels, aimMatrix);
+        this.modelFinal = new BakedModelGunFinalized(gun, this.modelMain, attachmentModels);
         this.overridesList = new ItemOverrideListGCI(this);
     }
     

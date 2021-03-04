@@ -2,7 +2,7 @@ package de.cas_ual_ty.guncus.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import de.cas_ual_ty.guncus.item.ItemGun;
+import de.cas_ual_ty.guncus.item.GunItem;
 import de.cas_ual_ty.guncus.item.attachments.Accessory;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Optic;
@@ -19,9 +19,9 @@ public class SightRenderer
     @SubscribeEvent
     public void fovUpdate(FOVUpdateEvent event)
     {
-        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+        PlayerEntity entityPlayer = ClientProxy.getClientPlayer();
         
-        if(entityPlayer != null && ProxyClient.isAiming())
+        if(entityPlayer != null && ClientProxy.isAiming())
         {
             if(!entityPlayer.isSprinting())
             {
@@ -29,12 +29,12 @@ public class SightRenderer
                 float modifier = 1F;
                 float extra = 0F;
                 
-                if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
+                if(entityPlayer.getHeldItemMainhand().getItem() instanceof GunItem || entityPlayer.getHeldItemOffhand().getItem() instanceof GunItem)
                 {
                     if(entityPlayer.getHeldItemOffhand().isEmpty())
                     {
                         ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                        ItemGun gun = (ItemGun)itemStack.getItem();
+                        GunItem gun = (GunItem)itemStack.getItem();
                         
                         if(gun.getNBTCanAimGun(itemStack))
                         {
@@ -79,20 +79,20 @@ public class SightRenderer
     @SubscribeEvent
     public void renderGameOverlayPre(RenderGameOverlayEvent.Pre event)
     {
-        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+        PlayerEntity entityPlayer = ClientProxy.getClientPlayer();
         ItemStack itemStack;
-        ItemGun gun;
+        GunItem gun;
         
         if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
         {
             Optic optic = null;
             
-            if(entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun || entityPlayer.getHeldItemOffhand().getItem() instanceof ItemGun)
+            if(entityPlayer.getHeldItemMainhand().getItem() instanceof GunItem || entityPlayer.getHeldItemOffhand().getItem() instanceof GunItem)
             {
                 if(entityPlayer.getHeldItemOffhand().isEmpty())
                 {
                     itemStack = entityPlayer.getHeldItemMainhand();
-                    gun = (ItemGun)itemStack.getItem();
+                    gun = (GunItem)itemStack.getItem();
                     
                     if(gun.getNBTCanAimGun(itemStack))
                     {
@@ -107,7 +107,7 @@ public class SightRenderer
                 optic = (Optic)entityPlayer.getHeldItemMainhand().getItem();
             }
             
-            if(optic != null && optic.canAim() && !entityPlayer.isSprinting() && ProxyClient.isAiming())
+            if(optic != null && optic.canAim() && !entityPlayer.isSprinting() && ClientProxy.isAiming() && !optic.isDefault())
             {
                 SightRenderer.drawSight(event.getMatrixStack(), optic, event.getWindow());
                 
@@ -121,6 +121,6 @@ public class SightRenderer
     
     private static void drawSight(MatrixStack ms, Optic optic, MainWindow sr)
     {
-        ProxyClient.drawDrawFullscreenImage(ms, optic.getOverlay(), 1024, 256, sr);
+        ClientProxy.drawDrawFullscreenImage(ms, optic.getOverlay(), 1024, 256, sr);
     }
 }

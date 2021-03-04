@@ -6,11 +6,10 @@ import java.util.Random;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
-import de.cas_ual_ty.guncus.item.ItemGun;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.GunItem;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Optic;
-import de.cas_ual_ty.guncus.item.attachments.Paint;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -20,25 +19,28 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.client.model.data.IModelData;
 
 public class BakedModelGunFinalized implements IBakedModel
 {
+    private final GunItem gun;
     private final IBakedModel modelMain;
     private final IBakedModel[][] attachmentModels;
-    private ItemStack itemStack;
     
-    public BakedModelGunFinalized(IBakedModel modelMain, IBakedModel[][] attachmentModels, Matrix4f aimMatrix)
+    private ItemStack tmpItemStack;
+    
+    public BakedModelGunFinalized(GunItem gun, IBakedModel modelMain, IBakedModel[][] attachmentModels)
     {
+        this.gun = gun;
         this.modelMain = modelMain;
         this.attachmentModels = attachmentModels;
-        this.itemStack = null;
+        
+        this.tmpItemStack = null;
     }
     
     public BakedModelGunFinalized setCurrentItemStack(ItemStack itemStack)
     {
-        this.itemStack = itemStack;
+        this.tmpItemStack = itemStack;
         return this;
     }
     
@@ -61,59 +63,10 @@ public class BakedModelGunFinalized implements IBakedModel
         return this.modelMain.getParticleTexture(data);
     }
     
-    @SuppressWarnings("deprecation")
     @Override
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand)
     {
-        ArrayList<BakedQuad> list = new ArrayList<>();
-        
-        List<BakedQuad> list1 = this.modelMain.getQuads(state, side, rand);
-        
-        ItemGun gun = (ItemGun)this.itemStack.getItem();
-        
-        Paint paint = gun.<Paint>getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT);
-        IBakedModel model;
-        
-        if(paint != null && paint.shouldLoadModel())
-        {
-            model = this.attachmentModels[EnumAttachmentType.PAINT.getSlot()][gun.getIndexForAttachment(paint)];
-            
-            if(model != null)
-            {
-                list1 = model.getQuads(state, side, rand);
-            }
-        }
-        
-        if(list1 != null && !list1.isEmpty())
-        {
-            list.addAll(list1);
-        }
-        
-        List<BakedQuad> list2;
-        
-        ItemAttachment attachment;
-        
-        for(EnumAttachmentType type : EnumAttachmentType.VALUES)
-        {
-            attachment = gun.getAttachment(this.itemStack, type);
-            
-            if(attachment != null && attachment.shouldRender())
-            {
-                model = this.attachmentModels[type.getSlot()][gun.getIndexForAttachment(attachment)];
-                
-                if(model != null)
-                {
-                    list2 = model.getQuads(state, side, rand);
-                    
-                    if(list2 != null && !list2.isEmpty())
-                    {
-                        list.addAll(list2);
-                    }
-                }
-            }
-        }
-        
-        return list;
+        return this.getQuads(state, side, rand, null);
     }
     
     @Override
@@ -121,39 +74,17 @@ public class BakedModelGunFinalized implements IBakedModel
     {
         ArrayList<BakedQuad> list = new ArrayList<>();
         
-        List<BakedQuad> list1 = this.modelMain.getQuads(state, side, rand, extraData);
-        
-        ItemGun gun = (ItemGun)this.itemStack.getItem();
-        
-        Paint paint = gun.<Paint>getAttachmentCalled(this.itemStack, EnumAttachmentType.PAINT);
         IBakedModel model;
-        
-        if(paint != null && paint.shouldLoadModel())
-        {
-            model = this.attachmentModels[EnumAttachmentType.PAINT.getSlot()][gun.getIndexForAttachment(paint)];
-            
-            if(model != null)
-            {
-                list1 = model.getQuads(state, side, rand, extraData);
-            }
-        }
-        
-        if(list1 != null && !list1.isEmpty())
-        {
-            list.addAll(list1);
-        }
-        
         List<BakedQuad> list2;
+        AttachmentItem attachment;
         
-        ItemAttachment attachment;
-        
-        for(EnumAttachmentType type : EnumAttachmentType.VALUES)
+        for(EnumAttachmentType type : EnumAttachmentType.RENDER_ORDER)
         {
-            attachment = gun.getAttachment(this.itemStack, type);
+            attachment = this.gun.getAttachment(this.tmpItemStack, type);
             
-            if(attachment != null && attachment.shouldRender())
+            if(attachment != null)
             {
-                model = this.attachmentModels[type.getSlot()][gun.getIndexForAttachment(attachment)];
+                model = this.attachmentModels[type.getSlot()][this.gun.getIndexForAttachment(attachment)];
                 
                 if(model != null)
                 {
@@ -199,23 +130,18 @@ public class BakedModelGunFinalized implements IBakedModel
     {
         if(transformType == TransformType.FIRST_PERSON_RIGHT_HAND)
         {
-            PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+            PlayerEntity entityPlayer = ClientProxy.getClientPlayer();
             
-            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof ItemGun && entityPlayer.getHeldItemOffhand().isEmpty() && ProxyClient.isAiming())
+            if(entityPlayer != null && !entityPlayer.isSprinting() && entityPlayer.getHeldItemMainhand().getItem() instanceof GunItem && entityPlayer.getHeldItemOffhand().isEmpty() && ClientProxy.isAiming())
             {
                 ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                ItemGun gun = (ItemGun)itemStack.getItem();
+                Optic optic = this.gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                int idx = this.gun.getIndexForAttachment(optic);
                 
-                Optic optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
-                
-                if(gun.getNBTCanAimGun(itemStack) && optic.canAim())
+                if(this.gun.getNBTCanAimGun(itemStack) && optic.canAim() && idx != -1)
                 {
-                    if(!optic.isDefault())
-                    {
-                        mat.push();
-                        mat.scale(0, 0, 0);
-                        return this;
-                    }
+                    this.attachmentModels[EnumAttachmentType.OPTIC.getSlot()][idx].handlePerspective(transformType, mat);
+                    return this;
                 }
             }
         }

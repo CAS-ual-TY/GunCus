@@ -10,8 +10,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import de.cas_ual_ty.guncus.entity.EntityBullet;
-import de.cas_ual_ty.guncus.item.ItemGun;
+import de.cas_ual_ty.guncus.entity.BulletEntity;
+import de.cas_ual_ty.guncus.item.GunItem;
 import de.cas_ual_ty.guncus.item.attachments.Accessory;
 import de.cas_ual_ty.guncus.item.attachments.Accessory.Laser;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
@@ -73,7 +73,7 @@ public class LaserRenderer
     @SubscribeEvent
     public void renderWorldLast(RenderWorldLastEvent event)
     {
-        if(ProxyClient.getMC().getRenderViewEntity() != null)
+        if(ClientProxy.getMC().getRenderViewEntity() != null)
         {
             MatrixStack matrixStack = event.getMatrixStack();
             
@@ -85,7 +85,7 @@ public class LaserRenderer
             matrixStack.translate(-v.x, -v.y, -v.z);
             
             IRenderTypeBuffer.Impl b = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-            World world = ProxyClient.getMC().getRenderViewEntity().world;
+            World world = ClientProxy.getMC().getRenderViewEntity().world;
             final float partialTicks = event.getPartialTicks();
             
             for(PlayerEntity entityPlayer : world.getPlayers())
@@ -100,9 +100,9 @@ public class LaserRenderer
                         Accessory accessory = null;
                         ItemStack itemStack = entityPlayer.getHeldItem(hand);
                         
-                        if(itemStack.getItem() instanceof ItemGun)
+                        if(itemStack.getItem() instanceof GunItem)
                         {
-                            ItemGun gun = (ItemGun)itemStack.getItem();
+                            GunItem gun = (GunItem)itemStack.getItem();
                             
                             if(gun.isNBTAccessoryTurnedOn(itemStack))
                             {
@@ -270,7 +270,7 @@ public class LaserRenderer
         
         for(Entity entity : world.getEntitiesInAABBexcluding(entity0, GunCusUtility.aabbFromVec3ds(start, end), (entity1) -> true))
         {
-            if(entity != null && (entity.getEntityId() != entity0.getEntityId()) && !(entity instanceof EntityBullet))
+            if(entity != null && (entity.getEntityId() != entity0.getEntityId()) && !(entity instanceof BulletEntity))
             {
                 AxisAlignedBB axisalignedbb = entity.getBoundingBox().offset(entity.getMotion().scale(partialTicks)).grow(0.30000001192092896D);
                 
@@ -294,11 +294,11 @@ public class LaserRenderer
     @SubscribeEvent
     public void renderGameOverlayPre(RenderGameOverlayEvent.Pre event)
     {
-        PlayerEntity entityPlayer = ProxyClient.getClientPlayer();
+        PlayerEntity entityPlayer = ClientProxy.getClientPlayer();
         
         if(event.getType() == ElementType.CROSSHAIRS && entityPlayer != null)
         {
-            ItemGun gun;
+            GunItem gun;
             Accessory accessory;
             
             Vector3d start = new Vector3d(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
@@ -309,9 +309,9 @@ public class LaserRenderer
             {
                 ItemStack itemStack = entityPlayer.getHeldItem(hand);
                 
-                if(itemStack.getItem() instanceof ItemGun)
+                if(itemStack.getItem() instanceof GunItem)
                 {
-                    gun = (ItemGun)itemStack.getItem();
+                    gun = (GunItem)itemStack.getItem();
                     accessory = gun.getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
                 }
                 else if(itemStack.getItem() instanceof Accessory)
@@ -348,7 +348,7 @@ public class LaserRenderer
         RenderSystem.color4f(1F, 1F, 1F, 1F);
         
         int off = 8;
-        FontRenderer font = ProxyClient.getFontRenderer();
+        FontRenderer font = ClientProxy.getFontRenderer();
         off = hand == Hand.OFF_HAND ? -(font.getStringWidth(text) + 1 + off) : off;
         
         font.drawStringWithShadow(ms, text, sr.getScaledWidth() / 2 + off, sr.getScaledHeight() / 2, 0xFFFFFF);

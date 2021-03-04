@@ -1,14 +1,27 @@
 package de.cas_ual_ty.guncus.item.attachments;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Paint extends ItemAttachment
+import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.MakerItem;
+import net.minecraft.item.ItemStack;
+
+public class Paint extends AttachmentItem
 {
-    public static final Paint DEFAULT = new Paint();
+    public static final List<MakerItem> PAINTS_LIST = new ArrayList<>();
     
-    public Paint(Properties properties)
+    public static final Paint DEFAULT = (Paint)new Paint().setRegistryName(GunCus.MOD_ID, "paint_default");
+    
+    public Paint(Properties properties, ItemStack... materials)
     {
         super(properties);
+        
+        if(this.craftAmount > 0 && materials.length > 0)
+        {
+            PAINTS_LIST.add(this);
+        }
     }
     
     protected Paint()
@@ -20,17 +33,5 @@ public class Paint extends ItemAttachment
     public EnumAttachmentType getType()
     {
         return EnumAttachmentType.PAINT;
-    }
-    
-    @Override
-    public boolean shouldRender()
-    {
-        return false;
-    }
-    
-    @Override
-    public boolean shouldLoadModel()
-    {
-        return !this.isDefault();
     }
 }

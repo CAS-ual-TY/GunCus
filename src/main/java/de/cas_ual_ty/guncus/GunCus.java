@@ -2,12 +2,11 @@ package de.cas_ual_ty.guncus;
 
 import java.util.List;
 
-import de.cas_ual_ty.guncus.command.CommandGunCus;
-import de.cas_ual_ty.guncus.itemgroup.ItemGroupGunCus;
-import de.cas_ual_ty.guncus.network.MessageBulletMaker;
-import de.cas_ual_ty.guncus.network.MessageGunMaker;
-import de.cas_ual_ty.guncus.network.MessageHitmarker;
-import de.cas_ual_ty.guncus.network.MessageShoot;
+import de.cas_ual_ty.guncus.command.GunCusCommand;
+import de.cas_ual_ty.guncus.itemgroup.GunCusItemGroup;
+import de.cas_ual_ty.guncus.network.HitmarkerMessage;
+import de.cas_ual_ty.guncus.network.MakerMessages;
+import de.cas_ual_ty.guncus.network.ShootMessage;
 import de.cas_ual_ty.guncus.registries.GunCusItems;
 import de.cas_ual_ty.guncus.registries.GunCusPointOfInterestTypes;
 import de.cas_ual_ty.guncus.registries.GunCusVillagerProfessions;
@@ -42,12 +41,12 @@ public class GunCus
     
     public static final boolean FULL_CREATIVE_TABS = true;
     
-    public static final ItemGroupGunCus ITEM_GROUP_GUN_CUS = new ItemGroupGunCus();
+    public static final GunCusItemGroup ITEM_GROUP_GUN_CUS = new GunCusItemGroup();
     
     public GunCus()
     {
         GunCus.instance = this;
-        GunCus.proxy = (IProxy)DistExecutor.safeRunForDist(() -> de.cas_ual_ty.guncus.client.ProxyClient::new, () -> de.cas_ual_ty.guncus.server.ProxyServer::new);
+        GunCus.proxy = (IProxy)DistExecutor.safeRunForDist(() -> de.cas_ual_ty.guncus.client.ClientProxy::new, () -> de.cas_ual_ty.guncus.server.ServerProxy::new);
         
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::init);
@@ -66,10 +65,11 @@ public class GunCus
             () -> GunCus.PROTOCOL_VERSION,
             GunCus.PROTOCOL_VERSION::equals,
             GunCus.PROTOCOL_VERSION::equals);
-        GunCus.channel.registerMessage(0, MessageShoot.class, MessageShoot::encode, MessageShoot::decode, MessageShoot::handle);
-        GunCus.channel.registerMessage(1, MessageHitmarker.class, MessageHitmarker::encode, MessageHitmarker::decode, MessageHitmarker::handle);
-        GunCus.channel.registerMessage(2, MessageGunMaker.class, MessageGunMaker::encode, MessageGunMaker::decode, MessageGunMaker::handle);
-        GunCus.channel.registerMessage(3, MessageBulletMaker.class, MessageBulletMaker::encode, MessageBulletMaker::decode, MessageBulletMaker::handle);
+        GunCus.channel.registerMessage(0, ShootMessage.class, ShootMessage::encode, ShootMessage::decode, ShootMessage::handle);
+        GunCus.channel.registerMessage(1, HitmarkerMessage.class, HitmarkerMessage::encode, HitmarkerMessage::decode, HitmarkerMessage::handle);
+        GunCus.channel.registerMessage(4, MakerMessages.Next.class, MakerMessages.Next::encode, MakerMessages.Next::decode, MakerMessages.Next::handle);
+        GunCus.channel.registerMessage(5, MakerMessages.Prev.class, MakerMessages.Prev::encode, MakerMessages.Prev::decode, MakerMessages.Prev::handle);
+        GunCus.channel.registerMessage(6, MakerMessages.Create.class, MakerMessages.Create::encode, MakerMessages.Create::decode, MakerMessages.Create::handle);
         
         GunCusUtility.fixPOITypeBlockStates(GunCusPointOfInterestTypes.ARMS_DEALER);
         
@@ -78,7 +78,7 @@ public class GunCus
     
     public void registerCommands(RegisterCommandsEvent event)
     {
-        CommandGunCus.register(event.getDispatcher());
+        GunCusCommand.register(event.getDispatcher());
     }
     
     public void villagerTrades(VillagerTradesEvent event)

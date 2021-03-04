@@ -1,20 +1,33 @@
 package de.cas_ual_ty.guncus.item.attachments;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Barrel extends ItemAttachment
+import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.MakerItem;
+import net.minecraft.item.ItemStack;
+
+public class Barrel extends AttachmentItem
 {
-    public static final Barrel DEFAULT = new Barrel();
+    public static final List<MakerItem> BARRELS_LIST = new ArrayList<>();
+    
+    public static final Barrel DEFAULT = (Barrel)new Barrel().setRegistryName(GunCus.MOD_ID, "barrel_default");
     
     protected boolean isSilenced;
     protected boolean isFlashHider; //TODO implement
     
-    public Barrel(Properties properties)
+    public Barrel(Properties properties, ItemStack... materials)
     {
-        super(properties);
+        super(properties, materials);
         
         this.isSilenced = false;
         this.isFlashHider = false;
+        
+        if(this.craftAmount > 0 && materials.length > 0)
+        {
+            BARRELS_LIST.add(this);
+        }
     }
     
     protected Barrel()

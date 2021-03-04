@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "guncus:item/gun_scar_l/paint_green"
+        "layer0": "guncus:item/gun_scar_h/paint_green"
     }
 }

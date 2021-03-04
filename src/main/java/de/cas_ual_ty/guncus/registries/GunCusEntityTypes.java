@@ -1,7 +1,7 @@
 package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
-import de.cas_ual_ty.guncus.entity.EntityBullet;
+import de.cas_ual_ty.guncus.entity.BulletEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent.Register;
@@ -15,13 +15,13 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder(GunCus.MOD_ID)
 public class GunCusEntityTypes
 {
-    public static final EntityType<EntityBullet> BULLET = null;
+    public static final EntityType<BulletEntity> BULLET = null;
     
     @SubscribeEvent
     public static void registerEntityTypes(Register<EntityType<?>> event)
     {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
         
-        registry.register(EntityType.Builder.<EntityBullet>create(EntityBullet::new, EntityClassification.MISC).build("bullet").setRegistryName(GunCus.MOD_ID, "bullet"));
+        registry.register(EntityType.Builder.<BulletEntity>create(BulletEntity::new, EntityClassification.MISC).build("bullet").setRegistryName(GunCus.MOD_ID, "bullet"));
     }
 }

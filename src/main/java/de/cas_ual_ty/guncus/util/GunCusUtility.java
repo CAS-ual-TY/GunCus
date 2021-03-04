@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.cas_ual_ty.guncus.item.ItemGun;
+import de.cas_ual_ty.guncus.item.GunItem;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -58,9 +58,9 @@ public class GunCusUtility
         return new AxisAlignedBB(Math.min(vec1.x, vec2.x), Math.min(vec1.y, vec2.y), Math.min(vec1.z, vec2.z), Math.max(vec1.x, vec2.x), Math.max(vec1.y, vec2.y), Math.max(vec1.z, vec2.z));
     }
     
-    public static ArrayList<ItemStack> createAllVariants(ItemGun gun)
+    public static ArrayList<ItemStack> createAllVariants(GunItem gun)
     {
-        ArrayList<ItemStack> itemStacks = new ArrayList<>();
+        ArrayList<ItemStack> itemStacks = new ArrayList<>(gun.getVariantsAmt());
         
         EnumAttachmentType.callForAll(gun, (attachments) ->
         {

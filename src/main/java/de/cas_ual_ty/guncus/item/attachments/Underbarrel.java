@@ -1,20 +1,33 @@
 package de.cas_ual_ty.guncus.item.attachments;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Underbarrel extends ItemAttachment
+import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.MakerItem;
+import net.minecraft.item.ItemStack;
+
+public class Underbarrel extends AttachmentItem
 {
-    public static final Underbarrel DEFAULT = new Underbarrel();
+    public static final List<MakerItem> UNDERBARRELS_LIST = new ArrayList<>();
+    
+    public static final Underbarrel DEFAULT = (Underbarrel)new Underbarrel().setRegistryName(GunCus.MOD_ID, "underbarrel_default");
     
     protected float driftModifierShiftStill;
     protected float inaccuracyModifierShiftStill;
     
-    public Underbarrel(Properties properties)
+    public Underbarrel(Properties properties, ItemStack... materials)
     {
-        super(properties);
+        super(properties, materials);
         
         this.driftModifierShiftStill = 1F;
         this.inaccuracyModifierShiftStill = 1F;
+        
+        if(this.craftAmount > 0 && materials.length > 0)
+        {
+            UNDERBARRELS_LIST.add(this);
+        }
     }
     
     protected Underbarrel()

@@ -1,20 +1,33 @@
 package de.cas_ual_ty.guncus.item.attachments;
 
-import de.cas_ual_ty.guncus.item.ItemAttachment;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Auxiliary extends ItemAttachment
+import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.MakerItem;
+import net.minecraft.item.ItemStack;
+
+public class Auxiliary extends AttachmentItem
 {
-    public static final Auxiliary DEFAULT = new Auxiliary();
+    public static final List<MakerItem> AUXILIARIES_LIST = new ArrayList<>();
+    
+    public static final Auxiliary DEFAULT = (Auxiliary)new Auxiliary().setRegistryName(GunCus.MOD_ID, "auxiliary_default");
     
     protected boolean isAllowingReloadWhileZoomed;
     protected int extraFireRate;
     
-    public Auxiliary(Properties properties)
+    public Auxiliary(Properties properties, ItemStack... materials)
     {
-        super(properties);
+        super(properties, materials);
         
         this.isAllowingReloadWhileZoomed = false;
         this.extraFireRate = 0;
+        
+        if(this.craftAmount > 0 && materials.length > 0)
+        {
+            AUXILIARIES_LIST.add(this);
+        }
     }
     
     protected Auxiliary()

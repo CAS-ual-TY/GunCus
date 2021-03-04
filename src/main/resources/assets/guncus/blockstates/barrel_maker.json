@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "guncus:block/barrel_maker" },
+        "facing=south": { "model": "guncus:block/barrel_maker", "y": 180 },
+        "facing=west":  { "model": "guncus:block/barrel_maker", "y": 270 },
+        "facing=east":  { "model": "guncus:block/barrel_maker", "y": 90 }
+    }
+}
