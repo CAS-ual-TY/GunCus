@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/gun_ak_74m/magazine_quick_switch"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/gun_ak_74m/magazine_quick_switch"
+  }
 }

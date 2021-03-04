@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/gun_ak_74m/optic_m145"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/gun_ak_74m/optic_m145"
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/gun_scar_l/barrel_pbs4_suppressor"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/gun_scar_l/barrel_pbs4_suppressor"
+  }
 }

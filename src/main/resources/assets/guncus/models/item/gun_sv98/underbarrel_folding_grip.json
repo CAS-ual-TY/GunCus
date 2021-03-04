@@ -1,6 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "guncus:item/gun_sv98/underbarrel_folding_grip"
-    }
-}
