@@ -64,7 +64,7 @@ public class Optic extends AttachmentItem
     
     public boolean canAim()
     {
-        return !this.isDefault() && this.getOverlay() != null;
+        return true;
     }
     
     public ResourceLocation getOverlay()

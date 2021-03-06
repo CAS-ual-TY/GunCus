@@ -147,7 +147,7 @@ public class GunTableContainer extends Container
             {
                 if(this.gunSlot.isItemValid(itemStack) && !this.gunSlot.getHasStack())
                 {
-                    this.gunSlot.putStack(itemStack);
+                    this.gunSlot.putStack(itemStack.copy());
                     itemStack.shrink(1);
                 }
             }

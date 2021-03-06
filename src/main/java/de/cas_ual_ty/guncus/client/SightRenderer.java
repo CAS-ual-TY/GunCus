@@ -29,31 +29,28 @@ public class SightRenderer
                 float modifier = 1F;
                 float extra = 0F;
                 
-                if(entityPlayer.getHeldItemMainhand().getItem() instanceof GunItem || entityPlayer.getHeldItemOffhand().getItem() instanceof GunItem)
+                if(entityPlayer.getHeldItemMainhand().getItem() instanceof GunItem && entityPlayer.getHeldItemOffhand().isEmpty())
                 {
-                    if(entityPlayer.getHeldItemOffhand().isEmpty())
+                    ItemStack itemStack = entityPlayer.getHeldItemMainhand();
+                    GunItem gun = (GunItem)itemStack.getItem();
+                    
+                    if(gun.getNBTCanAimGun(itemStack))
                     {
-                        ItemStack itemStack = entityPlayer.getHeldItemMainhand();
-                        GunItem gun = (GunItem)itemStack.getItem();
+                        optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                    }
+                    
+                    if(optic != null && gun.isNBTAccessoryTurnedOn(itemStack) && !gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY).isDefault())
+                    {
+                        Accessory accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
                         
-                        if(gun.getNBTCanAimGun(itemStack))
+                        if(optic.isCompatibleWithMagnifiers())
                         {
-                            optic = gun.<Optic>getAttachmentCalled(itemStack, EnumAttachmentType.OPTIC);
+                            modifier = accessory.getZoomModifier();
                         }
                         
-                        if(optic != null && gun.isNBTAccessoryTurnedOn(itemStack) && !gun.getAttachment(itemStack, EnumAttachmentType.ACCESSORY).isDefault())
+                        if(optic.isCompatibleWithExtraZoom())
                         {
-                            Accessory accessory = gun.<Accessory>getAttachmentCalled(itemStack, EnumAttachmentType.ACCESSORY);
-                            
-                            if(optic.isCompatibleWithMagnifiers())
-                            {
-                                modifier = accessory.getZoomModifier();
-                            }
-                            
-                            if(optic.isCompatibleWithExtraZoom())
-                            {
-                                extra = accessory.getExtraZoom();
-                            }
+                            extra = accessory.getExtraZoom();
                         }
                     }
                 }
@@ -107,7 +104,7 @@ public class SightRenderer
                 optic = (Optic)entityPlayer.getHeldItemMainhand().getItem();
             }
             
-            if(optic != null && optic.canAim() && !entityPlayer.isSprinting() && ClientProxy.isAiming() && !optic.isDefault())
+            if(optic != null && optic.getOverlay() != null && !entityPlayer.isSprinting() && ClientProxy.isAiming())
             {
                 SightRenderer.drawSight(event.getMatrixStack(), optic, event.getWindow());
                 
