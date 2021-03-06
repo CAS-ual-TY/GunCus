@@ -1,10 +1,10 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "guncus:bullet_maker",
+  "group": "guncus:optic_maker",
   "pattern": [
     "YZY",
     "YXY",
-    "YWY"
+    "YYY"
   ],
   "key": {
     "X": {
@@ -14,13 +14,10 @@
       "item": "minecraft:iron_ingot"
     },
     "Z": {
-      "item": "minecraft:gunpowder"
-    },
-    "W": {
-      "item": "minecraft:iron_block"
+      "item": "minecraft:glass_pane"
     }
   },
   "result": {
-    "item": "guncus:bullet_maker"
+    "item": "guncus:optic_maker"
   }
 }

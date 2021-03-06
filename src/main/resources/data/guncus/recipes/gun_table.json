@@ -1,23 +1,23 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        " i ",
-        " C ",
-        "iIi"
-    ],
-    "key": {
-        "i": {
-            "item": "minecraft:iron_ingot"
-        },
-        "C": {
-            "item": "minecraft:crafting_table"
-        },
-        "I": {
-            "item": "minecraft:iron_block"
-        }
+  "type": "minecraft:crafting_shaped",
+  "group": "guncus:gun_table",
+  "pattern": [
+    " X ",
+    " Y ",
+    "XZX"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
     },
-    "result": {
-        "item": "guncus:gun_table",
-        "count": 1
+    "Y": {
+      "item": "minecraft:crafting_table"
+    },
+    "Z": {
+      "item": "minecraft:iron_block"
     }
+  },
+  "result": {
+    "item": "guncus:gun_table"
+  }
 }

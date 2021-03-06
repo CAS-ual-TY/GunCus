@@ -50,6 +50,7 @@ public class GunCusContainerTypes
         registry.register(new ContainerType<>((IContainerFactory<BarrelMakerContainer>)BarrelMakerContainer::new).setRegistryName(GunCus.MOD_ID, "barrel_maker"));
         registry.register(new ContainerType<>((IContainerFactory<UnderbarrelMakerContainer>)UnderbarrelMakerContainer::new).setRegistryName(GunCus.MOD_ID, "underbarrel_maker"));
         registry.register(new ContainerType<>((IContainerFactory<AuxiliaryMakerContainer>)AuxiliaryMakerContainer::new).setRegistryName(GunCus.MOD_ID, "auxiliary_maker"));
+        registry.register(new ContainerType<>((IContainerFactory<AmmoMakerContainer>)AmmoMakerContainer::new).setRegistryName(GunCus.MOD_ID, "ammo_maker"));
         registry.register(new ContainerType<>((IContainerFactory<MagazineMakerContainer>)MagazineMakerContainer::new).setRegistryName(GunCus.MOD_ID, "magazine_maker"));
         registry.register(new ContainerType<>((IContainerFactory<PaintMakerContainer>)PaintMakerContainer::new).setRegistryName(GunCus.MOD_ID, "paint_maker"));
     }
