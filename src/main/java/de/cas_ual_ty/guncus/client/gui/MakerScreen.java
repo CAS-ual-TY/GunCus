@@ -21,6 +21,8 @@ public class MakerScreen extends ContainerScreen<MakerContainer>
 {
     public static final ResourceLocation MAKER_GUI_TEXTURES = new ResourceLocation(GunCus.MOD_ID, "textures/gui/container/generic_maker.png");
     
+    private Button makeButton;
+    
     public MakerScreen(MakerContainer screenContainer, PlayerInventory inv, ITextComponent titleIn)
     {
         super(screenContainer, inv, titleIn);
@@ -32,7 +34,8 @@ public class MakerScreen extends ContainerScreen<MakerContainer>
         super.init();
         this.addButton(new Button(this.guiLeft + 124 - 12 - 4, this.guiTop + 33, 10, 20, new StringTextComponent("<"), (b) -> this.prev()));
         this.addButton(new Button(this.guiLeft + 124 + 18 + 4, this.guiTop + 33, 10, 20, new StringTextComponent(">"), (b) -> this.next()));
-        this.addButton(new Button(this.guiLeft + 124 - 12 - 4, this.guiTop + 57, 48, 20, new StringTextComponent("MAKE"), (b) -> this.create()));
+        this.addButton(this.makeButton = new Button(this.guiLeft + 124 - 12 - 4, this.guiTop + 57, 48, 20, new StringTextComponent("MAKE"), (b) -> this.create()));
+        this.makeButton.active = false;
     }
     
     private void next()
@@ -48,6 +51,40 @@ public class MakerScreen extends ContainerScreen<MakerContainer>
     private void create()
     {
         GunCus.channel.send(PacketDistributor.SERVER.noArg(), new MakerMessages.Create());
+    }
+    
+    @Override
+    public void tick()
+    {
+        if(this.getContainer().selectedItemSlot.getHasStack())
+        {
+            boolean hasEverything = true;
+            
+            for(Slot s : this.getContainer().materialsSlots)
+            {
+                ItemStack material = s.getStack();
+                
+                if(!material.isEmpty())
+                {
+                    if(hasEverything && !this.getContainer().playerHasMaterial(material, false))
+                    {
+                        hasEverything = false;
+                        break;
+                    }
+                }
+            }
+            
+            if(this.makeButton.active != hasEverything)
+            {
+                this.makeButton.active = hasEverything;
+            }
+        }
+        else if(this.makeButton.active)
+        {
+            this.makeButton.active = false;
+        }
+        
+        super.tick();
     }
     
     @Override
