@@ -2,6 +2,7 @@ package de.cas_ual_ty.guncus.registries;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.item.AttachmentItem;
+import de.cas_ual_ty.guncus.item.AttachmentMakerBlockItem;
 import de.cas_ual_ty.guncus.item.BulletItem;
 import de.cas_ual_ty.guncus.item.GunItem;
 import de.cas_ual_ty.guncus.item.attachments.Accessory;
@@ -149,15 +150,15 @@ public class GunCusItems
         
         registry.register(new BlockItem(GunCusBlocks.GUN_TABLE, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_table"));
         registry.register(new BlockItem(GunCusBlocks.GUN_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "gun_maker"));
-        registry.register(new BlockItem(GunCusBlocks.BULLET_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "bullet_maker"));
-        registry.register(new BlockItem(GunCusBlocks.OPTIC_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "optic_maker"));
-        registry.register(new BlockItem(GunCusBlocks.ACCESSORY_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "accessory_maker"));
-        registry.register(new BlockItem(GunCusBlocks.BARREL_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "barrel_maker"));
-        registry.register(new BlockItem(GunCusBlocks.UNDERBARREL_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "underbarrel_maker"));
-        registry.register(new BlockItem(GunCusBlocks.AUXILIARY_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "auxiliary_maker"));
-        registry.register(new BlockItem(GunCusBlocks.AMMO_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "ammo_maker"));
-        registry.register(new BlockItem(GunCusBlocks.MAGAZINE_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "magazine_maker"));
-        registry.register(new BlockItem(GunCusBlocks.PAINT_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "paint_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.BULLET_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "bullet_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.OPTIC_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "optic_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.ACCESSORY_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "accessory_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.BARREL_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "barrel_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.UNDERBARREL_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "underbarrel_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.AUXILIARY_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "auxiliary_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.AMMO_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "ammo_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.MAGAZINE_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "magazine_maker"));
+        registry.register(new AttachmentMakerBlockItem(GunCusBlocks.PAINT_MAKER, new Properties().group(GunCus.ITEM_GROUP_GUN_CUS)).setRegistryName(GunCus.MOD_ID, "paint_maker"));
         
         registry.register(new GunItem(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 3, 30, 4, () -> GunCusItems.BULLET_5_56x45MM, 6, 0, 2).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_m16a4").setDefaultTradeable(32, 3).setRegistryName(GunCus.MOD_ID, "gun_m16a4"));
         registry.register(new GunItem(new Properties().group(GunCus.ITEM_GROUP_GUN_CUS).maxStackSize(1), 4, 30, 4, () -> GunCusItems.BULLET_5_45x39MM, 6, 0, 2).setAttachments(() -> GunCusItems.assaultRifleAttachments()).createGunTab("gun_ak_74m").setDefaultTradeable(32, 3).setRegistryName(GunCus.MOD_ID, "gun_ak_74m"));
