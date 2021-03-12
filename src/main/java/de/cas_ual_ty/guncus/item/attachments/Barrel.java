@@ -26,7 +26,7 @@ public class Barrel extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_BARRELS_LIST.add(this);
+            Barrel.MAKER_BARRELS_LIST.add(this);
         }
     }
     

@@ -24,7 +24,7 @@ public class Accessory extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_ACCESSORIES_LIST.add(this);
+            Accessory.MAKER_ACCESSORIES_LIST.add(this);
         }
     }
     

@@ -112,11 +112,11 @@ public class GunCusLootTables extends LootTableProvider
             Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
             try
             {
-                IDataProvider.save(GSON, cache, LootTableManager.toJson(lootTable), path);
+                IDataProvider.save(GunCusLootTables.GSON, cache, LootTableManager.toJson(lootTable), path);
             }
             catch (IOException e)
             {
-                LOGGER.error("Couldn't write loot table {}", path, e);
+                GunCusLootTables.LOGGER.error("Couldn't write loot table {}", path, e);
             }
         });
     }

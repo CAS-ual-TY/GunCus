@@ -1,20 +1,24 @@
 package de.cas_ual_ty.guncus.entity;
 
 import de.cas_ual_ty.guncus.GunCus;
+import de.cas_ual_ty.guncus.item.BulletItem;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BulletEntity extends ThrowableEntity
 {
@@ -23,15 +27,17 @@ public class BulletEntity extends ThrowableEntity
     
     protected static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(BulletEntity.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> GRAVITY = EntityDataManager.createKey(BulletEntity.class, DataSerializers.FLOAT);
+    protected BulletItem bullet = null;
     
     public BulletEntity(EntityType<BulletEntity> type, World worldIn)
     {
         super(type, worldIn);
     }
     
-    public BulletEntity(EntityType<BulletEntity> type, LivingEntity livingEntityIn, World worldIn)
+    public BulletEntity(EntityType<BulletEntity> type, LivingEntity livingEntityIn, World worldIn, BulletItem bullet)
     {
         super(type, livingEntityIn, worldIn);
+        this.bullet = bullet;
     }
     
     public BulletEntity setDamage(float damage)
@@ -95,6 +101,12 @@ public class BulletEntity extends ThrowableEntity
             if(!this.world.isRemote && hit.getEntity() instanceof LivingEntity)
             {
                 LivingEntity entity = (LivingEntity)hit.getEntity();
+                
+                if(this.bullet != null && this.bullet.getOnHit() != null)
+                {
+                    this.bullet.getOnHit().accept(entity);
+                }
+                
                 entity.attackEntityFrom(DamageSource.causeMobDamage((LivingEntity)this.func_234616_v_()), this.getBulletDamage());
                 
                 if(this.func_234616_v_() instanceof PlayerEntity)
@@ -128,5 +140,27 @@ public class BulletEntity extends ThrowableEntity
     protected float getBulletGravity()
     {
         return this.dataManager.get(BulletEntity.GRAVITY);
+    }
+    
+    @Override
+    protected void readAdditional(CompoundNBT compound)
+    {
+        super.readAdditional(compound);
+        
+        if(compound.contains("bulletType"))
+        {
+            this.bullet = (BulletItem)ForgeRegistries.ITEMS.getValue(new ResourceLocation(compound.getString("bulletType")));
+        }
+    }
+    
+    @Override
+    protected void writeAdditional(CompoundNBT compound)
+    {
+        super.writeAdditional(compound);
+        
+        if(this.bullet != null)
+        {
+            compound.putString("bulletType", this.bullet.getRegistryName().toString());
+        }
     }
 }

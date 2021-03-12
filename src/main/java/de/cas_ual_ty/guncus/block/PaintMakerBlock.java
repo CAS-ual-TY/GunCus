@@ -26,6 +26,6 @@ public class PaintMakerBlock extends MakerBlock
     @Override
     public ITextComponent getContainerTitle()
     {
-        return TITLE;
+        return PaintMakerBlock.TITLE;
     }
 }

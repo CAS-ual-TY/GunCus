@@ -26,7 +26,7 @@ public class Underbarrel extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_UNDERBARRELS_LIST.add(this);
+            Underbarrel.MAKER_UNDERBARRELS_LIST.add(this);
         }
     }
     

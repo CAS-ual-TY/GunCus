@@ -2,10 +2,12 @@ package de.cas_ual_ty.guncus.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.util.RandomTradeBuilder;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.text.ITextComponent;
@@ -24,6 +26,7 @@ public class BulletItem extends MakerItem
     protected float bulletSpeedModifier;
     protected float spreadModifier;
     protected int projectileAmount;
+    protected Consumer<LivingEntity> onHit;
     
     public BulletItem(Properties properties, int craftAmount, ItemStack... materials)
     {
@@ -34,13 +37,14 @@ public class BulletItem extends MakerItem
         this.bulletSpeedModifier = 1F;
         this.spreadModifier = 1F;
         this.projectileAmount = 1;
+        this.onHit = null;
         
         if(craftAmount > 0 && materials.length > 0)
         {
             BulletItem.MAKER_BULLETS_LIST.add(this);
         }
         
-        ALL_BULLETS_LIST.add(this);
+        BulletItem.ALL_BULLETS_LIST.add(this);
     }
     
     public BulletItem(Properties properties, int iron, int gunpowder, int craftAmt)
@@ -79,6 +83,11 @@ public class BulletItem extends MakerItem
         return this.projectileAmount;
     }
     
+    public Consumer<LivingEntity> getOnHit()
+    {
+        return this.onHit;
+    }
+    
     public BulletItem setDamage(float damage)
     {
         this.extraDamage = damage;
@@ -106,6 +115,12 @@ public class BulletItem extends MakerItem
     public BulletItem setProjectileAmount(int projectileAmount)
     {
         this.projectileAmount = projectileAmount;
+        return this;
+    }
+    
+    public BulletItem setOnHit(Consumer<LivingEntity> onHit)
+    {
+        this.onHit = onHit;
         return this;
     }
     

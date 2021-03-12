@@ -91,6 +91,7 @@ public class GunTableScreen extends ContainerScreen<GunTableContainer>
     @Override
     public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks)
     {
+        this.renderBackground(ms);
         super.render(ms, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(ms, mouseX, mouseY);
     }

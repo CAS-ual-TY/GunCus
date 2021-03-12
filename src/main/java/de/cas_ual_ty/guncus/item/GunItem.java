@@ -97,12 +97,12 @@ public class GunItem extends MakerItem
             GunItem.MAKER_GUNS_LIST.add(this);
         }
         
-        ALL_GUNS_LIST.add(this);
+        GunItem.ALL_GUNS_LIST.add(this);
     }
     
     public GunItem(Properties properties, int fireRate, int maxAmmo, float baseDamage, Supplier<BulletItem> bullet, int iron, int gold, int redstone)
     {
-        this(properties, fireRate, maxAmmo, baseDamage, bullet, 1, makeMaterialsParam(iron, gold, redstone));
+        this(properties, fireRate, maxAmmo, baseDamage, bullet, 1, GunItem.makeMaterialsParam(iron, gold, redstone));
     }
     
     public GunItem setDefaultTradeable(int price, int level)
@@ -185,6 +185,16 @@ public class GunItem extends MakerItem
     public int calcCurrentSwitchTime(AttachmentItem[] attachments)
     {
         return this.getBaseSwitchTime();
+    }
+    
+    public EnumFireMode calcCurrentFireMode(AttachmentItem[] attachments)
+    {
+        return ((Auxiliary)attachments[EnumAttachmentType.AUXILIARY.getSlot()]).getForceFullAuto() ? EnumFireMode.FULL_AUTO : this.getBaseFireMode();
+    }
+    
+    public EnumFireMode getCurrentFireMode(ItemStack itemStack)
+    {
+        return this.calcCurrentFireMode(this.getCurrentAttachments(itemStack));
     }
     
     public GunItem setSoundShoot(Supplier<SoundEvent> soundShoot)
@@ -459,32 +469,40 @@ public class GunItem extends MakerItem
         
         BulletItem bullet = this.calcCurrentBullet(attachments);
         
-        float inaccuracy = inaccuracyInt * inaccuracyModifier;
+        //limit max unmodified inaccuracy to +- 7.5 degree
         float speed = BulletEntity.BASE_SPEED * speedModifier;
         float damage = this.getBaseDamage() + extraDamage + bullet.getExtraDamage();
         
-        if(aiming)
-        {
-            inaccuracy *= 0.5F;
-        }
+        float inaccuracy;
         
-        if(moving)
+        if(bullet.getProjectileAmount() == 1)
         {
-            inaccuracy *= inaccuracyModifierMoving;
+            inaccuracy = Math.min(inaccuracyInt, 7.5F) * inaccuracyModifier;
+            
+            if(aiming)
+            {
+                inaccuracy *= 0.5F;
+            }
+            
+            if(moving)
+            {
+                inaccuracy *= inaccuracyModifierMoving;
+            }
+            else
+            {
+                inaccuracy *= inaccuracyModifierStill;
+                
+                if(entityPlayer.isSteppingCarefully())
+                {
+                    inaccuracy *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getInaccuracyModifierShiftStill();
+                    driftModifier *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getDriftModifierShiftStill();
+                }
+            }
         }
         else
         {
-            inaccuracy *= inaccuracyModifierStill;
-            
-            if(entityPlayer.isSteppingCarefully())
-            {
-                inaccuracy *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getInaccuracyModifierShiftStill();
-                driftModifier *= ((Underbarrel)attachments[EnumAttachmentType.UNDERBARREL.getSlot()]).getDriftModifierShiftStill();
-            }
+            inaccuracy = 1F;
         }
-        
-        // TODO temporary until there is a proper bullet renderer
-        inaccuracy *= 0;
         
         if(!entityPlayer.world.isRemote)
         {
@@ -499,7 +517,7 @@ public class GunItem extends MakerItem
                 rotationPitch = entityPlayer.rotationPitch + randomPitch;
                 rotationYaw = entityPlayer.rotationYaw + randomYaw;
                 
-                bulletEntity = new BulletEntity(GunCusEntityTypes.BULLET, entityPlayer, entityPlayer.world);
+                bulletEntity = new BulletEntity(GunCusEntityTypes.BULLET, entityPlayer, entityPlayer.world, bullet);
                 bulletEntity.setPosition(entityPlayer.getPosX(), entityPlayer.getPosY() + entityPlayer.getEyeHeight(), entityPlayer.getPosZ());
                 bulletEntity.func_234612_a_(entityPlayer, rotationPitch, rotationYaw, 0, speed, 0);
                 bulletEntity.setGravity(0);//bullet.getGravity()); // TODO temporary until there is a proper bullet renderer

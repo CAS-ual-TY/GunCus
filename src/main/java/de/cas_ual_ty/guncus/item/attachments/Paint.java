@@ -20,7 +20,7 @@ public class Paint extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_PAINTS_LIST.add(this);
+            Paint.MAKER_PAINTS_LIST.add(this);
         }
     }
     

@@ -16,6 +16,7 @@ import de.cas_ual_ty.guncus.client.gui.GunTableScreen;
 import de.cas_ual_ty.guncus.client.gui.MakerScreen;
 import de.cas_ual_ty.guncus.item.AttachmentItem;
 import de.cas_ual_ty.guncus.item.GunItem;
+import de.cas_ual_ty.guncus.item.GunItem.EnumFireMode;
 import de.cas_ual_ty.guncus.item.attachments.EnumAttachmentType;
 import de.cas_ual_ty.guncus.item.attachments.Optic;
 import de.cas_ual_ty.guncus.itemgroup.ShuffleItemGroup;
@@ -47,9 +48,10 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class ClientProxy implements IProxy
 {
-    private static int shootTime[] = new int[GunCusUtility.HANDS.length];
+    private static int[] shootTime = new int[GunCusUtility.HANDS.length];
     private static int inaccuracyTime = 0;
     private static int prevSelectedMain = -1;
+    private static boolean[] locked = new boolean[GunCusUtility.HANDS.length];
     
     @Override
     public void registerModEventListeners(IEventBus bus)
@@ -191,9 +193,21 @@ public class ClientProxy implements IProxy
             ItemStack itemStack;
             GunItem gun;
             
-            int i = 0;
-            for(Hand hand : GunCusUtility.HANDS)
+            int i;
+            Hand hand;
+            
+            for(i = 0; i < GunCusUtility.HANDS.length; ++i)
             {
+                hand = GunCusUtility.HANDS[i];
+                
+                if(ClientProxy.locked[i])
+                {
+                    if(!ClientProxy.isShooting())
+                    {
+                        ClientProxy.locked[i] = false;
+                    }
+                }
+                
                 if(ClientProxy.shootTime[i] > 0)
                 {
                     --ClientProxy.shootTime[i];
@@ -217,8 +231,6 @@ public class ClientProxy implements IProxy
                         }
                     }
                 }
-                
-                ++i;
             }
             
             ClientProxy.prevSelectedMain = entityPlayer.inventory.currentItem;
@@ -252,11 +264,18 @@ public class ClientProxy implements IProxy
                 i = 0;
                 int handsInt = 0;
                 
-                for(i = 0; i < ClientProxy.shootTime.length; ++i)
+                for(i = 0; i < GunCusUtility.HANDS.length; ++i)
                 {
-                    if(entityPlayer.getHeldItem(GunCusUtility.HANDS[i]).getItem() instanceof GunItem && ClientProxy.shootTime[i] <= 0)
+                    if(!ClientProxy.locked[i] && entityPlayer.getHeldItem(GunCusUtility.HANDS[i]).getItem() instanceof GunItem && ClientProxy.shootTime[i] <= 0)
                     {
                         handsInt += i + 1;
+                        
+                        gun = (GunItem)entityPlayer.getHeldItem(GunCusUtility.HANDS[i]).getItem();
+                        
+                        if(gun.getCurrentFireMode(entityPlayer.getHeldItem(GunCusUtility.HANDS[i])) != EnumFireMode.FULL_AUTO)
+                        {
+                            ClientProxy.locked[i] = true;
+                        }
                     }
                 }
                 
@@ -333,7 +352,7 @@ public class ClientProxy implements IProxy
     public static void renderDisabledRect(MatrixStack ms, float x, float y, float w, float h)
     {
         RenderSystem.colorMask(true, true, true, false);
-        drawRect(ms, x, y, w, h, 0F, 0F, 0F, 0.5F);
+        ClientProxy.drawRect(ms, x, y, w, h, 0F, 0F, 0F, 0.5F);
         RenderSystem.colorMask(true, true, true, true);
     }
     

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "guncus:item/gun_glock/optic_default"
+  }
+}

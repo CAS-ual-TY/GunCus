@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guncus:item/ammo_7_62x51mm"
+  }
+}

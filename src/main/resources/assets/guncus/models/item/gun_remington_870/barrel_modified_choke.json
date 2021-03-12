@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "guncus:item/gun_remington_870/barrel_modified_choke"
+  }
+}

@@ -50,14 +50,14 @@ public class GunCusGunModels extends ItemModelProvider
                     else if(!attachment.isDefault() && attachment.getType() == EnumAttachmentType.OPTIC)
                     {
                         this.getBuilder(this.modid + ":item/" + path)
-                            .parent(new UncheckedModelFile("item/generated"))
+                            .parent(new UncheckedModelFile("item/handheld"))
                             .texture("layer0", this.modLoc("item/" + path))
                             .transforms().transform(Perspective.FIRSTPERSON_RIGHT).scale(0);
                     }
                     else
                     {
                         this.getBuilder(this.modid + ":item/" + path)
-                            .parent(new UncheckedModelFile("item/generated"))
+                            .parent(new UncheckedModelFile("item/handheld"))
                             .texture("layer0", this.modLoc("item/" + path));
                     }
                 }

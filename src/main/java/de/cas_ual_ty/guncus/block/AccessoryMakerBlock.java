@@ -26,6 +26,6 @@ public class AccessoryMakerBlock extends MakerBlock
     @Override
     public ITextComponent getContainerTitle()
     {
-        return TITLE;
+        return AccessoryMakerBlock.TITLE;
     }
 }

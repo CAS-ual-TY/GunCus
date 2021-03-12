@@ -37,7 +37,7 @@ public class Optic extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_OPTICS_LIST.add(this);
+            Optic.MAKER_OPTICS_LIST.add(this);
         }
     }
     

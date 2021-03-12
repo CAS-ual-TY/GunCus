@@ -1,0 +1,6 @@
+{
+  "parent": "guncus:item/gun_sv98/paint_default",
+  "textures": {
+    "layer0": "guncus:item/gun_sv98/paint_cyan"
+  }
+}

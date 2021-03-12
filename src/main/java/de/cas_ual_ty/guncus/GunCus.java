@@ -3,6 +3,7 @@ package de.cas_ual_ty.guncus;
 import java.util.List;
 
 import de.cas_ual_ty.guncus.command.GunCusCommand;
+import de.cas_ual_ty.guncus.item.GunItem;
 import de.cas_ual_ty.guncus.itemgroup.GunCusItemGroup;
 import de.cas_ual_ty.guncus.network.HitmarkerMessage;
 import de.cas_ual_ty.guncus.network.MakerMessages;
@@ -33,15 +34,15 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class GunCus
 {
     public static final String MOD_ID = "guncus";
-    public static final String PROTOCOL_VERSION = "1";
+    public static final String PROTOCOL_VERSION = "2";
     
     public static GunCus instance;
     public static IProxy proxy;
     public static SimpleChannel channel;
     
-    public static final boolean FULL_CREATIVE_TABS = true;
+    public static boolean FULL_CREATIVE_TABS = false;
     
-    public static final GunCusItemGroup ITEM_GROUP_GUN_CUS = new GunCusItemGroup();
+    public static final GunCusItemGroup ITEM_GROUP_GUN_CUS = new GunCusItemGroup(GunCus.MOD_ID);
     
     public GunCus()
     {
@@ -74,6 +75,14 @@ public class GunCus
         GunCusUtility.fixPOITypeBlockStates(GunCusPointOfInterestTypes.ARMS_DEALER);
         
         GunCus.proxy.init();
+        
+        for(GunItem gun : GunItem.ALL_GUNS_LIST)
+        {
+            if(gun.gunTab != null)
+            {
+                gun.gunTab.init();
+            }
+        }
     }
     
     public void registerCommands(RegisterCommandsEvent event)

@@ -26,6 +26,6 @@ public class GunMakerBlock extends MakerBlock
     @Override
     public ITextComponent getContainerTitle()
     {
-        return TITLE;
+        return GunMakerBlock.TITLE;
     }
 }

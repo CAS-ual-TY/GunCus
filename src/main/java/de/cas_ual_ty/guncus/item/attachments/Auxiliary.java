@@ -16,6 +16,7 @@ public class Auxiliary extends AttachmentItem
     
     protected boolean isAllowingReloadWhileZoomed;
     protected int extraFireRate;
+    protected boolean forceFullAuto;
     
     public Auxiliary(Properties properties, ItemStack... materials)
     {
@@ -23,10 +24,11 @@ public class Auxiliary extends AttachmentItem
         
         this.isAllowingReloadWhileZoomed = false;
         this.extraFireRate = 0;
+        this.forceFullAuto = false;
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_AUXILIARIES_LIST.add(this);
+            Auxiliary.MAKER_AUXILIARIES_LIST.add(this);
         }
     }
     
@@ -51,6 +53,11 @@ public class Auxiliary extends AttachmentItem
         return this.extraFireRate;
     }
     
+    public boolean getForceFullAuto()
+    {
+        return this.forceFullAuto;
+    }
+    
     public Auxiliary setIsAllowingReloadWhileZoomed(boolean isAllowingReloadWhileZoomed)
     {
         this.isAllowingReloadWhileZoomed = isAllowingReloadWhileZoomed;
@@ -60,6 +67,12 @@ public class Auxiliary extends AttachmentItem
     public Auxiliary setExtraFireRate(int extraFireRate)
     {
         this.extraFireRate = extraFireRate;
+        return this;
+    }
+    
+    public Auxiliary setForceFullAuto(boolean forceFullAuto)
+    {
+        this.forceFullAuto = forceFullAuto;
         return this;
     }
 }

@@ -1,8 +1,10 @@
 package de.cas_ual_ty.guncus.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -13,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.village.PointOfInterestType;
@@ -21,10 +24,13 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 public class GunCusUtility
 {
     private static Method blockStatesInjector;
+    private static Field nonNullListElements;
     
     static
     {
         GunCusUtility.blockStatesInjector = ObfuscationReflectionHelper.findMethod(PointOfInterestType.class, "func_221052_a", PointOfInterestType.class);
+        GunCusUtility.nonNullListElements = ObfuscationReflectionHelper.findField(NonNullList.class, "field_191198_a");
+        GunCusUtility.nonNullListElements.setAccessible(true);
     }
     
     public static final Hand[] HANDS = Hand.values();
@@ -79,5 +85,26 @@ public class GunCusUtility
         {
             e.printStackTrace();
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static <E> void addAllToNonNullList(NonNullList<E> list, List<E> elements)
+    {
+        Object arrayList;
+        try
+        {
+            arrayList = GunCusUtility.nonNullListElements.get(list);
+            
+            if(arrayList instanceof ArrayList)
+            {
+                ((ArrayList<E>)arrayList).addAll(elements);
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        
+        list.addAll(elements);
     }
 }

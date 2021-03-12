@@ -27,7 +27,7 @@ public class Ammo extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_AMMOS_LIST.add(this);
+            Ammo.MAKER_AMMOS_LIST.add(this);
         }
     }
     

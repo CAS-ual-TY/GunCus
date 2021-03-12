@@ -1,5 +1,7 @@
 package de.cas_ual_ty.guncus.itemgroup;
 
+import java.util.List;
+
 import de.cas_ual_ty.guncus.GunCus;
 import de.cas_ual_ty.guncus.item.AttachmentItem;
 import de.cas_ual_ty.guncus.item.GunItem;
@@ -14,11 +16,14 @@ public class GunItemGroup extends ShuffleItemGroup
 {
     protected final GunItem gun;
     
+    protected List<ItemStack> allVariants;
+    
     public GunItemGroup(String label, GunItem gun)
     {
         super(label);
         this.gun = gun;
         this.icon = new ItemStack(this.gun);
+        this.allVariants = null;
     }
     
     @Override
@@ -52,9 +57,18 @@ public class GunItemGroup extends ShuffleItemGroup
             }
         }
         
-        if(GunCus.FULL_CREATIVE_TABS)
+        if(GunCus.FULL_CREATIVE_TABS && this.allVariants != null)
         {
-            items.addAll(GunCusUtility.createAllVariants(this.gun));
+            GunCusUtility.addAllToNonNullList(items, this.allVariants);
+        }
+    }
+    
+    @Override
+    public void fillShuffleList(NonNullList<ItemStack> list)
+    {
+        if(this.allVariants != null)
+        {
+            GunCusUtility.addAllToNonNullList(list, this.allVariants);
         }
     }
     
@@ -64,9 +78,8 @@ public class GunItemGroup extends ShuffleItemGroup
         return this.gun.getName();
     }
     
-    @Override
-    public ItemStack shuffle()
+    public void init()
     {
-        return GunCus.FULL_CREATIVE_TABS ? super.shuffle() : this.icon;
+        this.allVariants = GunCusUtility.createAllVariants(this.gun);
     }
 }

@@ -26,7 +26,7 @@ public class Magazine extends AttachmentItem
         
         if(this.craftAmount > 0 && materials.length > 0)
         {
-            MAKER_MAGAZINES_LIST.add(this);
+            Magazine.MAKER_MAGAZINES_LIST.add(this);
         }
     }
     

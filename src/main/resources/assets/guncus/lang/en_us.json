@@ -60,10 +60,12 @@
 
     "item.guncus.gun_ak_74m": "AK-74M",
     "item.guncus.gun_m16a4": "M16A4",
-    "item.guncus.gun_scar_l": "Scar-L",
-    "item.guncus.gun_scar_h": "Scar-H",
+    "item.guncus.gun_scar": "SCAR",
     "item.guncus.gun_m27_iar": "M27 IAR",
     "item.guncus.gun_sv98": "SV98",
+    "item.guncus.gun_colt_anaconda": "Colt Anaconda",
+    "item.guncus.gun_remington_870": "Remington 870",
+    "item.guncus.gun_glock": "Glock",
 
     "item.guncus.bullet_5_56x45mm": "5.56×45mm",
     "item.guncus.bullet_5_45x39mm": "5.45×39mm",
@@ -75,6 +77,7 @@
     "item.guncus.bullet_12g_slug": "12G Slug",
     "item.guncus.bullet__44_magnum": ".44 Magnum",
     "item.guncus.bullet__338_magnum": ".338 Magnum",
+    "item.guncus.bullet_9mm": "9mm",
 
     "item.guncus.optic_reflex": "Reflex",
     "item.guncus.optic_coyote": "Coyote",
@@ -129,22 +132,29 @@
     "item.guncus.auxiliary_straight_pull": "Straight Pull",
     "item.guncus.auxiliary_rapid_fire": "Rapid Fire",
 
-    "item.guncus.ammo_12g_buckshot": "12G Buckshot",
     "item.guncus.ammo_12g_dart": "12G Dart",
     "item.guncus.ammo_12g_frag": "12G Frag",
     "item.guncus.ammo_12g_slug": "12G Slug",
+    "item.guncus.ammo_7_62x51mm": "7.62×51mm",
 
     "item.guncus.magazine_quick_switch": "Quick Switch",
     "item.guncus.magazine_extended_10": "Extended (+10)",
     "item.guncus.magazine_extended_5": "Extended (+5)",
 
     "item.guncus.paint_black": "Black Paint",
-    "item.guncus.paint_white": "White Paint",
-    "item.guncus.paint_red": "Red Paint",
     "item.guncus.paint_blue": "Blue Paint",
-    "item.guncus.paint_yellow": "Yellow Paint",
+    "item.guncus.paint_brown": "Brown Paint",
+    "item.guncus.paint_cyan": "Cyan Paint",
+    "item.guncus.paint_gray": "Gray Paint",
     "item.guncus.paint_green": "Green Paint",
+    "item.guncus.paint_light_blue": "Light Blue Paint",
+    "item.guncus.paint_light_gray": "Light Gray Paint",
+    "item.guncus.paint_lime": "Lime Paint",
+    "item.guncus.paint_magenta": "Magenta Paint",
+    "item.guncus.paint_orange": "Orange Paint",
     "item.guncus.paint_pink": "Pink Paint",
-    "item.guncus.paint_turquoise": "Turquoise Paint",
-    "item.guncus.paint_orange": "Orange Paint"
+    "item.guncus.paint_purple": "Purple Paint",
+    "item.guncus.paint_red": "Red Paint",
+    "item.guncus.paint_white": "White Paint",
+    "item.guncus.paint_yellow": "Yellow Paint"
 }

@@ -35,7 +35,7 @@ public class MakerMessages
             
             context.enqueueWork(() ->
             {
-                doForContainer(context.getSender(), container -> container.populate());
+                MakerMessages.doForContainer(context.getSender(), container -> container.populate());
             });
             
             context.setPacketHandled(true);
@@ -59,7 +59,7 @@ public class MakerMessages
             
             context.enqueueWork(() ->
             {
-                doForContainer(context.getSender(), container -> container.nextItem());
+                MakerMessages.doForContainer(context.getSender(), container -> container.nextItem());
             });
             
             context.setPacketHandled(true);
@@ -83,7 +83,7 @@ public class MakerMessages
             
             context.enqueueWork(() ->
             {
-                doForContainer(context.getSender(), container -> container.prevItem());
+                MakerMessages.doForContainer(context.getSender(), container -> container.prevItem());
             });
             
             context.setPacketHandled(true);
@@ -107,7 +107,7 @@ public class MakerMessages
             
             context.enqueueWork(() ->
             {
-                doForContainer(context.getSender(), container -> container.create());
+                MakerMessages.doForContainer(context.getSender(), container -> container.create());
             });
             
             context.setPacketHandled(true);

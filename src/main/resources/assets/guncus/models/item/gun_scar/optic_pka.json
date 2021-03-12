@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:item/handheld",
+  "display": {
+    "firstperson_righthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "textures": {
+    "layer0": "guncus:item/gun_scar/optic_pka"
+  }
+}

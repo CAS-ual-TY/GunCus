@@ -26,6 +26,6 @@ public class BarrelMakerBlock extends MakerBlock
     @Override
     public ITextComponent getContainerTitle()
     {
-        return TITLE;
+        return BarrelMakerBlock.TITLE;
     }
 }

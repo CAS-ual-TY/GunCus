@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "guncus:item/gun_ak_74m/underbarrel_ergo_grip"
   }

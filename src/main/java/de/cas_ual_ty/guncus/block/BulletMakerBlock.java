@@ -26,6 +26,6 @@ public class BulletMakerBlock extends MakerBlock
     @Override
     public ITextComponent getContainerTitle()
     {
-        return TITLE;
+        return BulletMakerBlock.TITLE;
     }
 }

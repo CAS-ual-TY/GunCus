@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "guncus:item/gun_scar_l/underbarrel_potato_grip"
-  }
-}

@@ -26,6 +26,6 @@ public class OpticMakerBlock extends MakerBlock
     @Override
     public ITextComponent getContainerTitle()
     {
-        return TITLE;
+        return OpticMakerBlock.TITLE;
     }
 }
